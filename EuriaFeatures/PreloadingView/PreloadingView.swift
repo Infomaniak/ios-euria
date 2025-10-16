@@ -67,7 +67,6 @@ public struct PreloadingView: View {
 
                 ProgressView()
                     .progressViewStyle(.circular)
-                    .tint(.white) // TODO: Update colors
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {

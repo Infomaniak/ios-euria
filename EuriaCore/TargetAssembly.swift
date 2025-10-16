@@ -16,17 +16,18 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import DeviceAssociation
 import Foundation
+import InAppTwoFactorAuthentication
 import InfomaniakCore
 import InfomaniakCoreCommonUI
 import InfomaniakDI
 import InfomaniakLogin
+import InterAppLogin
 import OSLog
 
-private let appGroupIdentifier = "group.\(Constants.bundleId)"
-
 public extension UserDefaults {
-    static let shared = UserDefaults(suiteName: appGroupIdentifier)!
+    static let shared = UserDefaults(suiteName: Constants.appGroupIdentifier)!
 }
 
 extension [Factory] {
@@ -39,6 +40,7 @@ extension [Factory] {
 @MainActor
 open class TargetAssembly {
     private static let logger = Logger(category: "TargetAssembly")
+    private static let realmRootPath = "chats"
 
     private static let apiEnvironment: ApiEnvironment = .preprod
     public static let loginConfig = InfomaniakLogin.Config(
@@ -48,19 +50,48 @@ open class TargetAssembly {
     )
 
     public init() {
+        ApiEnvironment.current = Self.apiEnvironment
         Self.setupDI()
     }
 
     open class func getCommonServices() -> [Factory] {
         return [
+            Factory(type: ConnectedAccountManagerable.self) { _, _ in
+                ConnectedAccountManager(currentAppKeychainIdentifier: AppIdentifierBuilder.mailKeychainIdentifier)
+            },
+            Factory(type: InAppTwoFactorAuthenticationManagerable.self) { _, _ in
+                InAppTwoFactorAuthenticationManager()
+            },
             Factory(type: InfomaniakNetworkLoginable.self) { _, _ in
                 InfomaniakNetworkLogin(config: loginConfig)
             },
             Factory(type: InfomaniakLoginable.self) { _, _ in
                 InfomaniakLogin(config: loginConfig)
             },
+            Factory(type: KeychainHelper.self) { _, _ in
+                KeychainHelper(accessGroup: Constants.appGroupIdentifier)
+            },
             Factory(type: AccountManagerable.self) { _, _ in
                 AccountManager()
+            },
+            Factory(type: AppGroupPathProvidable.self) { _, _ in
+                guard let provider = AppGroupPathProvider(
+                    realmRootPath: realmRootPath,
+                    appGroupIdentifier: Constants.appGroupIdentifier
+                ) else {
+                    fatalError("could not safely init AppGroupPathProvider")
+                }
+
+                return provider
+            },
+            Factory(type: DeviceManagerable.self) { _, _ in
+                let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String? ?? "x.x"
+                return DeviceManager(appGroupIdentifier: Constants.sharedAppGroupName,
+                                     appMarketingVersion: version,
+                                     capabilities: [.twoFactorAuthenticationChallengeApproval])
+            },
+            Factory(type: TokenStore.self) { _, _ in
+                TokenStore()
             }
         ]
     }
