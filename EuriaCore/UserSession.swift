@@ -28,6 +28,7 @@ final class RefreshTokenDelegate: InfomaniakCore.RefreshTokenDelegate, Sendable 
 
 public protocol UserSessionable: Sendable {
     var userId: Int { get }
+    var apiFetcher: ApiFetcher { get }
 }
 
 extension ApiFetcher {

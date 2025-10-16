@@ -16,35 +16,25 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import EuriaCore
 import EuriaCoreUI
-import InfomaniakCore
-import InfomaniakDI
 import SwiftUI
+import WebKit
 
-public struct MainView: View {
-    @LazyInjectService private var accountManager: AccountManagerable
-
-    @EnvironmentObject private var rootViewState: RootViewState
+struct WebView: UIViewRepresentable {
     @EnvironmentObject private var mainViewState: MainViewState
+    let url: URL
 
-    public init() {}
-
-    public var body: some View {
-        NavigationStack {
-            WebView(url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!)
-                .toolbar {
-                    Button("Disconnect") {
-                        Task {
-                            await accountManager.removeTokenAndAccountFor(userId: mainViewState.userSession.userId)
-                            rootViewState.state = .onboarding
-                        }
-                    }
-                }
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        var request = URLRequest(url: url)
+        if let token = mainViewState.userSession.apiFetcher.currentToken {
+            request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
         }
+        webView.load(request)
+        return webView
     }
-}
 
-#Preview {
-    MainView()
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        // Update the view.
+    }
 }
