@@ -1,0 +1,28 @@
+name: CI workflow
+
+on:
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+  
+jobs:
+  build:
+    name: Build and Test project
+    runs-on: [ self-hosted, iOS ]
+
+    steps:
+      - uses: jdx/mise-action@v2
+        with:
+          cache: false
+          experimental: true
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Generate
+        run: tuist install && tuist generate
+      - name: Check implicit imports
+        run: tuist inspect implicit-imports
+      - name: Build
+        run: tuist build --clean "Euria"
