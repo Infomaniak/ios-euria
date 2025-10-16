@@ -8,13 +8,19 @@ let packageSettings = PackageSettings(
     productTypes: [
         "Alamofire": .framework,
         "DesignSystem": .framework,
+        "DeviceAssociation": .framework,
+        "InAppTwoFactorAuthentication": .framework,
+        "InfomaniakConcurrency": .staticFramework,
         "InfomaniakCoreCommonUI": .framework,
         "InfomaniakCoreSwiftUI": .framework,
         "InfomaniakCoreUIResources": .framework,
         "InfomaniakCore": .framework,
         "InfomaniakDI": .framework,
         "InfomaniakLogin": .framework,
+        "InterAppLogin": .framework,
         "Lottie": .framework,
+        "NukeUI": .framework,
+        "Nuke": .framework,
         "VersionChecker": .framework,
         "_LottieStub": .framework
     ]
@@ -34,6 +40,7 @@ let package = Package(
         .package(url: "https://github.com/Infomaniak/ios-login", .upToNextMajor(from: "7.3.0")),
         .package(url: "https://github.com/Infomaniak/ios-onboarding", .upToNextMajor(from: "1.3.0")),
         .package(url: "https://github.com/Infomaniak/ios-version-checker", .upToNextMajor(from: "16.0.0")),
+        .package(url: "https://github.com/Infomaniak/swift-concurrency", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/matomo-org/matomo-sdk-ios", .upToNextMajor(from: "7.7.0"))
     ]
 )

@@ -3,11 +3,11 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let preloadingView = Feature(name: "PreloadingView", additionalDependencies: [
-    TargetDependency.external(name: "InfomaniakDI"),
-    TargetDependency.external(name: "InfomaniakCoreSwiftUI"),
     TargetDependency.external(name: "DesignSystem"),
     TargetDependency.external(name: "InfomaniakCoreCommonUI"),
-    TargetDependency.external(name: "InfomaniakCore")
+    TargetDependency.external(name: "InfomaniakCoreSwiftUI"),
+    TargetDependency.external(name: "InfomaniakCore"),
+    TargetDependency.external(name: "InfomaniakDI")
 ])
 
 let mainView = Feature(
@@ -19,8 +19,13 @@ let mainView = Feature(
 )
 
 let onboardingView = Feature(name: "OnboardingView", additionalDependencies: [
-    TargetDependency.external(name: "InfomaniakCoreUIResources"),
+    TargetDependency.external(name: "InfomaniakConcurrency"),
+    TargetDependency.external(name: "InfomaniakCore"),
+    TargetDependency.external(name: "InfomaniakDeviceCheck"),
+    TargetDependency.external(name: "InfomaniakDI"),
+    TargetDependency.external(name: "InfomaniakLogin"),
     TargetDependency.external(name: "InfomaniakOnboarding"),
+    TargetDependency.external(name: "InterAppLogin"),
     TargetDependency.external(name: "Lottie")
 ])
 
@@ -77,11 +82,14 @@ let project = Project(
                 sources: "EuriaCore/**",
                 dependencies: [
                     .target(name: "EuriaResources"),
+                    .external(name: "DesignSystem"),
+                    .external(name: "DeviceAssociation"),
+                    .external(name: "InAppTwoFactorAuthentication"),
                     .external(name: "InfomaniakCoreCommonUI"),
                     .external(name: "InfomaniakCoreSwiftUI"),
                     .external(name: "InfomaniakCoreUIKit"),
                     .external(name: "InfomaniakLogin"),
-                    .external(name: "DesignSystem"),
+                    .external(name: "InterAppLogin"),
                     .external(name: "Sentry-Dynamic")
                 ],
                 settings: .settings(base: Constants.baseSettings)),
