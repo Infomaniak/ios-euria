@@ -1,0 +1,4 @@
+project: Euria.xcworkspace
+retain_public: true
+schemes:
+- Euria

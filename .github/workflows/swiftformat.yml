@@ -1,0 +1,26 @@
+name: SwiftFormat
+
+on:
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: SwiftFormat
+    runs-on: [ self-hosted, iOS ]
+
+    steps:
+      - uses: jdx/mise-action@v2
+        with:
+          cache: false
+          experimental: true
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: SwiftFormat
+        run: swiftformat --lint . --reporter github-actions-log
