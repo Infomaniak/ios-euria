@@ -25,6 +25,7 @@ import InfomaniakDI
 import InfomaniakLogin
 import InterAppLogin
 import OSLog
+import Sentry
 
 public extension UserDefaults {
     static let shared = UserDefaults(suiteName: Constants.appGroupIdentifier)!
@@ -50,8 +51,37 @@ open class TargetAssembly {
     )
 
     public init() {
+        initSentry()
         ApiEnvironment.current = Self.apiEnvironment
         Self.setupDI()
+    }
+
+    private func initSentry() {
+        let sentryEnvironment: String = Bundle.main.isRunningInTestFlight ? "testflight" : "production"
+        SentrySDK.start { options in
+            options.tracePropagationTargets = []
+            options.dsn = "https://8018fd7b5c8adf98e1052d5bea678793@sentry-mobile.infomaniak.com/21"
+            options.enableUIViewControllerTracing = false
+            options.enableUserInteractionTracing = false
+            options.enableNetworkTracking = false
+            options.enableNetworkBreadcrumbs = false
+            options.enableSwizzling = false
+            options.enableMetricKit = false
+
+            options.beforeSend = { event in
+                event.environment = sentryEnvironment
+                // if the application is in debug or test mode discard the events
+                #if DEBUG
+                return nil
+                #else
+                if UserDefaults.shared.isSentryAuthorized {
+                    return event
+                } else {
+                    return nil
+                }
+                #endif
+            }
+        }
     }
 
     open class func getCommonServices() -> [Factory] {
