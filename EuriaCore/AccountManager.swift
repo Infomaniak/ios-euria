@@ -16,47 +16,127 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import DeviceAssociation
 import Foundation
 import InfomaniakCore
 import InfomaniakDI
 import InfomaniakLogin
+import OSLog
 
 public protocol AccountManagerable: Sendable {
     typealias UserId = Int
 
-    func createAccount(token: ApiToken) async throws
+    func getAccountIds() async -> [AccountManagerable.UserId]
+    func createAccount(code: String, codeVerifier: String) async throws -> (any UserSessionable)
+    func createAccount(token: ApiToken) async throws -> (any UserSessionable)
+    func updateAccount(token: ApiToken) async throws
+    func removeTokenAndAccountFor(userId: Int) async
     func getUserSession(for userId: UserId) async -> (any UserSessionable)?
     func getFirstSession() async -> (any UserSessionable)?
 }
 
 public actor AccountManager: AccountManagerable {
+    @LazyInjectService var deviceManager: DeviceManagerable
     @LazyInjectService var tokenStore: TokenStore
+    @LazyInjectService var networkLoginService: InfomaniakNetworkLoginable
 
+    let refreshTokenDelegate = RefreshTokenDelegate()
+
+    public let userProfileStore = UserProfileStore()
     private var sessions: [AccountManagerable.UserId: UserSession] = [:]
+    private var apiFetchers: [AccountManagerable.UserId: ApiFetcher] = [:]
 
     public init() {}
 
-    public func createAccount(token: ApiToken) async throws {}
+    public func createAccount(code: String, codeVerifier: String) async throws -> (any UserSessionable) {
+        let token = try await networkLoginService.apiTokenUsing(code: code, codeVerifier: codeVerifier)
 
-    public func updateAccount(token: ApiToken) async throws {}
+        do {
+            let session = try await createAccount(token: token)
+            return session
+        } catch {
+            throw error
+        }
+    }
+
+    public func createAccount(token: ApiToken) async throws -> (any UserSessionable) {
+        let temporaryApiFetcher = ApiFetcher(token: token, delegate: refreshTokenDelegate)
+        let user = try await userProfileStore.updateUserProfile(with: temporaryApiFetcher)
+
+        let deviceId = try await deviceManager.getOrCreateCurrentDevice().uid
+        tokenStore.addToken(newToken: token, associatedDeviceId: deviceId)
+
+        guard let session = await getUserSession(for: user.id) as? UserSession else {
+            // TODO: throw real error
+            fatalError("Failed to retrieve user session after creating account")
+        }
+
+        attachDeviceToApiToken(token, apiFetcher: session.apiFetcher)
+
+        return session
+    }
+
+    public func updateAccount(token: ApiToken) async throws {
+        // TODO: Implement account update logic if needed based on Mail
+    }
+
+    public func removeTokenAndAccountFor(userId: Int) {
+        let removedToken = tokenStore.removeTokenFor(userId: userId)
+        sessions.removeValue(forKey: userId)
+        apiFetchers.removeAll()
+        deviceManager.forgetLocalDeviceHash(forUserId: userId)
+
+        guard let removedToken else { return }
+
+        networkLoginService.deleteApiToken(token: removedToken) { result in
+            guard case .failure(let error) = result else { return }
+            Logger.general.error("Failed to delete api token: \(error.localizedDescription)")
+        }
+    }
+
+    private func attachDeviceToApiToken(_ token: ApiToken, apiFetcher: ApiFetcher) {
+        Task {
+            do {
+                let device = try await deviceManager.getOrCreateCurrentDevice()
+                try await deviceManager.attachDeviceIfNeeded(device, to: token, apiFetcher: apiFetcher)
+            } catch {
+                Logger.general.error("Failed to attach device to token: \(error.localizedDescription)")
+            }
+        }
+    }
 
     public func getUserSession(for userId: AccountManagerable.UserId) async -> (any UserSessionable)? {
         if let session = sessions[userId] {
             return session
         } else if let token = tokenStore.tokenFor(userId: userId) {
-            sessions[userId] = UserSession(token: token)
+            let apiFetcher = getApiFetcher(for: userId, token: token.apiToken)
+            sessions[userId] = UserSession(userId: userId, apiFetcher: apiFetcher)
             return sessions[userId]
         } else {
             return nil
         }
     }
 
+    public func getApiFetcher(for userId: Int, token: ApiToken) -> ApiFetcher {
+        if let apiFetcher = apiFetchers[userId] {
+            return apiFetcher
+        } else {
+            let apiFetcher = ApiFetcher(token: token, delegate: refreshTokenDelegate)
+            apiFetchers[userId] = apiFetcher
+            return apiFetcher
+        }
+    }
+
     public func getFirstSession() async -> (any UserSessionable)? {
-        guard let firstToken = tokenStore.getAllTokens().values.first else {
+        guard let firstToken = tokenStore.getAllTokens().values.first,
+              let session = await getUserSession(for: firstToken.userId) else {
             return nil
         }
 
-        sessions[firstToken.userId] = UserSession(token: firstToken)
-        return sessions[firstToken.userId]
+        return session
+    }
+
+    public func getAccountIds() async -> [AccountManagerable.UserId] {
+        return Array(sessions.keys)
     }
 }

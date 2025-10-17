@@ -1,5 +1,5 @@
 {
-  "originHash" : "aa385dc8cba86642d4733336032b0784f790a4775f17e9265edd7c687a23d4cd",
+  "originHash" : "603a23ac6151212b3b23d981b50e4f1f41d5d636e580558d922e7e6c1f1b347c",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-login",
       "state" : {
-        "revision" : "36d1c1886880695c735711c9e9226b07394e6035",
-        "version" : "7.3.1"
+        "revision" : "dce43ecfa6083f18489da82fc4a83b37268a72a8",
+        "version" : "7.4.0"
       }
     },
     {
@@ -170,6 +170,15 @@
       "state" : {
         "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
         "version" : "5.7.1"
+      }
+    },
+    {
+      "identity" : "swift-concurrency",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Infomaniak/swift-concurrency",
+      "state" : {
+        "revision" : "97ae7c9b998a43812d3f57ae106cb447a853bf3b",
+        "version" : "1.0.0"
       }
     },
     {

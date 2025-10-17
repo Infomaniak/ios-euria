@@ -30,20 +30,25 @@ public protocol UserSessionable: Sendable {
     var userId: Int { get }
 }
 
-public struct UserSession: UserSessionable {
-    let refreshTokenDelegate = RefreshTokenDelegate()
+extension ApiFetcher {
+    convenience init(token: ApiToken, delegate: RefreshTokenDelegate) {
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
 
-    let token: AssociatedApiToken
-    let apiFetcher: ApiFetcher
-
-    public var userId: Int {
-        token.userId
+        self.init(decoder: decoder)
+        createAuthenticatedSession(token,
+                                   authenticator: OAuthAuthenticator(refreshTokenDelegate: delegate),
+                                   additionalAdapters: [UserAgentAdapter()])
     }
+}
 
-    init(token: AssociatedApiToken) {
-        self.token = token
-        let apiFetcher = ApiFetcher()
-        apiFetcher.setToken(token.apiToken, delegate: refreshTokenDelegate)
+public struct UserSession: UserSessionable {
+    public let apiFetcher: ApiFetcher
+    public let userId: Int
+
+    init(userId: Int, apiFetcher: ApiFetcher) {
+        self.userId = userId
         self.apiFetcher = apiFetcher
     }
 }

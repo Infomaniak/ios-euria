@@ -21,4 +21,6 @@ import Foundation
 public enum Constants {
     public static let bundleId = "com.infomaniak.euria"
     public static let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String? ?? "Euria"
+    public static let appGroupIdentifier = "group.\(Constants.bundleId)"
+    public static let sharedAppGroupName = "group.com.infomaniak"
 }

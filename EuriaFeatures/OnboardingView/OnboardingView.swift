@@ -16,16 +16,58 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import AuthenticationServices
+import EuriaCore
 import EuriaCoreUI
+import InfomaniakDI
+import InterAppLogin
 import SwiftUI
 
 public struct OnboardingView: View {
+    @InjectService private var accountManager: AccountManagerable
+
     @EnvironmentObject private var rootViewState: RootViewState
+
+    @State private var excludedUserIds: [AccountManagerable.UserId] = []
+    @State private var loginHandler = LoginHandler()
 
     public init() {}
 
     public var body: some View {
-        Button("Onboarding") {}
+        ContinueWithAccountView(isLoading: loginHandler.isLoading, excludingUserIds: excludedUserIds) {
+            Task {
+                do {
+                    let session = try await loginHandler.login()
+                    handleLoginSuccess(session: session)
+                } catch {
+                    handleLoginError(error)
+                }
+            }
+        } onLoginWithAccountsPressed: { accounts in
+            Task {
+                do {
+                    let session = try await loginHandler.loginWith(accounts: accounts)
+                    handleLoginSuccess(session: session)
+                } catch {
+                    handleLoginError(error)
+                }
+            }
+        } onCreateAccountPressed: {
+            // TODO: Handle Account creation
+        }
+        .disabled(loginHandler.isLoading)
+        .task {
+            excludedUserIds = await accountManager.getAccountIds()
+        }
+    }
+
+    func handleLoginError(_ error: Error) {
+        guard (error as? ASWebAuthenticationSessionError)?.code != .canceledLogin else { return }
+        // TODO: Handle error
+    }
+
+    func handleLoginSuccess(session: any UserSessionable) {
+        rootViewState.state = .mainView(MainViewState(userSession: session))
     }
 }
 
