@@ -39,24 +39,11 @@ public struct OnboardingView: View {
     public var body: some View {
         WaveView(slides: Slide.onboardingSlides, selectedSlide: $selectedSlideIndex) { slideIndex in
             if slideIndex == Slide.onboardingSlides.count - 1 {
-                ContinueWithAccountView(isLoading: loginHandler.isLoading, excludingUserIds: excludedUserIds) {
-                    Task {
-                        do {
-                            let session = try await loginHandler.login()
-                            handleLoginSuccess(session: session)
-                        } catch {
-                            handleLoginError(error)
-                        }
-                    }
+                ContinueWithAccountView(isLoading: loginHandler.isLoading,
+                                        excludingUserIds: excludedUserIds) {
+                    loginPressed()
                 } onLoginWithAccountsPressed: { accounts in
-                    Task {
-                        do {
-                            let session = try await loginHandler.loginWith(accounts: accounts)
-                            handleLoginSuccess(session: session)
-                        } catch {
-                            handleLoginError(error)
-                        }
-                    }
+                    loginWithAccountsPressed(accounts: accounts)
                 } onCreateAccountPressed: {
                     // TODO: Handle Account creation
                 }
@@ -82,39 +69,30 @@ public struct OnboardingView: View {
     func handleLoginSuccess(session: any UserSessionable) {
         rootViewState.state = .mainView(MainViewState(userSession: session))
     }
+
+    private func loginPressed() {
+        Task {
+            do {
+                let session = try await loginHandler.login()
+                handleLoginSuccess(session: session)
+            } catch {
+                handleLoginError(error)
+            }
+        }
+    }
+
+    private func loginWithAccountsPressed(accounts: [ConnectedAccount]) {
+        Task {
+            do {
+                let session = try await loginHandler.loginWith(accounts: accounts)
+                handleLoginSuccess(session: session)
+            } catch {
+                handleLoginError(error)
+            }
+        }
+    }
 }
 
 #Preview {
     OnboardingView()
-}
-
-extension Slide {
-    static var onboardingSlides: [Slide] {
-        return [
-            Slide(
-                backgroundImage: UIImage(),
-                backgroundImageTintColor: nil,
-                content: .illustration(UIImage(systemName: "arrow.right") ?? UIImage()),
-                bottomView: VStack(spacing: 8) {
-                    Text("Slide1")
-                }
-            ),
-            Slide(
-                backgroundImage: UIImage(),
-                backgroundImageTintColor: nil,
-                content: .illustration(UIImage(systemName: "arrow.left.arrow.right") ?? UIImage()),
-                bottomView: VStack(spacing: 8) {
-                    Text("Slide2")
-                }
-            ),
-            Slide(
-                backgroundImage: UIImage(),
-                backgroundImageTintColor: nil,
-                content: .illustration(UIImage(systemName: "arrow.left") ?? UIImage()),
-                bottomView: VStack(spacing: 8) {
-                    Text("Slide3")
-                }
-            )
-        ]
-    }
 }

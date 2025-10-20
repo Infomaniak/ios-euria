@@ -55,10 +55,8 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
             uiViewController.setSelectedSlide(index: selectedSlide)
         }
 
-        if colorScheme != context.coordinator.currentColorScheme,
-           let currentSlideViewCell = uiViewController.currentSlideViewCell {
+        if colorScheme != context.coordinator.currentColorScheme {
             context.coordinator.currentColorScheme = colorScheme
-            context.coordinator.selectCorrectAnimation(for: currentSlideViewCell, at: selectedSlide)
         }
     }
 
@@ -89,19 +87,6 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
             return index == parent.slides.count - 1
         }
 
-        func willDisplaySlideViewCell(_ slideViewCell: SlideCollectionViewCell, at index: Int) {
-            selectCorrectAnimation(for: slideViewCell, at: index)
-        }
-
-        func selectCorrectAnimation(for slideViewCell: SlideCollectionViewCell, at index: Int) {
-            guard case .animation(let configuration) = parent.slides[index].content else {
-                return
-            }
-
-            let suffix = currentColorScheme == .dark ? "dark" : "light"
-            let animation = LottieAnimation.named("\(configuration.filename)-\(suffix)", bundle: configuration.bundle)
-            slideViewCell.illustrationAnimationView.animation = animation
-            slideViewCell.illustrationAnimationView.play()
-        }
+        func willDisplaySlideViewCell(_ slideViewCell: SlideCollectionViewCell, at index: Int) {}
     }
 }
