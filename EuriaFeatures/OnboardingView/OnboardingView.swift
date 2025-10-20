@@ -20,6 +20,7 @@ import AuthenticationServices
 import EuriaCore
 import EuriaCoreUI
 import InfomaniakDI
+import InfomaniakOnboarding
 import InterAppLogin
 import SwiftUI
 
@@ -31,33 +32,45 @@ public struct OnboardingView: View {
     @State private var excludedUserIds: [AccountManagerable.UserId] = []
     @State private var loginHandler = LoginHandler()
 
+    @State private var selectedSlideIndex = 0
+
     public init() {}
 
     public var body: some View {
-        ContinueWithAccountView(isLoading: loginHandler.isLoading, excludingUserIds: excludedUserIds) {
-            Task {
-                do {
-                    let session = try await loginHandler.login()
-                    handleLoginSuccess(session: session)
-                } catch {
-                    handleLoginError(error)
+        WaveView(slides: Slide.onboardingSlides, selectedSlide: $selectedSlideIndex) { slideIndex in
+            if slideIndex == Slide.onboardingSlides.count - 1 {
+                ContinueWithAccountView(isLoading: loginHandler.isLoading, excludingUserIds: excludedUserIds) {
+                    Task {
+                        do {
+                            let session = try await loginHandler.login()
+                            handleLoginSuccess(session: session)
+                        } catch {
+                            handleLoginError(error)
+                        }
+                    }
+                } onLoginWithAccountsPressed: { accounts in
+                    Task {
+                        do {
+                            let session = try await loginHandler.loginWith(accounts: accounts)
+                            handleLoginSuccess(session: session)
+                        } catch {
+                            handleLoginError(error)
+                        }
+                    }
+                } onCreateAccountPressed: {
+                    // TODO: Handle Account creation
+                }
+                .disabled(loginHandler.isLoading)
+                .task {
+                    excludedUserIds = await accountManager.getAccountIds()
+                }
+            } else {
+                Button {
+                    selectedSlideIndex += 1
+                } label: {
+                    Text("Next Slide \(slideIndex + 1)")
                 }
             }
-        } onLoginWithAccountsPressed: { accounts in
-            Task {
-                do {
-                    let session = try await loginHandler.loginWith(accounts: accounts)
-                    handleLoginSuccess(session: session)
-                } catch {
-                    handleLoginError(error)
-                }
-            }
-        } onCreateAccountPressed: {
-            // TODO: Handle Account creation
-        }
-        .disabled(loginHandler.isLoading)
-        .task {
-            excludedUserIds = await accountManager.getAccountIds()
         }
     }
 
@@ -73,4 +86,35 @@ public struct OnboardingView: View {
 
 #Preview {
     OnboardingView()
+}
+
+extension Slide {
+    static var onboardingSlides: [Slide] {
+        return [
+            Slide(
+                backgroundImage: UIImage(),
+                backgroundImageTintColor: nil,
+                content: .illustration(UIImage(systemName: "arrow.right") ?? UIImage()),
+                bottomView: VStack(spacing: 8) {
+                    Text("Slide1")
+                }
+            ),
+            Slide(
+                backgroundImage: UIImage(),
+                backgroundImageTintColor: nil,
+                content: .illustration(UIImage(systemName: "arrow.left.arrow.right") ?? UIImage()),
+                bottomView: VStack(spacing: 8) {
+                    Text("Slide2")
+                }
+            ),
+            Slide(
+                backgroundImage: UIImage(),
+                backgroundImageTintColor: nil,
+                content: .illustration(UIImage(systemName: "arrow.left") ?? UIImage()),
+                bottomView: VStack(spacing: 8) {
+                    Text("Slide3")
+                }
+            )
+        ]
+    }
 }
