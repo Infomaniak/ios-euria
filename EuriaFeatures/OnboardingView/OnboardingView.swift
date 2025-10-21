@@ -16,12 +16,12 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import AuthenticationServices
 import EuriaCore
 import EuriaCoreUI
+import EuriaResources
+import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakOnboarding
-import InterAppLogin
 import SwiftUI
 
 public struct OnboardingView: View {
@@ -33,64 +33,17 @@ public struct OnboardingView: View {
     @State private var loginHandler = LoginHandler()
 
     @State private var selectedSlideIndex = 0
+    private let slides = Slide.onboardingSlides
 
     public init() {}
 
     public var body: some View {
-        WaveView(slides: Slide.onboardingSlides, selectedSlide: $selectedSlideIndex) { slideIndex in
-            if slideIndex == Slide.onboardingSlides.count - 1 {
-                ContinueWithAccountView(isLoading: loginHandler.isLoading,
-                                        excludingUserIds: excludedUserIds) {
-                    loginPressed()
-                } onLoginWithAccountsPressed: { accounts in
-                    loginWithAccountsPressed(accounts: accounts)
-                } onCreateAccountPressed: {
-                    // TODO: Handle Account creation
-                }
-                .disabled(loginHandler.isLoading)
-                .task {
-                    excludedUserIds = await accountManager.getAccountIds()
-                }
-            } else {
-                Button {
-                    selectedSlideIndex += 1
-                } label: {
-                    Text("Next Slide \(slideIndex + 1)")
-                }
-            }
+        WaveView(slides: slides, selectedSlide: $selectedSlideIndex) { slideIndex in
+            slideIndex == slides.count - 1 || (slideIndex == slides.count - 2 && selectedSlideIndex == slides.count - 1)
+        } bottomView: { _ in
+            OnboardingBottomButtonsView(loginHandler: loginHandler, selection: $selectedSlideIndex, slideCount: slides.count)
         }
         .ignoresSafeArea()
-    }
-
-    func handleLoginError(_ error: Error) {
-        guard (error as? ASWebAuthenticationSessionError)?.code != .canceledLogin else { return }
-        // TODO: Handle error
-    }
-
-    func handleLoginSuccess(session: any UserSessionable) {
-        rootViewState.state = .mainView(MainViewState(userSession: session))
-    }
-
-    private func loginPressed() {
-        Task {
-            do {
-                let session = try await loginHandler.login()
-                handleLoginSuccess(session: session)
-            } catch {
-                handleLoginError(error)
-            }
-        }
-    }
-
-    private func loginWithAccountsPressed(accounts: [ConnectedAccount]) {
-        Task {
-            do {
-                let session = try await loginHandler.loginWith(accounts: accounts)
-                handleLoginSuccess(session: session)
-            } catch {
-                handleLoginError(error)
-            }
-        }
     }
 }
 

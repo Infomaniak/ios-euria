@@ -26,11 +26,18 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
 
     let slides: [Slide]
 
+    let shouldAnimateBottomViewForIndex: (Int) -> Bool
     @ViewBuilder var bottomView: (Int) -> BottomView
 
-    init(slides: [Slide], selectedSlide: Binding<Int>, @ViewBuilder bottomView: @escaping (Int) -> BottomView) {
+    init(
+        slides: [Slide],
+        selectedSlide: Binding<Int>,
+        shouldAnimateBottomViewForIndex: @escaping (Int) -> Bool = { _ in return false },
+        @ViewBuilder bottomView: @escaping (Int) -> BottomView
+    ) {
         self.slides = slides
         _selectedSlide = selectedSlide
+        self.shouldAnimateBottomViewForIndex = shouldAnimateBottomViewForIndex
         self.bottomView = bottomView
     }
 
@@ -56,23 +63,38 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         }
 
         if colorScheme != context.coordinator.currentColorScheme,
-        let currentSlideViewCell = uiViewController.currentSlideViewCell {
+           let currentSlideViewCell = uiViewController.currentSlideViewCell {
             context.coordinator.currentColorScheme = colorScheme
             context.coordinator.selectCorrectAnimation(for: currentSlideViewCell, at: selectedSlide)
         }
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(parent: self, colorScheme: colorScheme)
+        return Coordinator(
+            parent: self,
+            colorScheme: colorScheme,
+            shouldAnimateBottomViewForIndex: shouldAnimateBottomViewForIndex,
+            bottomView: bottomView
+        )
     }
 
     class Coordinator: OnboardingViewControllerDelegate {
         let parent: WaveView<BottomView>
         var currentColorScheme: ColorScheme
 
-        init(parent: WaveView<BottomView>, colorScheme: ColorScheme) {
+        let shouldAnimateBottomViewForIndex: (Int) -> Bool
+        let bottomView: (Int) -> BottomView
+
+        init(
+            parent: WaveView<BottomView>,
+            colorScheme: ColorScheme,
+            shouldAnimateBottomViewForIndex: @escaping (Int) -> Bool,
+            bottomView: @escaping (Int) -> BottomView
+        ) {
             self.parent = parent
             currentColorScheme = colorScheme
+            self.shouldAnimateBottomViewForIndex = shouldAnimateBottomViewForIndex
+            self.bottomView = bottomView
         }
 
         func bottomViewForIndex(_ index: Int) -> (any View)? {
@@ -86,7 +108,7 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         }
 
         func shouldAnimateBottomViewForIndex(_ index: Int) -> Bool {
-            return index == parent.slides.count - 1
+            return shouldAnimateBottomViewForIndex(index)
         }
 
         func willDisplaySlideViewCell(_ slideViewCell: SlideCollectionViewCell, at index: Int) {
