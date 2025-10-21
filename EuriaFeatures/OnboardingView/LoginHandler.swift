@@ -38,16 +38,20 @@ final class LoginHandler: ObservableObject {
 
     func login() async throws -> (any UserSessionable) {
         isLoading = true
+        do {
+            let result = try await loginService.asWebAuthenticationLoginFrom(
+                anchor: ASPresentationAnchor(),
+                useEphemeralSession: true,
+                hideCreateAccountButton: true
+            )
 
-        let result = try await loginService.asWebAuthenticationLoginFrom(
-            anchor: ASPresentationAnchor(),
-            useEphemeralSession: true,
-            hideCreateAccountButton: true
-        )
+            let session = try await loginSuccessful(code: result.code, codeVerifier: result.verifier)
 
-        let session = try await loginSuccessful(code: result.code, codeVerifier: result.verifier)
-
-        return session
+            return session
+        } catch {
+            loginFailed(error: error)
+            throw error
+        }
     }
 
     func loginWith(accounts: [ConnectedAccount]) async throws -> (any UserSessionable) {
@@ -75,5 +79,10 @@ final class LoginHandler: ObservableObject {
         let session = try await accountManager.createAccount(code: code, codeVerifier: verifier)
         isLoading = false
         return session
+    }
+
+    private func loginFailed(error: Error) {
+        isLoading = false
+        print("Login failed with error: \(error)") // TODO: Handle error
     }
 }
