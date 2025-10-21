@@ -31,9 +31,7 @@ extension Slide {
                     filename: "storage-cardboard-box",
                     bundle: EuriaResourcesResources.bundle
                 )),
-                bottomView: VStack(spacing: 8) {
-                    Text("Slide1")
-                }
+                bottomView: OnboardingTextView(text: .slide1)
             ),
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBackground2.image,
@@ -43,9 +41,7 @@ extension Slide {
                     filename: "cards-transfer-type",
                     bundle: EuriaResourcesResources.bundle
                 )),
-                bottomView: VStack(spacing: 8) {
-                    Text("Slide2")
-                }
+                bottomView: OnboardingTextView(text: .slide2)
             ),
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBackground3.image,
@@ -55,9 +51,7 @@ extension Slide {
                     filename: "padlocks",
                     bundle: EuriaResourcesResources.bundle
                 )),
-                bottomView: VStack(spacing: 8) {
-                    Text("Slide3")
-                }
+                bottomView: OnboardingTextView(text: .slide3)
             )
         ]
     }
