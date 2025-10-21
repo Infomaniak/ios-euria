@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaResources
 import InfomaniakOnboarding
 import SwiftUI
 
@@ -23,25 +24,37 @@ extension Slide {
     static var onboardingSlides: [Slide] {
         return [
             Slide(
-                backgroundImage: UIImage(),
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBackground1.image,
                 backgroundImageTintColor: nil,
-                content: .illustration(UIImage(systemName: "arrow.right") ?? UIImage()),
+                content: .animation(IKLottieConfiguration(
+                    id: 1,
+                    filename: "storage-cardboard-box",
+                    bundle: EuriaResourcesResources.bundle
+                )),
                 bottomView: VStack(spacing: 8) {
                     Text("Slide1")
                 }
             ),
             Slide(
-                backgroundImage: UIImage(),
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBackground2.image,
                 backgroundImageTintColor: nil,
-                content: .illustration(UIImage(systemName: "arrow.left.arrow.right") ?? UIImage()),
+                content: .animation(IKLottieConfiguration(
+                    id: 2,
+                    filename: "cards-transfer-type",
+                    bundle: EuriaResourcesResources.bundle
+                )),
                 bottomView: VStack(spacing: 8) {
                     Text("Slide2")
                 }
             ),
             Slide(
-                backgroundImage: UIImage(),
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBackground3.image,
                 backgroundImageTintColor: nil,
-                content: .illustration(UIImage(systemName: "arrow.left") ?? UIImage()),
+                content: .animation(IKLottieConfiguration(
+                    id: 3,
+                    filename: "padlocks",
+                    bundle: EuriaResourcesResources.bundle
+                )),
                 bottomView: VStack(spacing: 8) {
                     Text("Slide3")
                 }

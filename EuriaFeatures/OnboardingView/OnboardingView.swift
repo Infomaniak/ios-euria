@@ -59,6 +59,7 @@ public struct OnboardingView: View {
                 }
             }
         }
+        .ignoresSafeArea()
     }
 
     func handleLoginError(_ error: Error) {
