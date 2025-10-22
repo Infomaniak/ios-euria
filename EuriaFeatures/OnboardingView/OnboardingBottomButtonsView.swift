@@ -66,8 +66,7 @@ struct OnboardingBottomButtonsView: View {
                 } label: {
                     Label {
                         Text(CoreUILocalizable.buttonNext)
-                    }
-                    icon: {
+                    } icon: {
                         EuriaResourcesAsset.Images.arrowRight.swiftUIImage
                     }
                     .labelStyle(.iconOnly)
