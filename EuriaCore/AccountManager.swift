@@ -30,7 +30,7 @@ public protocol AccountManagerable {
     var accounts: [ApiToken] { get async }
     var userProfileStore: UserProfileStore { get async }
 
-	var currentSession: (any UserSessionable)? { get async }
+    var currentSession: (any UserSessionable)? { get async }
 
     var objectWillChange: ObservableObjectPublisher { get }
 
