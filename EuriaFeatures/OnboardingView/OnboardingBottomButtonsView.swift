@@ -28,10 +28,6 @@ import InterAppLogin
 import SwiftUI
 
 struct OnboardingBottomButtonsView: View {
-    @InjectService private var accountManager: AccountManagerable
-
-    @EnvironmentObject private var rootViewState: RootViewState
-
     @ObservedObject var loginHandler = LoginHandler()
 
     @State private var excludedUserIds: [AccountManagerable.UserId] = []

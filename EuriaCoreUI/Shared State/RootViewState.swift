@@ -32,7 +32,7 @@ public enum RootViewType: @MainActor Equatable {
 
 @MainActor
 public final class RootViewState: ObservableObject {
-    @Published private(set) public var state: RootViewType
+    @Published public private(set) var state: RootViewType
 
     private var accountManagerObservation: AnyCancellable?
 

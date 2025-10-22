@@ -18,7 +18,6 @@
 
 import EuriaCore
 import EuriaCoreUI
-import EuriaResources
 import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakOnboarding

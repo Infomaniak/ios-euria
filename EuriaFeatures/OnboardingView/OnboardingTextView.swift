@@ -17,7 +17,6 @@
  */
 
 import DesignSystem
-import EuriaResources
 import SwiftUI
 
 enum OnboardingText {

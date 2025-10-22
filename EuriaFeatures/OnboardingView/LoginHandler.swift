@@ -18,7 +18,6 @@
 
 import AuthenticationServices
 import EuriaCore
-import EuriaCoreUI
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakDeviceCheck
