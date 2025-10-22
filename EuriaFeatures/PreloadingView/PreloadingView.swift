@@ -75,9 +75,9 @@ public struct PreloadingView: View {
         }
         .task {
             if let userSession = await accountManager.getFirstSession() {
-                rootViewState.state = .mainView(MainViewState(userSession: userSession))
+                rootViewState.transition(toState: .mainView(MainViewState(userSession: userSession)))
             } else {
-                rootViewState.state = .onboarding
+                rootViewState.transition(toState: .onboarding)
             }
         }
     }

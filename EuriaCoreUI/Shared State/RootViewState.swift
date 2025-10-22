@@ -32,7 +32,7 @@ public enum RootViewType: @MainActor Equatable {
 
 @MainActor
 public final class RootViewState: ObservableObject {
-    @Published public var state: RootViewType
+    @Published private(set) public var state: RootViewType
 
     private var accountManagerObservation: AnyCancellable?
 
@@ -47,12 +47,18 @@ public final class RootViewState: ObservableObject {
             }
     }
 
+    public func transition(toState state: RootViewType) {
+        withAnimation {
+            self.state = state
+        }
+    }
+
     private func transitionToMainViewIfPossible() {
         Task {
             @InjectService var accountManager: AccountManagerable
             guard let currentSession = await accountManager.currentSession else { return }
 
-            state = .mainView(MainViewState(userSession: currentSession))
+            transition(toState: .mainView(MainViewState(userSession: currentSession)))
         }
     }
 }
