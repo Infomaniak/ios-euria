@@ -46,8 +46,7 @@ struct OnboardingBottomButtonsView: View {
 
     var body: some View {
         VStack(spacing: IKPadding.mini) {
-            ContinueWithAccountView(isLoading: loginHandler.isLoading,
-                                    excludingUserIds: excludedUserIds) {
+            ContinueWithAccountView(isLoading: loginHandler.isLoading, excludingUserIds: excludedUserIds) {
                 loginPressed()
             } onLoginWithAccountsPressed: { accounts in
                 loginWithAccountsPressed(accounts: accounts)
@@ -83,32 +82,13 @@ struct OnboardingBottomButtonsView: View {
 
     private func loginPressed() {
         Task {
-            do {
-                let session = try await loginHandler.login()
-                handleLoginSuccess(session: session)
-            } catch {
-                handleLoginError(error)
-            }
+            await loginHandler.login()
         }
     }
 
     private func loginWithAccountsPressed(accounts: [ConnectedAccount]) {
         Task {
-            do {
-                let session = try await loginHandler.loginWith(accounts: accounts)
-                handleLoginSuccess(session: session)
-            } catch {
-                handleLoginError(error)
-            }
+            await loginHandler.loginWith(accounts: accounts)
         }
-    }
-
-    func handleLoginError(_ error: Error) {
-        guard (error as? ASWebAuthenticationSessionError)?.code != .canceledLogin else { return }
-        // TODO: Handle error
-    }
-
-    func handleLoginSuccess(session: any UserSessionable) {
-        rootViewState.state = .mainView(MainViewState(userSession: session))
     }
 }
