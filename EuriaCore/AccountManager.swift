@@ -56,8 +56,8 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         }
     }
 
-    private var sessions: [AccountManagerable.UserId: UserSession] = [:]
-    private var apiFetchers: [AccountManagerable.UserId: ApiFetcher] = [:]
+    private var sessions: [UserId: UserSession] = [:]
+    private var apiFetchers: [UserId: ApiFetcher] = [:]
 
     public init() {}
 
