@@ -16,25 +16,17 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import EuriaCore
-import EuriaCoreUI
-import EuriaRootView
-import SwiftUI
+import Sentry
 
-@main
-struct EuriaApp: App {
-    // periphery:ignore - Making sure the Sentry is initialized at a very early stage of the app launch.
-    private let sentryService = SentryService()
-    // periphery:ignore - Making sure the DI is registered at a very early stage of the app launch.
-    private let dependencyInjectionHook = TargetAssembly()
-
-    @StateObject private var rootViewState = RootViewState()
-
-    var body: some Scene {
-        WindowGroup {
-            RootView()
-                .environmentObject(rootViewState)
+public enum SentryDebug {
+    public static func setUserID(_ userID: Int?) {
+        guard let userID, userID != 0 else {
+            SentrySDK.setUser(nil)
+            return
         }
-        .defaultAppStorage(.shared)
+
+        let user = Sentry.User(userId: "\(userID)")
+        user.ipAddress = "{{auto}}"
+        SentrySDK.setUser(user)
     }
 }

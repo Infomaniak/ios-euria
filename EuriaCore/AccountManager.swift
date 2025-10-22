@@ -52,6 +52,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
 
     public private(set) var currentSession: (any UserSessionable)? {
         didSet {
+            SentryDebug.setUserID(currentSession?.userId)
             objectWillChange.send()
         }
     }
