@@ -97,11 +97,9 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         // TODO: Implement account update logic if needed based on Mail
     }
 
-    public func removeTokenAndAccountFor(userId: Int) {
+    public func removeTokenAndAccountFor(userId: UserId) {
         let removedToken = tokenStore.removeTokenFor(userId: userId)
-        sessions.removeValue(forKey: userId)
-        apiFetchers.removeAll()
-        deviceManager.forgetLocalDeviceHash(forUserId: userId)
+        removeSession(userId: userId)
 
         guard let removedToken else { return }
 
@@ -109,6 +107,16 @@ public actor AccountManager: AccountManagerable, ObservableObject {
             guard case .failure(let error) = result else { return }
             Logger.general.error("Failed to delete api token: \(error.localizedDescription)")
         }
+    }
+
+    private func removeSession(userId: UserId) {
+        if userId == currentSession?.userId {
+            currentSession = nil
+        }
+
+        sessions.removeValue(forKey: userId)
+        apiFetchers.removeAll()
+        deviceManager.forgetLocalDeviceHash(forUserId: userId)
     }
 
     private func attachDeviceToApiToken(_ token: ApiToken, apiFetcher: ApiFetcher) {
@@ -122,7 +130,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         }
     }
 
-    public func getUserSession(for userId: AccountManagerable.UserId) async -> (any UserSessionable)? {
+    public func getUserSession(for userId: UserId) async -> (any UserSessionable)? {
         if let session = sessions[userId] {
             return session
         } else if let token = tokenStore.tokenFor(userId: userId) {
@@ -153,7 +161,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         return session
     }
 
-    public func getAccountIds() async -> [AccountManagerable.UserId] {
+    public func getAccountIds() async -> [UserId] {
         return Array(sessions.keys)
     }
 }
