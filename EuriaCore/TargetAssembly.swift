@@ -101,6 +101,9 @@ open class TargetAssembly {
             Factory(type: KeychainHelper.self) { _, _ in
                 KeychainHelper(accessGroup: Constants.appGroupIdentifier)
             },
+            Factory(type: PlatformDetectable.self) { _, _ in
+                PlatformDetector()
+            },
             Factory(type: AccountManagerable.self) { _, _ in
                 AccountManager()
             },

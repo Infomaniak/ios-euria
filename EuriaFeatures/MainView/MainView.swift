@@ -18,12 +18,15 @@
 
 import EuriaCore
 import EuriaCoreUI
+import InAppTwoFactorAuthentication
+import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakDI
 import SwiftUI
 
 public struct MainView: View {
     @LazyInjectService private var accountManager: AccountManagerable
+    @LazyInjectService private var platformDetector: PlatformDetectable
 
     @EnvironmentObject private var rootViewState: RootViewState
     @EnvironmentObject private var mainViewState: MainViewState
@@ -41,7 +44,30 @@ public struct MainView: View {
                         }
                     }
                 }
+                .sceneLifecycle(willEnterForeground: willEnterForeground)
         }
+    }
+
+    private func willEnterForeground() {
+        Task {
+            await checkTwoFAChallenges()
+        }
+    }
+
+    private func checkTwoFAChallenges() async {
+        let sessions: [InAppTwoFactorAuthenticationSession] = await accountManager.accounts.asyncCompactMap { account in
+            guard let user = await accountManager.userProfileStore.getUserProfile(id: account.userId) else {
+                return nil
+            }
+
+            let apiFetcher = await accountManager.getApiFetcher(for: account.userId, token: account)
+
+            let session = InAppTwoFactorAuthenticationSession(user: user, apiFetcher: apiFetcher)
+            return session
+        }
+
+        @InjectService var inAppTwoFactorAuthenticationManager: InAppTwoFactorAuthenticationManagerable
+        inAppTwoFactorAuthenticationManager.checkConnectionAttempts(using: sessions)
     }
 }
 

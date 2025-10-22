@@ -24,10 +24,13 @@ import InfomaniakDI
 import InfomaniakLogin
 import OSLog
 
-public protocol AccountManagerable: Sendable {
+public protocol AccountManagerable {
     typealias UserId = Int
 
-    var currentSession: (any UserSessionable)? { get async }
+    var accounts: [ApiToken] { get async }
+    var userProfileStore: UserProfileStore { get async }
+
+	var currentSession: (any UserSessionable)? { get async }
 
     var objectWillChange: ObservableObjectPublisher { get }
 
@@ -39,6 +42,7 @@ public protocol AccountManagerable: Sendable {
     func getUserSession(for userId: UserId) async -> (any UserSessionable)?
     func getFirstSession() async -> (any UserSessionable)?
     func getAccountIds() async -> [AccountManagerable.UserId]
+    func getApiFetcher(for userId: UserId, token: ApiToken) async -> ApiFetcher
 }
 
 public actor AccountManager: AccountManagerable, ObservableObject {
@@ -59,6 +63,10 @@ public actor AccountManager: AccountManagerable, ObservableObject {
 
     private var sessions: [UserId: UserSession] = [:]
     private var apiFetchers: [UserId: ApiFetcher] = [:]
+
+    public var accounts: [ApiToken] {
+        return tokenStore.getAllTokens().values.map { $0.apiToken }
+    }
 
     public init() {}
 
@@ -143,7 +151,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         }
     }
 
-    public func getApiFetcher(for userId: Int, token: ApiToken) -> ApiFetcher {
+    public func getApiFetcher(for userId: UserId, token: ApiToken) -> ApiFetcher {
         if let apiFetcher = apiFetchers[userId] {
             return apiFetcher
         } else {
