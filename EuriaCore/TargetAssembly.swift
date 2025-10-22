@@ -87,7 +87,7 @@ open class TargetAssembly {
     open class func getCommonServices() -> [Factory] {
         return [
             Factory(type: ConnectedAccountManagerable.self) { _, _ in
-                ConnectedAccountManager(currentAppKeychainIdentifier: AppIdentifierBuilder.mailKeychainIdentifier)
+                ConnectedAccountManager(currentAppKeychainIdentifier: AppIdentifierBuilder.euriaKeychainIdentifier)
             },
             Factory(type: InAppTwoFactorAuthenticationManagerable.self) { _, _ in
                 InAppTwoFactorAuthenticationManager()
