@@ -16,8 +16,10 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Combine
 import EuriaCore
 import Foundation
+import InfomaniakDI
 import SwiftUI
 
 @MainActor
@@ -30,7 +32,33 @@ public enum RootViewType: @MainActor Equatable {
 
 @MainActor
 public final class RootViewState: ObservableObject {
-    @Published public var state: RootViewType = .preloading
+    @Published public private(set) var state: RootViewType
 
-    public init() {}
+    private var accountManagerObservation: AnyCancellable?
+
+    public init() {
+        state = .preloading
+
+        @InjectService var accountManager: AccountManagerable
+        accountManagerObservation = accountManager.objectWillChange
+            .receive(on: RunLoop.main)
+            .sink { [weak self] in
+                self?.transitionToMainViewIfPossible()
+            }
+    }
+
+    public func transition(toState state: RootViewType) {
+        withAnimation {
+            self.state = state
+        }
+    }
+
+    private func transitionToMainViewIfPossible() {
+        Task {
+            @InjectService var accountManager: AccountManagerable
+            guard let currentSession = await accountManager.currentSession else { return }
+
+            transition(toState: .mainView(MainViewState(userSession: currentSession)))
+        }
+    }
 }

@@ -18,7 +18,6 @@
 
 import AuthenticationServices
 import EuriaCore
-import EuriaCoreUI
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakDeviceCheck
@@ -36,22 +35,26 @@ final class LoginHandler: ObservableObject {
 
     @Published var isLoading = false
 
-    func login() async throws -> (any UserSessionable) {
+    func login() async {
         isLoading = true
+        defer { isLoading = false }
 
-        let result = try await loginService.asWebAuthenticationLoginFrom(
-            anchor: ASPresentationAnchor(),
-            useEphemeralSession: true,
-            hideCreateAccountButton: true
-        )
-
-        let session = try await loginSuccessful(code: result.code, codeVerifier: result.verifier)
-
-        return session
+        do {
+            let result = try await loginService.asWebAuthenticationLoginFrom(
+                anchor: ASPresentationAnchor(),
+                useEphemeralSession: true,
+                hideCreateAccountButton: true
+            )
+            try await loginSuccessful(code: result.code, codeVerifier: result.verifier)
+        } catch {
+            loginFailed(error: error)
+        }
     }
 
-    func loginWith(accounts: [ConnectedAccount]) async throws -> (any UserSessionable) {
+    func loginWith(accounts: [ConnectedAccount]) async {
         isLoading = true
+        defer { isLoading = false }
+
         let sessions = await accounts.asyncCompactMap { account in
             do {
                 let derivatedToken = try await self.tokenService.derivateApiToken(for: account)
@@ -67,13 +70,15 @@ final class LoginHandler: ObservableObject {
             fatalError("No session could be created") // TODO: Handle error
         }
 
-        isLoading = false
-        return firstSession
+        await accountManager.setCurrentSession(session: firstSession)
     }
 
-    private func loginSuccessful(code: String, codeVerifier verifier: String) async throws -> (any UserSessionable) {
-        let session = try await accountManager.createAccount(code: code, codeVerifier: verifier)
-        isLoading = false
-        return session
+    private func loginSuccessful(code: String, codeVerifier verifier: String) async throws {
+        try await accountManager.createAndSetCurrentAccount(code: code, codeVerifier: verifier)
+    }
+
+    private func loginFailed(error: Error) {
+        guard (error as? ASWebAuthenticationSessionError)?.code != .canceledLogin else { return }
+        // TODO: Handle error
     }
 }

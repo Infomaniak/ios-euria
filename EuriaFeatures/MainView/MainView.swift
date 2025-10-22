@@ -37,7 +37,7 @@ public struct MainView: View {
                     Button("Disconnect") {
                         Task {
                             await accountManager.removeTokenAndAccountFor(userId: mainViewState.userSession.userId)
-                            rootViewState.state = .onboarding
+                            rootViewState.transition(toState: .onboarding)
                         }
                     }
                 }
