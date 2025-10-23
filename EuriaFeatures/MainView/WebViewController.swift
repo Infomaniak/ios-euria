@@ -23,7 +23,6 @@ import WebKit
 
 class WebViewController: UIViewController, WKUIDelegate {
     private let urlRequest: URLRequest
-    private static let host = "euria.preprod.dev.infomaniak.ch"
 
     private lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
