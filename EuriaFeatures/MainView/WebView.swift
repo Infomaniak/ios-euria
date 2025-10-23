@@ -25,14 +25,23 @@ struct WebView: UIViewRepresentable {
     let url: URL
 
     func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        var request = URLRequest(url: url)
-        if let token = mainViewState.userSession.apiFetcher.currentToken {
-            request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+        let configuration = WKWebViewConfiguration()
+
+        if let token = mainViewState.userSession.apiFetcher.currentToken,
+           let tokenCookie = HTTPCookie(
+            properties: [.name: "USER-TOKEN", .value: "\(token.accessToken)", .path: "/", .domain: "local.euria.dev.infomaniak.ch"]
+           ) {
+            print(token)
+            configuration.websiteDataStore.httpCookieStore.setCookie(tokenCookie)
         }
+
+        let webView = WKWebView(frame: .zero, configuration: configuration)
+        let request = URLRequest(url: url)
         webView.load(request)
 
         webView.navigationDelegate = context.coordinator
+
+        webView.isInspectable = true
 
         return webView
     }
