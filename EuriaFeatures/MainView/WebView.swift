@@ -18,8 +18,8 @@
 
 import EuriaCoreUI
 import SwiftUI
-import WebKit
 import UIKit
+import WebKit
 
 struct WebView: UIViewControllerRepresentable {
     @EnvironmentObject private var mainViewState: MainViewState
@@ -35,5 +35,6 @@ struct WebView: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: WebViewController, context: Context) {
+        // Update the view.
     }
 }
