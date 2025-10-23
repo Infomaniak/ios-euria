@@ -41,8 +41,8 @@ public struct PreloadingView: View {
 
     @EnvironmentObject private var rootViewState: RootViewState
 
-    private let backgroundImage = Image("", bundle: .main) // 
-    private let logoImage = Image("", bundle: .main) //
+    private let backgroundImage = Image("", bundle: .main)
+    private let logoImage = Image("", bundle: .main)
     private let infomaniakLogoImage = Image("splashscreen-infomaniak", bundle: .main)
 
     private let skipOnboarding: Bool

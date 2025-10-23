@@ -44,7 +44,6 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
 
     override func loadView() {
-        super.loadView()
         view = webView
     }
 
@@ -55,7 +54,7 @@ class WebViewController: UIViewController, WKUIDelegate {
 }
 
 extension WebViewController: WKNavigationDelegate {
-    public func webView(
+    func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @MainActor (WKNavigationActionPolicy) -> Void
@@ -70,11 +69,10 @@ extension WebViewController: WKNavigationDelegate {
         } else {
             if navigationAction.navigationType == .linkActivated {
                 if let url = navigationAction.request.url {
-                    decisionHandler(.cancel)
                     UIApplication.shared.open(url)
-                    return
                 }
             }
+            decisionHandler(.cancel)
         }
     }
 }
