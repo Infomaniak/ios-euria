@@ -67,10 +67,9 @@ extension WebViewController: WKNavigationDelegate {
         if navigationHost == ApiEnvironment.current.euriaHost {
             decisionHandler(.allow)
         } else {
-            if navigationAction.navigationType == .linkActivated {
-                if let url = navigationAction.request.url {
-                    UIApplication.shared.open(url)
-                }
+            if navigationAction.navigationType == .linkActivated,
+               let url = navigationAction.request.url {
+                UIApplication.shared.open(url)
             }
             decisionHandler(.cancel)
         }
