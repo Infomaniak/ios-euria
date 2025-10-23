@@ -31,10 +31,35 @@ struct WebView: UIViewRepresentable {
             request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
         }
         webView.load(request)
+
+        webView.navigationDelegate = context.coordinator
+
         return webView
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
         // Update the view.
+    }
+
+    func makeCoordinator() -> Coordinator {
+        let coordinator = Coordinator()
+        return coordinator
+    }
+
+    final class Coordinator: NSObject, WKNavigationDelegate {
+        func webView(
+            _ webView: WKWebView,
+            didReceive challenge: URLAuthenticationChallenge,
+            completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+        ) {
+            let protectionSpace = challenge.protectionSpace
+            if protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+               let serverTrust = protectionSpace.serverTrust {
+                let credential = URLCredential(trust: serverTrust)
+                completionHandler(.useCredential, credential)
+            } else {
+                completionHandler(.performDefaultHandling, nil)
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@ public struct MainView: View {
 
     public var body: some View {
         NavigationStack {
-            WebView(url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!)
+            WebView(url: URL(string: "https://local.euria.dev.infomaniak.ch:5173")!)
                 .toolbar {
                     Button("Disconnect") {
                         Task {
