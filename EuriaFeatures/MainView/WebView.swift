@@ -19,22 +19,21 @@
 import EuriaCoreUI
 import SwiftUI
 import WebKit
+import UIKit
 
-struct WebView: UIViewRepresentable {
+struct WebView: UIViewControllerRepresentable {
     @EnvironmentObject private var mainViewState: MainViewState
     let url: URL
 
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
+    func makeUIViewController(context: Context) -> WebViewController {
         var request = URLRequest(url: url)
         if let token = mainViewState.userSession.apiFetcher.currentToken {
             request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
         }
-        webView.load(request)
-        return webView
+        let controller = WebViewController(urlRequest: request)
+        return controller
     }
 
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Update the view.
+    func updateUIViewController(_ uiViewController: WebViewController, context: Context) {
     }
 }
