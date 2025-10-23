@@ -25,8 +25,8 @@ import SwiftUI
 
 public struct OnboardingView: View {
     @State private var loginHandler = LoginHandler()
-
     @State private var selectedSlideIndex = 0
+
     private let slides = Slide.onboardingSlides
 
     public init() {}
