@@ -73,8 +73,7 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         return Coordinator(
             parent: self,
             colorScheme: colorScheme,
-            shouldAnimateBottomViewForIndex: shouldAnimateBottomViewForIndex,
-            bottomView: bottomView
+            shouldAnimateBottomViewForIndex: shouldAnimateBottomViewForIndex
         )
     }
 
@@ -83,18 +82,15 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         var currentColorScheme: ColorScheme
 
         let shouldAnimateBottomViewForIndex: (Int) -> Bool
-        let bottomView: (Int) -> BottomView
 
         init(
             parent: WaveView<BottomView>,
             colorScheme: ColorScheme,
             shouldAnimateBottomViewForIndex: @escaping (Int) -> Bool,
-            bottomView: @escaping (Int) -> BottomView
         ) {
             self.parent = parent
             currentColorScheme = colorScheme
             self.shouldAnimateBottomViewForIndex = shouldAnimateBottomViewForIndex
-            self.bottomView = bottomView
         }
 
         func bottomViewForIndex(_ index: Int) -> (any View)? {

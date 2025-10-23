@@ -19,7 +19,6 @@
 import DesignSystem
 import EuriaCore
 import EuriaCoreUI
-import EuriaResources
 import InfomaniakCore
 import InfomaniakCoreCommonUI
 import InfomaniakCoreSwiftUI
