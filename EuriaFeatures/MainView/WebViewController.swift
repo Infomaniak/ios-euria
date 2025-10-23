@@ -61,11 +61,15 @@ extension WebViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @MainActor (WKNavigationActionPolicy) -> Void
     ) {
-        if let configHost = urlRequest.url?.host {
-            if configHost == WebViewController.host {
-                decisionHandler(.allow)
-                return
-            } else if navigationAction.navigationType == .linkActivated {
+        guard let navigationHost = navigationAction.request.url?.host() else {
+            decisionHandler(.allow)
+            return
+        }
+
+        if navigationHost == ApiEnvironment.current.euriaHost {
+            decisionHandler(.allow)
+        } else {
+            if navigationAction.navigationType == .linkActivated {
                 if let url = navigationAction.request.url {
                     decisionHandler(.cancel)
                     UIApplication.shared.open(url)
@@ -73,7 +77,5 @@ extension WebViewController: WKNavigationDelegate {
                 }
             }
         }
-
-        decisionHandler(.cancel)
     }
 }
