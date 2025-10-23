@@ -19,7 +19,6 @@
 import AuthenticationServices
 import DesignSystem
 import EuriaCore
-import EuriaCoreUI
 import EuriaResources
 import InfomaniakCoreUIResources
 import InfomaniakDI
@@ -31,7 +30,6 @@ struct OnboardingBottomButtonsView: View {
     @ObservedObject var loginHandler = LoginHandler()
 
     @State private var excludedUserIds: [AccountManagerable.UserId] = []
-    @State private var isPresentingCreateAccount = false
 
     @Binding var selection: Int
     let slideCount: Int
