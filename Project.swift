@@ -89,6 +89,7 @@ let project = Project(
                     .external(name: "InfomaniakCoreCommonUI"),
                     .external(name: "InfomaniakCoreSwiftUI"),
                     .external(name: "InfomaniakCoreUIKit"),
+                    .external(name: "InfomaniakCreateAccount"),
                     .external(name: "InfomaniakLogin"),
                     .external(name: "InterAppLogin"),
                     .external(name: "Sentry-Dynamic")
