@@ -26,7 +26,6 @@ import SwiftUI
 
 public struct MainView: View {
     @LazyInjectService private var accountManager: AccountManagerable
-    @LazyInjectService private var platformDetector: PlatformDetectable
 
     @EnvironmentObject private var rootViewState: RootViewState
     @EnvironmentObject private var mainViewState: MainViewState
