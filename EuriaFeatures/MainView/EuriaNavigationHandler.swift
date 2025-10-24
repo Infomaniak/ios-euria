@@ -16,32 +16,30 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import EuriaCoreUI
 import InfomaniakCore
-import SwiftUI
+import InfomaniakDI
 import UIKit
 import WebKit
 
-struct WebView: UIViewRepresentable {
-    @EnvironmentObject private var mainViewState: MainViewState
-    let url: URL
-    var webConfiguration = WKWebViewConfiguration()
-    var navigationDelegate: WKNavigationDelegate?
-
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        if let navigationDelegate {
-            webView.navigationDelegate = navigationDelegate
+class EuriaNavigationHandler: NSObject, WKNavigationDelegate {
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @MainActor (WKNavigationActionPolicy) -> Void
+    ) {
+        guard let navigationHost = navigationAction.request.url?.host() else {
+            decisionHandler(.allow)
+            return
         }
-        let request = URLRequest(url: url)
-        webView.load(request)
-        #if DEBUG
-        webView.isInspectable = true
-        #endif
-        return webView
-    }
 
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Update the view.
+        if navigationHost == ApiEnvironment.current.euriaHost {
+            decisionHandler(.allow)
+        } else {
+            if navigationAction.navigationType == .linkActivated,
+               let url = navigationAction.request.url {
+                UIApplication.shared.open(url)
+            }
+            decisionHandler(.cancel)
+        }
     }
 }

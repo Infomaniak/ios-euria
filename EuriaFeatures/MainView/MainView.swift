@@ -21,6 +21,7 @@ import EuriaCoreUI
 import InfomaniakCore
 import InfomaniakDI
 import SwiftUI
+import WebKit
 
 public struct MainView: View {
     @LazyInjectService private var accountManager: AccountManagerable
@@ -28,19 +29,54 @@ public struct MainView: View {
     @EnvironmentObject private var rootViewState: RootViewState
     @EnvironmentObject private var mainViewState: MainViewState
 
+    private let webConfiguration = WKWebViewConfiguration()
+    private let euriaNavigationDelegate = EuriaNavigationHandler()
+
     public init() {}
 
     public var body: some View {
         NavigationStack {
-            WebView(url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!)
-                .toolbar {
-                    Button("Disconnect") {
-                        Task {
-                            await accountManager.removeTokenAndAccountFor(userId: mainViewState.userSession.userId)
-                            rootViewState.transition(toState: .onboarding)
-                        }
+            WebView(
+                url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+                webConfiguration: webConfiguration,
+                navigationDelegate: euriaNavigationDelegate
+            )
+            .toolbar {
+                Button("Disconnect") {
+                    Task {
+                        await accountManager.removeTokenAndAccountFor(userId: mainViewState.userSession.userId)
+                        rootViewState.transition(toState: .onboarding)
                     }
                 }
+            }
+            .task {
+                await setEuriaConfiguration(webConfiguration: webConfiguration)
+            }
+        }
+    }
+
+    func setEuriaConfiguration(webConfiguration: WKWebViewConfiguration) async {
+        let cookieStore = webConfiguration.websiteDataStore.httpCookieStore
+
+        if let token = mainViewState.userSession.apiFetcher.currentToken,
+           let tokenCookie = HTTPCookie(properties: [
+               .name: "USER-TOKEN", .value: "\(token.accessToken)", .path: "/",
+               .domain: ApiEnvironment.current.euriaHost
+           ]) {
+            await setCookie(cookie: tokenCookie, store: cookieStore)
+        }
+
+        if let languageCookie = HTTPCookie(properties: [
+            .name: "USER-LANGUAGE", .value: Locale.current.language.languageCode?.identifier ?? "en", .path: "/",
+            .domain: ApiEnvironment.current.euriaHost
+        ]) {
+            await setCookie(cookie: languageCookie, store: cookieStore)
+        }
+    }
+
+    func setCookie(cookie: HTTPCookie, store: WKHTTPCookieStore) async {
+        await withCheckedContinuation { cont in
+            store.setCookie(cookie) { cont.resume() }
         }
     }
 }
