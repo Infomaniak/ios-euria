@@ -85,6 +85,7 @@ let project = Project(
                     .external(name: "DesignSystem"),
                     .external(name: "DeviceAssociation"),
                     .external(name: "InAppTwoFactorAuthentication"),
+                    .external(name: "InfomaniakConcurrency"),
                     .external(name: "InfomaniakCoreCommonUI"),
                     .external(name: "InfomaniakCoreSwiftUI"),
                     .external(name: "InfomaniakCoreUIKit"),
