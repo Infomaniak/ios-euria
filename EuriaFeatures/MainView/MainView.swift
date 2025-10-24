@@ -30,7 +30,7 @@ public struct MainView: View {
     @EnvironmentObject private var mainViewState: MainViewState
 
     private let webConfiguration = WKWebViewConfiguration()
-    private let EuriaNavigationDelegate = EuriaNavigationHandler()
+    private let euriaNavigationDelegate = EuriaNavigationHandler()
 
     public init() {}
 
@@ -39,7 +39,7 @@ public struct MainView: View {
             WebView(
                 url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
                 webConfiguration: webConfiguration,
-                navigationDelegate: EuriaNavigationDelegate
+                navigationDelegate: euriaNavigationDelegate
             )
             .toolbar {
                 Button("Disconnect") {
