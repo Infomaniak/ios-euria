@@ -21,6 +21,7 @@ import EuriaCoreUI
 import InfomaniakCore
 import InfomaniakDI
 import SwiftUI
+import WebKit
 
 public struct MainView: View {
     @LazyInjectService private var accountManager: AccountManagerable
@@ -28,19 +29,42 @@ public struct MainView: View {
     @EnvironmentObject private var rootViewState: RootViewState
     @EnvironmentObject private var mainViewState: MainViewState
 
+    private let webConfiguration = WKWebViewConfiguration()
+    private let EuriaNavigationDelegate = EuriaNavigationHandler()
+
     public init() {}
 
     public var body: some View {
         NavigationStack {
-            WebView(url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!)
-                .toolbar {
-                    Button("Disconnect") {
-                        Task {
-                            await accountManager.removeTokenAndAccountFor(userId: mainViewState.userSession.userId)
-                            rootViewState.transition(toState: .onboarding)
-                        }
+            WebView(
+                url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+                webConfiguration: webConfiguration,
+                navigationDelegate: EuriaNavigationDelegate
+            )
+            .toolbar {
+                Button("Disconnect") {
+                    Task {
+                        await accountManager.removeTokenAndAccountFor(userId: mainViewState.userSession.userId)
+                        rootViewState.transition(toState: .onboarding)
                     }
                 }
+            }
+            .onAppear {
+                if let token = mainViewState.userSession.apiFetcher.currentToken,
+                   let tokenCookie = HTTPCookie(properties: [
+                       .name: "USER-TOKEN", .value: "\(token.accessToken)", .path: "/",
+                       .domain: ApiEnvironment.current.euriaHost
+                   ]) {
+                    webConfiguration.websiteDataStore.httpCookieStore.setCookie(tokenCookie)
+                }
+
+                if let languageCookie = HTTPCookie(properties: [
+                    .name: "USER-LANGUAGE", .value: Locale.current.language.languageCode?.identifier ?? "en", .path: "/",
+                    .domain: ApiEnvironment.current.euriaHost
+                ]) {
+                    webConfiguration.websiteDataStore.httpCookieStore.setCookie(languageCookie)
+                }
+            }
         }
     }
 }

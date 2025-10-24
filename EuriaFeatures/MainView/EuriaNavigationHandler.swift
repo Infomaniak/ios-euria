@@ -21,39 +21,7 @@ import InfomaniakDI
 import UIKit
 import WebKit
 
-class WebViewController: UIViewController, WKUIDelegate {
-    private let urlRequest: URLRequest
-
-    private lazy var webView: WKWebView = {
-        let webConfiguration = WKWebViewConfiguration()
-        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.navigationDelegate = self
-        webView.uiDelegate = self
-
-        return webView
-    }()
-
-    init(urlRequest: URLRequest) {
-        self.urlRequest = urlRequest
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func loadView() {
-        view = webView
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        webView.load(urlRequest)
-    }
-}
-
-extension WebViewController: WKNavigationDelegate {
+class EuriaNavigationHandler: NSObject, WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
