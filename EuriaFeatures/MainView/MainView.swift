@@ -49,22 +49,34 @@ public struct MainView: View {
                     }
                 }
             }
-            .onAppear {
-                if let token = mainViewState.userSession.apiFetcher.currentToken,
-                   let tokenCookie = HTTPCookie(properties: [
-                       .name: "USER-TOKEN", .value: "\(token.accessToken)", .path: "/",
-                       .domain: ApiEnvironment.current.euriaHost
-                   ]) {
-                    webConfiguration.websiteDataStore.httpCookieStore.setCookie(tokenCookie)
-                }
-
-                if let languageCookie = HTTPCookie(properties: [
-                    .name: "USER-LANGUAGE", .value: Locale.current.language.languageCode?.identifier ?? "en", .path: "/",
-                    .domain: ApiEnvironment.current.euriaHost
-                ]) {
-                    webConfiguration.websiteDataStore.httpCookieStore.setCookie(languageCookie)
-                }
+            .task {
+                await setEuriaConfiguration(webConfiguration: webConfiguration)
             }
+        }
+    }
+
+    func setEuriaConfiguration(webConfiguration: WKWebViewConfiguration) async {
+        let cookieStore = webConfiguration.websiteDataStore.httpCookieStore
+
+        if let token = mainViewState.userSession.apiFetcher.currentToken,
+           let tokenCookie = HTTPCookie(properties: [
+               .name: "USER-TOKEN", .value: "\(token.accessToken)", .path: "/",
+               .domain: ApiEnvironment.current.euriaHost
+           ]) {
+            await setCookie(cookie: tokenCookie, store: cookieStore)
+        }
+
+        if let languageCookie = HTTPCookie(properties: [
+            .name: "USER-LANGUAGE", .value: Locale.current.language.languageCode?.identifier ?? "en", .path: "/",
+            .domain: ApiEnvironment.current.euriaHost
+        ]) {
+            await setCookie(cookie: languageCookie, store: cookieStore)
+        }
+    }
+
+    func setCookie(cookie: HTTPCookie, store: WKHTTPCookieStore) async {
+        await withCheckedContinuation { cont in
+            store.setCookie(cookie) { cont.resume() }
         }
     }
 }
