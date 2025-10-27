@@ -24,58 +24,52 @@ import SwiftUI
 import WebKit
 
 public struct MainView: View {
-    @LazyInjectService private var accountManager: AccountManagerable
-
-    @EnvironmentObject private var rootViewState: RootViewState
     @EnvironmentObject private var mainViewState: MainViewState
 
-    private let webConfiguration = WKWebViewConfiguration()
-    private let euriaNavigationDelegate = EuriaNavigationHandler()
+    @State private var webViewDelegate = EuriaWebViewDelegate()
 
     public init() {}
 
     public var body: some View {
-        NavigationStack {
-            WebView(
-                url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
-                webConfiguration: webConfiguration,
-                navigationDelegate: euriaNavigationDelegate
-            )
-            .task {
-                await setEuriaConfiguration(webConfiguration: webConfiguration)
-            }
+        WebView(
+            url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+            webConfiguration: webViewDelegate.webConfiguration,
+            delegate: webViewDelegate
+        )
+        .onAppear {
+            setupWebViewConfiguration()
         }
     }
 
-    func setEuriaConfiguration(webConfiguration: WKWebViewConfiguration) async {
-        let cookieStore = webConfiguration.websiteDataStore.httpCookieStore
+    private func setupWebViewConfiguration() {
+        addCookies()
+        addUserContentControllers()
+    }
+
+    private func addCookies() {
+        let cookieStore = webViewDelegate.webConfiguration.websiteDataStore.httpCookieStore
 
         if let token = mainViewState.userSession.apiFetcher.currentToken,
-           let tokenCookie = HTTPCookie(properties: [
-               .name: "USER-TOKEN", .value: "\(token.accessToken)", .path: "/",
-               .domain: ApiEnvironment.current.euriaHost
-           ]) {
-            await setCookie(cookie: tokenCookie, store: cookieStore)
+           let tokenCookie = createCookie(name: "USER-TOKEN", value: "\(token.accessToken)") {
+            cookieStore.setCookie(tokenCookie)
         }
 
-        if let languageCookie = HTTPCookie(properties: [
-            .name: "USER-LANGUAGE", .value: Locale.current.language.languageCode?.identifier ?? "en", .path: "/",
-            .domain: ApiEnvironment.current.euriaHost
-        ]) {
-            await setCookie(cookie: languageCookie, store: cookieStore)
+        if let languageCookie = createCookie(
+            name: "USER-LANGUAGE",
+            value: Locale.current.language.languageCode?.identifier ?? "en"
+        ) {
+            cookieStore.setCookie(languageCookie)
         }
-
-        webConfiguration.userContentController.add(euriaNavigationDelegate, name: "logout")
     }
 
-    func setCookie(cookie: HTTPCookie, store: WKHTTPCookieStore) async {
-        await withCheckedContinuation { cont in
-            store.setCookie(cookie) { cont.resume() }
-        }
+    private func addUserContentControllers() {
+        webViewDelegate.webConfiguration.userContentController.add(webViewDelegate, name: "logout")
+    }
+
+    private func createCookie(name: String, value: String) -> HTTPCookie? {
+        return HTTPCookie(properties: [.name: name, .value: value, .path: "/", .domain: ApiEnvironment.current.euriaHost])
     }
 }
-
-protocol WebViewControllable: WKScriptMessageHandler, WKNavigationDelegate {}
 
 #Preview {
     MainView()

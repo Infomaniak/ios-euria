@@ -23,21 +23,25 @@ import UIKit
 import WebKit
 
 struct WebView: UIViewRepresentable {
-    @EnvironmentObject private var mainViewState: MainViewState
+    typealias WebViewDelegate = WKScriptMessageHandler & WKNavigationDelegate
+
     let url: URL
     var webConfiguration = WKWebViewConfiguration()
-    var navigationDelegate: WKNavigationDelegate?
+    var delegate: WebViewDelegate?
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        if let navigationDelegate {
-            webView.navigationDelegate = navigationDelegate
+
+        if let delegate {
+            webView.navigationDelegate = delegate
         }
-        let request = URLRequest(url: url)
-        webView.load(request)
         #if DEBUG
         webView.isInspectable = true
         #endif
+
+        let request = URLRequest(url: url)
+        webView.load(request)
+
         return webView
     }
 

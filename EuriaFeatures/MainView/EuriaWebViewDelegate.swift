@@ -23,19 +23,14 @@ import SwiftUI
 import UIKit
 import WebKit
 
-class EuriaNavigationHandler: NSObject, WKNavigationDelegate, WebViewControllable {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        @InjectService var accountManager: AccountManagerable
-        if message.body as? String == "logout" {
-            Task {
-                guard let userId = await accountManager.currentSession?.userId else {
-                    return
-                }
-                await accountManager.removeTokenAndAccountFor(userId: userId)
-            }
-        }
-    }
+@MainActor
+class EuriaWebViewDelegate: NSObject {
+    let webConfiguration = WKWebViewConfiguration()
+}
 
+// MARK: - WKNavigationDelegate
+
+extension EuriaWebViewDelegate: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
@@ -54,6 +49,27 @@ class EuriaNavigationHandler: NSObject, WKNavigationDelegate, WebViewControllabl
                 UIApplication.shared.open(url)
             }
             decisionHandler(.cancel)
+        }
+    }
+}
+
+// MARK: - WKScriptMessageHandler
+
+extension EuriaWebViewDelegate: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if message.body as? String == "logout" {
+            logoutUser()
+        }
+    }
+
+    private func logoutUser() {
+        Task {
+            @InjectService var accountManager: AccountManagerable
+            guard let userId = await accountManager.currentSession?.userId else {
+                return
+            }
+            print("logOut")
+            await accountManager.removeTokenAndAccountFor(userId: userId)
         }
     }
 }
