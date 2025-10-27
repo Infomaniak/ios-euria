@@ -52,6 +52,16 @@ extension Slide {
                     bundle: EuriaResourcesResources.bundle
                 )),
                 bottomView: OnboardingTextView(text: .ephemeral)
+            ),
+            Slide(
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBackground4.image,
+                backgroundImageTintColor: nil,
+                content: .animation(IKLottieConfiguration(
+                    id: 4,
+                    filename: "cards-transfer-type",
+                    bundle: EuriaResourcesResources.bundle
+                )),
+                bottomView: OnboardingTextView(text: .login)
             )
         ]
     }

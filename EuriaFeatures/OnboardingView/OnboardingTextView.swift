@@ -24,6 +24,7 @@ enum OnboardingText {
     case euria
     case privacy
     case ephemeral
+    case login
 
     var subtitle: AttributedString {
         var result = AttributedString(template(argument))
@@ -44,6 +45,8 @@ enum OnboardingText {
             EuriaResourcesStrings.onboardingPrivacyArgument
         case .ephemeral:
             EuriaResourcesStrings.onboardingEphemeralArgument
+        case .login:
+            EuriaResourcesStrings.onboardingLoginArgument
         }
     }
 
@@ -55,6 +58,8 @@ enum OnboardingText {
             EuriaResourcesStrings.onboardingPrivacyTemplate
         case .ephemeral:
             EuriaResourcesStrings.onboardingEphemeralTemplate
+        case .login:
+            EuriaResourcesStrings.onboardingLoginTemplate
         }
     }
 }

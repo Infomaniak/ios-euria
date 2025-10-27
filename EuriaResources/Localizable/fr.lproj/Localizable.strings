@@ -4,7 +4,7 @@
  * Locale: fr, French
  * Tagged: ios
  * Exported by: Baptiste Griva
- * Exported at: Mon, 27 Oct 2025 09:14:38 +0100
+ * Exported at: Mon, 27 Oct 2025 11:20:01 +0100
  */
 
 /* loco:68ff1e2dd83ab9aa2509ad92 */
@@ -18,6 +18,12 @@
 
 /* loco:68ff154bb297799a18033994 */
 "onboardingEuriaTemplate" = "Euria\nL’assistant IA %@";
+
+/* loco:68ff458ed23e12776a0209c2 */
+"onboardingLoginArgument" = "Discutez dès maintenant avec Euria.";
+
+/* loco:68ff44d0c7acdcfd0806acb3 */
+"onboardingLoginTemplate" = "Prêt à commencer ?\n%@";
 
 /* loco:68ff18295557e819550517a2 */
 "onboardingPrivacyArgument" = "chiffrées, privées et respectées.";
