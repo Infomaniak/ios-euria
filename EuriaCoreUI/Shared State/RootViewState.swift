@@ -56,7 +56,10 @@ public final class RootViewState: ObservableObject {
     private func transitionToMainViewIfPossible() {
         Task {
             @InjectService var accountManager: AccountManagerable
-            guard let currentSession = await accountManager.currentSession else { return }
+            guard let currentSession = await accountManager.currentSession else {
+                transition(toState: .onboarding)
+                return
+            }
 
             transition(toState: .mainView(MainViewState(userSession: currentSession)))
         }

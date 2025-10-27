@@ -41,14 +41,6 @@ public struct MainView: View {
                 webConfiguration: webConfiguration,
                 navigationDelegate: euriaNavigationDelegate
             )
-            .toolbar {
-                Button("Disconnect") {
-                    Task {
-                        await accountManager.removeTokenAndAccountFor(userId: mainViewState.userSession.userId)
-                        rootViewState.transition(toState: .onboarding)
-                    }
-                }
-            }
             .task {
                 await setEuriaConfiguration(webConfiguration: webConfiguration)
             }
@@ -72,6 +64,8 @@ public struct MainView: View {
         ]) {
             await setCookie(cookie: languageCookie, store: cookieStore)
         }
+
+        webConfiguration.userContentController.add(euriaNavigationDelegate, name: "logout")
     }
 
     func setCookie(cookie: HTTPCookie, store: WKHTTPCookieStore) async {
@@ -80,6 +74,8 @@ public struct MainView: View {
         }
     }
 }
+
+protocol WebViewControllable: WKScriptMessageHandler, WKNavigationDelegate {}
 
 #Preview {
     MainView()

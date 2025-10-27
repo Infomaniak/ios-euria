@@ -16,12 +16,26 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCore
 import InfomaniakCore
 import InfomaniakDI
+import SwiftUI
 import UIKit
 import WebKit
 
-class EuriaNavigationHandler: NSObject, WKNavigationDelegate {
+class EuriaNavigationHandler: NSObject, WKNavigationDelegate, WebViewControllable {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        @InjectService var accountManager: AccountManagerable
+        if message.body as? String == "logout" {
+            Task {
+                guard let userId = await accountManager.currentSession?.userId else {
+                    return
+                }
+                await accountManager.removeTokenAndAccountFor(userId: userId)
+            }
+        }
+    }
+
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
