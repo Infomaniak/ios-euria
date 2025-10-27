@@ -28,8 +28,9 @@ extension Slide {
                 backgroundImageTintColor: nil,
                 content: .animation(IKLottieConfiguration(
                     id: 1,
-                    filename: "euria-base",
-                    bundle: EuriaResourcesResources.bundle
+                    filename: ThemedAnimation.onboardingEuria.animationName(),
+                    bundle: EuriaResourcesResources.bundle,
+                    animationType: .dotLottie
                 )),
                 bottomView: OnboardingTextView(text: .euria)
             ),
@@ -38,8 +39,9 @@ extension Slide {
                 backgroundImageTintColor: nil,
                 content: .animation(IKLottieConfiguration(
                     id: 2,
-                    filename: "conversation-bubbles",
-                    bundle: EuriaResourcesResources.bundle
+                    filename: ThemedAnimation.onboardingPrivacy.animationName(),
+                    bundle: EuriaResourcesResources.bundle,
+                    animationType: .dotLottie
                 )),
                 bottomView: OnboardingTextView(text: .privacy)
             ),
@@ -48,8 +50,9 @@ extension Slide {
                 backgroundImageTintColor: nil,
                 content: .animation(IKLottieConfiguration(
                     id: 3,
-                    filename: "euria-base-ephemeral",
-                    bundle: EuriaResourcesResources.bundle
+                    filename: ThemedAnimation.onboardingEphemeral.animationName(),
+                    bundle: EuriaResourcesResources.bundle,
+                    animationType: .dotLottie
                 )),
                 bottomView: OnboardingTextView(text: .ephemeral)
             ),
@@ -58,8 +61,9 @@ extension Slide {
                 backgroundImageTintColor: nil,
                 content: .animation(IKLottieConfiguration(
                     id: 4,
-                    filename: "euria-base",
-                    bundle: EuriaResourcesResources.bundle
+                    filename: ThemedAnimation.onboardingEuria.animationName(),
+                    bundle: EuriaResourcesResources.bundle,
+                    animationType: .dotLottie
                 )),
                 bottomView: OnboardingTextView(text: .login)
             )

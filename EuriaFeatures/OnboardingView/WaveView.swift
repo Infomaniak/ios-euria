@@ -116,10 +116,15 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
             guard case .animation(let configuration) = parent.slides[index].content else { return }
 
             let themedFileName = getAnimation(for: index)
-            let animation = LottieAnimation.named(themedFileName, bundle: configuration.bundle)
+            Task {
+                let dotLottieFile = try await DotLottieFile.named(
+                    themedFileName,
+                    bundle: configuration.bundle
+                )
 
-            slideViewCell.illustrationAnimationView.animation = animation
-            slideViewCell.illustrationAnimationView.play()
+                slideViewCell.illustrationAnimationView.loadAnimation(from: dotLottieFile)
+                slideViewCell.illustrationAnimationView.play()
+            }
         }
 
         private func getAnimation(for index: Int) -> String {
