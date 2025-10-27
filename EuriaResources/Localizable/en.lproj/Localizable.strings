@@ -1,7 +1,12 @@
-/* 
-  Localizable.strings
-  Euria
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: en, English
+ * Tagged: ios
+ * Exported by: Baptiste Griva
+ * Exported at: Mon, 27 Oct 2025 11:29:46 +0100
+ */
 
-  Created by Valentin Perignon on 22.10.2025.
-  
-*/
+/* loco:68ff4981634f6375880c8ba2 */
+"buttonLogin" = "Login";
+

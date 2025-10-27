@@ -21,6 +21,7 @@ import DesignSystem
 import EuriaCore
 import EuriaResources
 import InfomaniakCoreUIResources
+import InfomaniakCreateAccount
 import InfomaniakDI
 import InfomaniakOnboarding
 import InterAppLogin
@@ -30,6 +31,7 @@ struct OnboardingBottomButtonsView: View {
     @ObservedObject var loginHandler = LoginHandler()
 
     @State private var excludedUserIds: [AccountManagerable.UserId] = []
+    @State private var isPresentingCreateAccount = false
 
     @Binding var selection: Int
 
@@ -46,7 +48,7 @@ struct OnboardingBottomButtonsView: View {
             } onLoginWithAccountsPressed: { accounts in
                 loginWithAccountsPressed(accounts: accounts)
             } onCreateAccountPressed: {
-                // TODO: Handle Account creation
+                isPresentingCreateAccount = true
             }
         }
         .ikButtonFullWidth(true)
@@ -72,6 +74,12 @@ struct OnboardingBottomButtonsView: View {
         }
         .padding(.horizontal, value: .large)
         .padding(.bottom, IKPadding.medium)
+        .sheet(isPresented: $isPresentingCreateAccount) {
+            RegisterView(registrationProcess: .mail) { viewController in
+                guard let viewController else { return }
+                loginHandler.loginAfterAccountCreation(from: viewController)
+            }
+        }
         .task {
             @InjectService var accountManager: AccountManagerable
             excludedUserIds = await accountManager.getAccountIds()
