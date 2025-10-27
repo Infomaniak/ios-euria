@@ -49,6 +49,7 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
     func loginAfterAccountCreation(from viewController: UIViewController) {
         isLoading = true
         defer { isLoading = false }
+
         loginService.setupWebviewNavbar(
             title: EuriaResourcesStrings.buttonLogin,
             titleColor: nil,
