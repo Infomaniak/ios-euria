@@ -17,32 +17,44 @@
  */
 
 import DesignSystem
+import EuriaResources
 import SwiftUI
 
 enum OnboardingText {
-    case slide1
-    case slide2
-    case slide3
+    case euria
+    case privacy
+    case ephemeral
 
-    var title: String {
+    var subtitle: AttributedString {
+        var result = AttributedString(template(argument))
+        result.font = .body
+
+        if let argumentRange = result.range(of: argument) {
+            result[argumentRange].font = .body.bold()
+        }
+
+        return result
+    }
+
+    private var argument: String {
         switch self {
-        case .slide1:
-            return "title1"
-        case .slide2:
-            return "title2"
-        case .slide3:
-            return "title3"
+        case .euria:
+            EuriaResourcesStrings.onboardingEuriaArgument
+        case .privacy:
+            EuriaResourcesStrings.onboardingPrivacyArgument
+        case .ephemeral:
+            EuriaResourcesStrings.onboardingEphemeralArgument
         }
     }
 
-    var subtitle: String {
+    private var template: (Any) -> String {
         switch self {
-        case .slide1:
-            return "onboarding_slide_1_text"
-        case .slide2:
-            return "onboarding_slide_2_text"
-        case .slide3:
-            return "onboarding_slide_3_text"
+        case .euria:
+            EuriaResourcesStrings.onboardingEuriaTemplate
+        case .privacy:
+            EuriaResourcesStrings.onboardingPrivacyTemplate
+        case .ephemeral:
+            EuriaResourcesStrings.onboardingEphemeralTemplate
         }
     }
 }
@@ -52,8 +64,6 @@ struct OnboardingTextView: View {
 
     var body: some View {
         VStack(spacing: IKPadding.mini) {
-            Text(text.title)
-                .font(.title)
             Text(text.subtitle)
         }
         .multilineTextAlignment(.center)

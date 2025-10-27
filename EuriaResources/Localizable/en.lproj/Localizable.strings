@@ -4,8 +4,26 @@
  * Locale: en, English
  * Tagged: ios
  * Exported by: Baptiste Griva
- * Exported at: Mon, 27 Oct 2025 11:29:46 +0100
+ * Exported at: Mon, 27 Oct 2025 09:14:38 +0100
  */
+
+/* loco:68ff1e2dd83ab9aa2509ad92 */
+"onboardingEphemeralArgument" = "your conversations with Euria fade at the end of each session.";
+
+/* loco:68ff1a4275f0868be50057e3 */
+"onboardingEphemeralTemplate" = "Ephemeral mode enabled:\n%@";
+
+/* loco:68ff15ef184733f2080e3484 */
+"onboardingEuriaArgument" = "ethical, sovereign and independent.";
+
+/* loco:68ff154bb297799a18033994 */
+"onboardingEuriaTemplate" = "Euria\nThe IA assistant %@";
+
+/* loco:68ff18295557e819550517a2 */
+"onboardingPrivacyArgument" = "ciphered, private and respected.";
+
+/* loco:68ff1702d6e8ef51560e41e2 */
+"onboardingPrivacyTemplate" = "With Euria,\nyour conversations are %@";
 
 /* loco:68ff4981634f6375880c8ba2 */
 "buttonLogin" = "Login";
