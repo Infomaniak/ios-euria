@@ -24,12 +24,11 @@ import InfomaniakDI
 import InfomaniakLogin
 import OSLog
 
-public protocol AccountManagerable {
+public protocol AccountManagerable: Sendable {
     typealias UserId = Int
 
     var accounts: [ApiToken] { get async }
     var userProfileStore: UserProfileStore { get async }
-
     var currentSession: (any UserSessionable)? { get async }
 
     var objectWillChange: ObservableObjectPublisher { get }
