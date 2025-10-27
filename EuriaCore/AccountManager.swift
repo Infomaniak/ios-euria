@@ -55,6 +55,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
 
     public private(set) var currentSession: (any UserSessionable)? {
         didSet {
+            UserDefaults.shared.currentUserId = currentSession?.userId ?? 0
             SentryDebug.setUserID(currentSession?.userId)
             objectWillChange.send()
         }
@@ -67,7 +68,17 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         return tokenStore.getAllTokens().values.map { $0.apiToken }
     }
 
-    public init() {}
+    public init() {
+        Task {
+            let currentUserID = UserDefaults.shared.currentUserId
+
+            let currentUserSession = await getUserSession(for: currentUserID)
+            let firstSession = await getFirstSession()
+            if let userSession = currentUserSession ?? firstSession {
+                await setCurrentSession(session: userSession)
+            }
+        }
+    }
 
     public func createAndSetCurrentAccount(code: String, codeVerifier: String) async throws {
         let token = try await networkLoginService.apiTokenUsing(code: code, codeVerifier: codeVerifier)
@@ -87,7 +98,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         let deviceId = try await deviceManager.getOrCreateCurrentDevice().uid
         tokenStore.addToken(newToken: token, associatedDeviceId: deviceId)
 
-        guard let session = await getUserSession(for: user.id) as? UserSession else {
+        guard let session = getUserSession(for: user.id) as? UserSession else {
             // TODO: throw real error
             fatalError("Failed to retrieve user session after creating account")
         }
@@ -97,7 +108,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         return session
     }
 
-    public func setCurrentSession(session: any UserSessionable) async {
+    public func setCurrentSession(session: any UserSessionable) {
         currentSession = session
     }
 
@@ -138,7 +149,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         }
     }
 
-    public func getUserSession(for userId: UserId) async -> (any UserSessionable)? {
+    public func getUserSession(for userId: UserId) -> (any UserSessionable)? {
         if let session = sessions[userId] {
             return session
         } else if let token = tokenStore.tokenFor(userId: userId) {
@@ -160,9 +171,9 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         }
     }
 
-    public func getFirstSession() async -> (any UserSessionable)? {
+    public func getFirstSession() -> (any UserSessionable)? {
         guard let firstToken = tokenStore.getAllTokens().values.first,
-              let session = await getUserSession(for: firstToken.userId) else {
+              let session = getUserSession(for: firstToken.userId) else {
             return nil
         }
 
