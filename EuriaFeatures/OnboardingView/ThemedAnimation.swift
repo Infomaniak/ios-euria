@@ -19,7 +19,7 @@
 import Lottie
 import SwiftUI
 
-public struct ThemedAnimation {
+public struct ThemedAnimation: Sendable {
     private let light: String
     private let dark: String
 
@@ -28,7 +28,7 @@ public struct ThemedAnimation {
         self.dark = dark
     }
 
-    func getLottieForCurrentScheme(colorScheme: ColorScheme? = nil) -> String {
+    func animationName(for colorScheme: ColorScheme? = nil) -> String {
         let fileName = colorScheme == .dark ? dark : light
         return fileName
     }

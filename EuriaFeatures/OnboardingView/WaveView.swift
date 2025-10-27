@@ -116,11 +116,11 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
             let themedFileName = {
                 switch index {
                 case 1:
-                    ThemedAnimation.onboardingPrivacy.getLottieForCurrentScheme(colorScheme: currentColorScheme)
+                    ThemedAnimation.onboardingPrivacy.animationName(for: currentColorScheme)
                 case 2:
-                    ThemedAnimation.onboardingEphemeral.getLottieForCurrentScheme(colorScheme: currentColorScheme)
+                    ThemedAnimation.onboardingEphemeral.animationName(for: currentColorScheme)
                 default:
-                    ThemedAnimation.onboardingEuria.getLottieForCurrentScheme(colorScheme: currentColorScheme)
+                    ThemedAnimation.onboardingEuria.animationName(for: currentColorScheme)
                 }
             }()
 

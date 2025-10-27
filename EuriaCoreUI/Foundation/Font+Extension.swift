@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import InfomaniakCoreSwiftUI
 import SwiftUI
 
 public extension Font {
@@ -24,19 +25,5 @@ public extension Font {
         public static let specificTitleMedium = Font.dynamicTypeSizeFont(size: 22, weight: .medium, relativeTo: .title)
         /// Figma name: *Spécifique 22 Light*
         public static let specificTitleLight = Font.dynamicTypeSizeFont(size: 22, weight: .light, relativeTo: .title)
-    }
-
-    /// Create a custom font with the UIFont preferred font family.
-    /// - Parameters:
-    ///   - size: Default size of the font for the "large" `Dynamic Type Size`.
-    ///   - weight: Weight of the font.
-    ///   - textStyle: The text style on which the font will be based to scale.
-    ///
-    /// - Returns: A font with the specified attributes.
-    ///
-    /// SwiftUI will use the default system font with the specified weight and size use `Dynamic Type Size`.
-    private static func dynamicTypeSizeFont(size: CGFloat, weight: Weight, relativeTo textStyle: TextStyle) -> Font {
-        let fontFamily = UIFont.preferredFont(forTextStyle: .body).familyName
-        return custom(fontFamily, size: size, relativeTo: textStyle).weight(weight)
     }
 }
