@@ -17,20 +17,31 @@
  */
 
 import EuriaCoreUI
+import InfomaniakCore
 import SwiftUI
+import UIKit
 import WebKit
 
 struct WebView: UIViewRepresentable {
-    @EnvironmentObject private var mainViewState: MainViewState
+    typealias WebViewDelegate = WKNavigationDelegate & WKScriptMessageHandler
+
     let url: URL
+    var webConfiguration = WKWebViewConfiguration()
+    var delegate: WebViewDelegate?
 
     func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
-        var request = URLRequest(url: url)
-        if let token = mainViewState.userSession.apiFetcher.currentToken {
-            request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+
+        if let delegate {
+            webView.navigationDelegate = delegate
         }
+        #if DEBUG
+        webView.isInspectable = true
+        #endif
+
+        let request = URLRequest(url: url)
         webView.load(request)
+
         return webView
     }
 
