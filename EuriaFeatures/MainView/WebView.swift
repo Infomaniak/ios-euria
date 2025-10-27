@@ -23,7 +23,7 @@ import UIKit
 import WebKit
 
 struct WebView: UIViewRepresentable {
-    typealias WebViewDelegate = WKScriptMessageHandler & WKNavigationDelegate
+    typealias WebViewDelegate = WKNavigationDelegate & WKScriptMessageHandler
 
     let url: URL
     var webConfiguration = WKWebViewConfiguration()

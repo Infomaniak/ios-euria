@@ -24,34 +24,44 @@ extension Slide {
     static var onboardingSlides: [Slide] {
         return [
             Slide(
-                backgroundImage: EuriaResourcesAsset.Images.onboardingBackground1.image,
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
                 backgroundImageTintColor: nil,
                 content: .animation(IKLottieConfiguration(
                     id: 1,
-                    filename: "storage-cardboard-box",
+                    filename: "euria-base",
                     bundle: EuriaResourcesResources.bundle
                 )),
-                bottomView: OnboardingTextView(text: .slide1)
+                bottomView: OnboardingTextView(text: .euria)
             ),
             Slide(
-                backgroundImage: EuriaResourcesAsset.Images.onboardingBackground2.image,
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBlurLeft.image,
                 backgroundImageTintColor: nil,
                 content: .animation(IKLottieConfiguration(
                     id: 2,
-                    filename: "cards-transfer-type",
+                    filename: "conversation-bubbles",
                     bundle: EuriaResourcesResources.bundle
                 )),
-                bottomView: OnboardingTextView(text: .slide2)
+                bottomView: OnboardingTextView(text: .privacy)
             ),
             Slide(
-                backgroundImage: EuriaResourcesAsset.Images.onboardingBackground3.image,
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
                 backgroundImageTintColor: nil,
                 content: .animation(IKLottieConfiguration(
                     id: 3,
-                    filename: "padlocks",
+                    filename: "euria-base-ephemeral",
                     bundle: EuriaResourcesResources.bundle
                 )),
-                bottomView: OnboardingTextView(text: .slide3)
+                bottomView: OnboardingTextView(text: .ephemeral)
+            ),
+            Slide(
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBlurLeft.image,
+                backgroundImageTintColor: nil,
+                content: .animation(IKLottieConfiguration(
+                    id: 4,
+                    filename: "euria-base",
+                    bundle: EuriaResourcesResources.bundle
+                )),
+                bottomView: OnboardingTextView(text: .login)
             )
         ]
     }

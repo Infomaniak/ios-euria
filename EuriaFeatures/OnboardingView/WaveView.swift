@@ -73,8 +73,7 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         return Coordinator(
             parent: self,
             colorScheme: colorScheme,
-            shouldAnimateBottomViewForIndex: shouldAnimateBottomViewForIndex,
-            bottomView: bottomView
+            shouldAnimateBottomViewForIndex: shouldAnimateBottomViewForIndex
         )
     }
 
@@ -83,18 +82,15 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         var currentColorScheme: ColorScheme
 
         let shouldAnimateBottomViewForIndex: (Int) -> Bool
-        let bottomView: (Int) -> BottomView
 
         init(
             parent: WaveView<BottomView>,
             colorScheme: ColorScheme,
             shouldAnimateBottomViewForIndex: @escaping (Int) -> Bool,
-            bottomView: @escaping (Int) -> BottomView
         ) {
             self.parent = parent
             currentColorScheme = colorScheme
             self.shouldAnimateBottomViewForIndex = shouldAnimateBottomViewForIndex
-            self.bottomView = bottomView
         }
 
         func bottomViewForIndex(_ index: Int) -> (any View)? {
@@ -118,10 +114,22 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         func selectCorrectAnimation(for slideViewCell: SlideCollectionViewCell, at index: Int) {
             guard case .animation(let configuration) = parent.slides[index].content else { return }
 
-            let suffix = currentColorScheme == .dark ? "dark" : "light"
-            let animation = LottieAnimation.named("\(configuration.filename)-\(suffix)", bundle: configuration.bundle)
+            let themedFileName = getAnimation(for: index)
+            let animation = LottieAnimation.named(themedFileName, bundle: configuration.bundle)
+
             slideViewCell.illustrationAnimationView.animation = animation
             slideViewCell.illustrationAnimationView.play()
+        }
+
+        private func getAnimation(for index: Int) -> String {
+            switch index {
+            case 1:
+                return ThemedAnimation.onboardingPrivacy.animationName(for: currentColorScheme)
+            case 2:
+                return ThemedAnimation.onboardingEphemeral.animationName(for: currentColorScheme)
+            default:
+                return ThemedAnimation.onboardingEuria.animationName(for: currentColorScheme)
+            }
         }
     }
 }

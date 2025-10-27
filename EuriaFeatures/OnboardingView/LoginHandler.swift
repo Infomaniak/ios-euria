@@ -18,6 +18,7 @@
 
 import AuthenticationServices
 import EuriaCore
+import EuriaResources
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakDeviceCheck
@@ -28,12 +29,37 @@ import InterAppLogin
 import SwiftUI
 
 @MainActor
-final class LoginHandler: ObservableObject {
+final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
     @LazyInjectService private var loginService: InfomaniakLoginable
     @LazyInjectService private var tokenService: InfomaniakNetworkLoginable
     @LazyInjectService private var accountManager: AccountManagerable
 
     @Published var isLoading = false
+
+    func didCompleteLoginWith(code: String, verifier: String) {
+        Task {
+            try await loginSuccessful(code: code, codeVerifier: verifier)
+        }
+    }
+
+    func didFailLoginWith(error: any Error) {
+        loginFailed(error: error)
+    }
+
+    func loginAfterAccountCreation(from viewController: UIViewController) {
+        isLoading = true
+        defer { isLoading = false }
+
+        loginService.setupWebviewNavbar(
+            title: EuriaResourcesStrings.buttonLogin,
+            titleColor: nil,
+            color: nil,
+            buttonColor: nil,
+            clearCookie: false,
+            timeOutMessage: nil
+        )
+        loginService.webviewLoginFrom(viewController: viewController, hideCreateAccountButton: true, delegate: self)
+    }
 
     func login() async {
         isLoading = true

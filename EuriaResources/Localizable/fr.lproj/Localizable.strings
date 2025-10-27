@@ -1,7 +1,36 @@
-/* 
-  Localizable.strings
-  Euria
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: fr, French
+ * Tagged: ios
+ * Exported by: Baptiste Griva
+ * Exported at: Mon, 27 Oct 2025 11:20:01 +0100
+ */
 
-  Created by Valentin Perignon on 22.10.2025.
-  
-*/
+/* loco:68ff1e2dd83ab9aa2509ad92 */
+"onboardingEphemeralArgument" = "vos conversations avec Euria s’effacent à la fin de chaque session.";
+
+/* loco:68ff1a4275f0868be50057e3 */
+"onboardingEphemeralTemplate" = "Mode éphémère activé :\n%@";
+
+/* loco:68ff15ef184733f2080e3484 */
+"onboardingEuriaArgument" = "éthique, souverain et indépendant.";
+
+/* loco:68ff154bb297799a18033994 */
+"onboardingEuriaTemplate" = "Euria\nL’assistant IA %@";
+
+/* loco:68ff458ed23e12776a0209c2 */
+"onboardingLoginArgument" = "Discutez dès maintenant avec Euria.";
+
+/* loco:68ff44d0c7acdcfd0806acb3 */
+"onboardingLoginTemplate" = "Prêt à commencer ?\n%@";
+
+/* loco:68ff18295557e819550517a2 */
+"onboardingPrivacyArgument" = "chiffrées, privées et respectées.";
+
+/* loco:68ff1702d6e8ef51560e41e2 */
+"onboardingPrivacyTemplate" = "Avec Euria,\nvos conversations sont %@";
+
+/* loco:68ff4981634f6375880c8ba2 */
+"buttonLogin" = "Connexion";
+

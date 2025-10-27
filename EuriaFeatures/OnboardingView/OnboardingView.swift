@@ -24,14 +24,9 @@ import InfomaniakOnboarding
 import SwiftUI
 
 public struct OnboardingView: View {
-    @InjectService private var accountManager: AccountManagerable
-
-    @EnvironmentObject private var rootViewState: RootViewState
-
-    @State private var excludedUserIds: [AccountManagerable.UserId] = []
     @State private var loginHandler = LoginHandler()
-
     @State private var selectedSlideIndex = 0
+
     private let slides = Slide.onboardingSlides
 
     public init() {}
