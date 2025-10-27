@@ -27,10 +27,6 @@ import InterAppLogin
 import OSLog
 import Sentry
 
-public extension UserDefaults {
-    static let shared = UserDefaults(suiteName: Constants.appGroupIdentifier)!
-}
-
 extension [Factory] {
     func registerFactoriesInDI() {
         forEach { SimpleResolver.sharedResolver.store(factory: $0) }
