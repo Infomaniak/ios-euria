@@ -61,12 +61,8 @@ struct OnboardingBottomButtonsView: View {
                         selection = min(slideCount - 1, selection + 1)
                     }
                 } label: {
-                    Label {
-                        Text(CoreUILocalizable.buttonNext)
-                    } icon: {
-                        EuriaResourcesAsset.Images.arrowRight.swiftUIImage
-                    }
-                    .labelStyle(.iconOnly)
+                    EuriaResourcesAsset.Images.arrowRight.swiftUIImage
+                        .iconSize(.large)
                 }
                 .buttonStyle(.ikSquare)
                 .controlSize(.large)

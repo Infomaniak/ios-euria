@@ -34,6 +34,7 @@ struct EuriaApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(rootViewState)
+                .ikButtonTheme(.euria)
         }
         .defaultAppStorage(.shared)
     }
