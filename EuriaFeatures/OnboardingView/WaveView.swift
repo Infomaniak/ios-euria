@@ -113,20 +113,23 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
 
         func selectCorrectAnimation(for slideViewCell: SlideCollectionViewCell, at index: Int) {
             guard case .animation(let configuration) = parent.slides[index].content else { return }
-            let themedFileName = {
-                switch index {
-                case 1:
-                    ThemedAnimation.onboardingPrivacy.animationName(for: currentColorScheme)
-                case 2:
-                    ThemedAnimation.onboardingEphemeral.animationName(for: currentColorScheme)
-                default:
-                    ThemedAnimation.onboardingEuria.animationName(for: currentColorScheme)
-                }
-            }()
 
+            let themedFileName = getAnimation(for: index)
             let animation = LottieAnimation.named(themedFileName, bundle: configuration.bundle)
+
             slideViewCell.illustrationAnimationView.animation = animation
             slideViewCell.illustrationAnimationView.play()
+        }
+
+        private func getAnimation(for index: Int) -> String {
+            switch index {
+            case 1:
+                return ThemedAnimation.onboardingPrivacy.animationName(for: currentColorScheme)
+            case 2:
+                return ThemedAnimation.onboardingEphemeral.animationName(for: currentColorScheme)
+            default:
+                return ThemedAnimation.onboardingEuria.animationName(for: currentColorScheme)
+            }
         }
     }
 }

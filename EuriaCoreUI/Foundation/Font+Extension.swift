@@ -25,5 +25,8 @@ public extension Font {
         public static let specificTitleMedium = Font.dynamicTypeSizeFont(size: 22, weight: .medium, relativeTo: .title)
         /// Figma name: *Spécifique 22 Light*
         public static let specificTitleLight = Font.dynamicTypeSizeFont(size: 22, weight: .light, relativeTo: .title)
+
+        /// Figma name: *Body Medium*
+        public static let bodyMedium = Font.dynamicTypeSizeFont(size: 16, weight: .medium, relativeTo: .body)
     }
 }
