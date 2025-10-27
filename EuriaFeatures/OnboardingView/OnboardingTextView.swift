@@ -28,10 +28,10 @@ enum OnboardingText {
 
     var subtitle: AttributedString {
         var result = AttributedString(template(argument))
-        result.font = .body
+        result.font = .Euria.specificTitleLight
 
         if let argumentRange = result.range(of: argument) {
-            result[argumentRange].font = .body.bold()
+            result[argumentRange].font = .Euria.specificTitleMedium
         }
 
         return result
