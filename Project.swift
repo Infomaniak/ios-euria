@@ -117,7 +117,8 @@ let project = Project(
                     "EuriaResources/**/*.xcassets",
                     "EuriaResources/**/*.strings",
                     "EuriaResources/**/*.stringsdict",
-                    "EuriaResources/**/*.json"
+                    "EuriaResources/**/*.json",
+                    "EuriaResources/**/*.lottie"
                 ],
                 settings: .settings(base: Constants.baseSettings))
     ]
