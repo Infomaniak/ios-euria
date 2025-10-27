@@ -19,7 +19,6 @@ let packageSettings = PackageSettings(
         "InfomaniakDI": .framework,
         "InfomaniakLogin": .framework,
         "InterAppLogin": .framework,
-        "Lottie": .framework,
         "NukeUI": .framework,
         "Nuke": .framework,
         "VersionChecker": .framework,
@@ -31,7 +30,6 @@ let packageSettings = PackageSettings(
 let package = Package(
     name: "Euria",
     dependencies: [
-        .package(url: "https://github.com/airbnb/lottie-spm", .upToNextMajor(from: "4.5.1")),
         .package(url: "https://github.com/getsentry/sentry-cocoa", .upToNextMajor(from: "8.0.0")),
         .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "18.2.0")),
         .package(url: "https://github.com/Infomaniak/ios-core-ui", .upToNextMajor(from: "24.0.0")),

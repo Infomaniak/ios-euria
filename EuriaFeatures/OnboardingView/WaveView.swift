@@ -22,6 +22,7 @@ import SwiftUI
 
 struct WaveView<BottomView: View>: UIViewControllerRepresentable {
     @Environment(\.colorScheme) private var colorScheme
+
     @Binding var selectedSlide: Int
 
     let slides: [Slide]
