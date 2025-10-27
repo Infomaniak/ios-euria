@@ -56,7 +56,8 @@ let project = Project(
                 "Euria/Resources/LaunchScreen.storyboard",
                 "Euria/Resources/Assets.xcassets", // Needed for AppIcon and LaunchScreen
                 "Euria/Resources/PrivacyInfo.xcprivacy",
-                "Euria/Resources/Localizable/**/InfoPlist.strings"
+                "Euria/Resources/Localizable/**/InfoPlist.strings",
+                "Euria/Resources/AppIcon.icon/**"
             ],
             entitlements: "Euria/Resources/Euria.entitlements",
             scripts: [
