@@ -18,6 +18,7 @@
 
 import AuthenticationServices
 import EuriaCore
+import EuriaResources
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakDeviceCheck
@@ -49,7 +50,7 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
         isLoading = true
         defer { isLoading = false }
         loginService.setupWebviewNavbar(
-            title: "Inscription",
+            title: EuriaResourcesStrings.buttonLogin,
             titleColor: nil,
             color: nil,
             buttonColor: nil,
