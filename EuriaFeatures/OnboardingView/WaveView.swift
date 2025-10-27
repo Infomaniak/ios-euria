@@ -113,7 +113,7 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
 
         func selectCorrectAnimation(for slideViewCell: SlideCollectionViewCell, at index: Int) {
             guard case .animation(let configuration) = parent.slides[index].content else { return }
-            let themedFileName: String = {
+            let themedFileName = {
                 switch index {
                 case 1:
                     ThemedAnimation.onboardingPrivacy.getLottieForCurrentScheme(colorScheme: currentColorScheme)
