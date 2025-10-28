@@ -20,7 +20,7 @@ import InfomaniakCoreSwiftUI
 import SwiftUI
 
 public extension Font {
-    @frozen enum Euria {
+    enum Euria {
         /// Figma name: *Spécifique 22 Medium*
         public static let specificTitleMedium = Font.dynamicTypeSizeFont(size: 22, weight: .medium, relativeTo: .title)
         /// Figma name: *Spécifique 22 Light*

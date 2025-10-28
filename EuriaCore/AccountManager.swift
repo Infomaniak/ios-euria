@@ -35,13 +35,18 @@ public protocol AccountManagerable: Sendable {
 
     func createAndSetCurrentAccount(code: String, codeVerifier: String) async throws
     func createAccount(token: ApiToken) async throws -> (any UserSessionable)
-    func updateAccount(token: ApiToken) async throws
     func removeTokenAndAccountFor(userId: Int) async
     func setCurrentSession(session: any UserSessionable) async
     func getUserSession(for userId: UserId) async -> (any UserSessionable)?
     func getFirstSession() async -> (any UserSessionable)?
     func getAccountIds() async -> [AccountManagerable.UserId]
     func getApiFetcher(for userId: UserId, token: ApiToken) async -> ApiFetcher
+}
+
+public extension AccountManager {
+    enum ErrorDomain: Error {
+        case noUserSession
+    }
 }
 
 public actor AccountManager: AccountManagerable, ObservableObject {
@@ -73,8 +78,8 @@ public actor AccountManager: AccountManagerable, ObservableObject {
             let currentUserID = UserDefaults.shared.currentUserId
 
             let currentUserSession = await getUserSession(for: currentUserID)
-            let firstSession = await getFirstSession()
-            if let userSession = currentUserSession ?? firstSession {
+            let fallbackFirstSession = await getFirstSession()
+            if let userSession = currentUserSession ?? fallbackFirstSession {
                 await setCurrentSession(session: userSession)
             }
         }
@@ -85,7 +90,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
 
         do {
             let session = try await createAccount(token: token)
-            await setCurrentSession(session: session)
+            setCurrentSession(session: session)
         } catch {
             throw error
         }
@@ -99,8 +104,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         tokenStore.addToken(newToken: token, associatedDeviceId: deviceId)
 
         guard let session = getUserSession(for: user.id) as? UserSession else {
-            // TODO: throw real error
-            fatalError("Failed to retrieve user session after creating account")
+            throw ErrorDomain.noUserSession
         }
 
         attachDeviceToApiToken(token, apiFetcher: session.apiFetcher)
@@ -110,10 +114,6 @@ public actor AccountManager: AccountManagerable, ObservableObject {
 
     public func setCurrentSession(session: any UserSessionable) {
         currentSession = session
-    }
-
-    public func updateAccount(token: ApiToken) async throws {
-        // TODO: Implement account update logic if needed based on Mail
     }
 
     public func removeTokenAndAccountFor(userId: UserId) {
@@ -134,7 +134,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         }
 
         sessions.removeValue(forKey: userId)
-        apiFetchers.removeAll()
+        apiFetchers.removeValue(forKey: userId)
         deviceManager.forgetLocalDeviceHash(forUserId: userId)
     }
 

@@ -32,6 +32,7 @@ struct OnboardingBottomButtonsView: View {
 
     @State private var excludedUserIds: [AccountManagerable.UserId] = []
     @State private var isPresentingCreateAccount = false
+    @State private var isShowingError = false
 
     @Binding var selection: Int
 
@@ -76,9 +77,18 @@ struct OnboardingBottomButtonsView: View {
                 loginHandler.loginAfterAccountCreation(from: viewController)
             }
         }
+        .alert(isPresented: $isShowingError, error: loginHandler.error) {
+            Button(CoreUILocalizable.buttonClose) {
+                loginHandler.error = nil
+            }
+        }
         .task {
             @InjectService var accountManager: AccountManagerable
             excludedUserIds = await accountManager.getAccountIds()
+        }
+        .onChange(of: loginHandler.error) { newValue in
+            guard newValue != nil else { return }
+            isShowingError = true
         }
     }
 
