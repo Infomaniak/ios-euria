@@ -34,10 +34,13 @@ struct WebView: UIViewRepresentable {
         if let delegate {
             webView.navigationDelegate = delegate
         }
+
         #if DEBUG
         webView.isInspectable = true
         #endif
+
         webView.scrollView.bounces = false
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
 
         let request = URLRequest(url: url)
         webView.load(request)

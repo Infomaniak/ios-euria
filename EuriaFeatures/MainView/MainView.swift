@@ -53,9 +53,9 @@ public struct MainView: View {
 
             if isShowingOfflineView {
                 OfflineView()
-                    .ignoresSafeArea()
             }
         }
+        .ignoresSafeArea()
         .onAppear {
             networkMonitor.start()
             setupWebViewConfiguration()
