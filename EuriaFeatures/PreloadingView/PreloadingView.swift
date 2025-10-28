@@ -36,8 +36,6 @@ extension VerticalAlignment {
 }
 
 public struct PreloadingView: View {
-    @LazyInjectService private var accountManager: AccountManagerable
-
     @EnvironmentObject private var rootViewState: RootViewState
 
     private let backgroundImage = Image("splashscreen-background", bundle: .main)
@@ -69,11 +67,25 @@ public struct PreloadingView: View {
                 .padding(.bottom, value: .medium)
         }
         .task {
-            if let userSession = await accountManager.currentSession {
-                rootViewState.transition(toState: .mainView(MainViewState(userSession: userSession)))
-            } else {
-                rootViewState.transition(toState: .onboarding)
-            }
+            await preloadApp()
+        }
+    }
+
+    private func preloadApp() async {
+        @InjectService var appLaunchCounter: AppLaunchCounter
+        guard !appLaunchCounter.isFirstLaunch else {
+            @InjectService var tokenStore: TokenStore
+            tokenStore.removeAllTokens()
+            appLaunchCounter.increase()
+            rootViewState.transition(toState: .onboarding)
+            return
+        }
+
+        @InjectService var accountManager: AccountManagerable
+        if let userSession = await accountManager.currentSession {
+            rootViewState.transition(toState: .mainView(MainViewState(userSession: userSession)))
+        } else {
+            rootViewState.transition(toState: .onboarding)
         }
     }
 }
