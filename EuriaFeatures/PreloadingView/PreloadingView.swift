@@ -44,11 +44,7 @@ public struct PreloadingView: View {
     private let logoImage = Image("", bundle: .main)
     private let infomaniakLogoImage = Image("splashscreen-infomaniak", bundle: .main)
 
-    private let skipOnboarding: Bool
-
-    public init(skipOnboarding: Bool = false) {
-        self.skipOnboarding = skipOnboarding
-    }
+    public init() {}
 
     public var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .splashScreenIconAlignment)) {
