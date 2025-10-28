@@ -21,6 +21,7 @@ import EuriaCore
 import EuriaResources
 import InfomaniakConcurrency
 import InfomaniakCore
+import InfomaniakCoreUIResources
 import InfomaniakDeviceCheck
 import InfomaniakDI
 import InfomaniakLogin
@@ -35,6 +36,18 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
     @LazyInjectService private var accountManager: AccountManagerable
 
     @Published var isLoading = false
+    @Published var error: ErrorDomain?
+
+    enum ErrorDomain: Error, LocalizedError {
+        case loginFailed
+
+        var errorDescription: String? {
+            switch self {
+            case .loginFailed:
+                return CoreUILocalizable.anErrorHasOccurred
+            }
+        }
+    }
 
     func didCompleteLoginWith(code: String, verifier: String) {
         Task {
@@ -88,12 +101,14 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
                 let session = try await self.accountManager.createAccount(token: derivatedToken)
                 return session
             } catch {
+                SentryDebug.loginError(error: error, step: "loginWith")
                 return nil
             }
         }
 
         guard let firstSession = sessions.first else {
-            fatalError("No session could be created") // TODO: Handle error
+            error = .loginFailed
+            return
         }
 
         await accountManager.setCurrentSession(session: firstSession)
@@ -105,6 +120,8 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
 
     private func loginFailed(error: Error) {
         guard (error as? ASWebAuthenticationSessionError)?.code != .canceledLogin else { return }
-        // TODO: Handle error
+
+        self.error = .loginFailed
+        SentryDebug.loginError(error: error, step: "loginFailed")
     }
 }
