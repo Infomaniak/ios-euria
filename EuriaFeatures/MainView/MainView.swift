@@ -30,7 +30,8 @@ public struct MainView: View {
 
     @EnvironmentObject private var mainViewState: MainViewState
 
-    @State private var webViewDelegate = EuriaWebViewDelegate()
+    @StateObject private var webViewDelegate = EuriaWebViewDelegate()
+    @ObservedObject var networkMonitor = NetworkMonitor.shared
 
     public init() {}
 
@@ -41,7 +42,13 @@ public struct MainView: View {
             delegate: webViewDelegate
         )
         .onAppear {
+            networkMonitor.start()
             setupWebViewConfiguration()
+        }
+        .overlay {
+            if !networkMonitor.isConnected && !webViewDelegate.didLoad {
+                OfflineView()
+            }
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }

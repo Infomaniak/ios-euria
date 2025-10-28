@@ -38,5 +38,6 @@ public struct OfflineView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .background()
     }
 }

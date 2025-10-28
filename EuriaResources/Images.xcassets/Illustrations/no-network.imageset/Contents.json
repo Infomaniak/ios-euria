@@ -3,6 +3,16 @@
     {
       "filename" : "no-network 1.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "no-network-dark.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {
