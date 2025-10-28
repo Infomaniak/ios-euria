@@ -43,7 +43,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
             return
         }
 
-        if navigationHost == ApiEnvironment.current.euriaHost {
+        if navigationHost == "local.euria.dev.infomaniak.ch" {
             decisionHandler(.allow)
         } else {
             if navigationAction.navigationType == .linkActivated,
@@ -56,6 +56,21 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         isLoaded = true
+    }
+
+    func webView(
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        let protectionSpace = challenge.protectionSpace
+        if protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let serverTrust = protectionSpace.serverTrust {
+            let credential = URLCredential(trust: serverTrust)
+            completionHandler(.useCredential, credential)
+        } else {
+            completionHandler(.performDefaultHandling, nil)
+        }
     }
 }
 

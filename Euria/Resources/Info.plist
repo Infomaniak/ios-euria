@@ -24,6 +24,17 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>You will be able to transfer the photos and videos taken with your camera.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>You will be able to attach photos and videos taken with your camera to the conversation with Euria.</string>
 	<key>NSMicrophoneUsageDescription</key>

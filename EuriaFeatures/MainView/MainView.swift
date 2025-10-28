@@ -49,7 +49,7 @@ public struct MainView: View {
         ZStack {
             if isShowingWebView {
                 WebView(
-                    url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+                    url: URL(string: "https://local.euria.dev.infomaniak.ch:5173")!,
                     webConfiguration: webViewDelegate.webConfiguration,
                     delegate: webViewDelegate
                 )
