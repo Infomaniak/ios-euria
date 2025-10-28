@@ -48,7 +48,7 @@ public final class RootViewState: ObservableObject {
     }
 
     public func transition(toState state: RootViewType, animate: Bool = true) {
-        guard animate == true else {
+        guard animate else {
             self.state = state
             return
         }
