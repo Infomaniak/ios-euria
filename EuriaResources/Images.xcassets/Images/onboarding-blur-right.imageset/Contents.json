@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "no-network 1.svg",
+      "filename" : "right-light.svg",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "no-network-dark.svg",
+      "filename" : "right-dark.svg",
       "idiom" : "universal"
     }
   ],
@@ -20,7 +20,6 @@
     "version" : 1
   },
   "properties" : {
-    "localizable" : true,
     "preserves-vector-representation" : true
   }
 }

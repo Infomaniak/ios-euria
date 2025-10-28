@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Gauche (2).svg",
+      "filename" : "cloud-slash-circle-world-light.svg",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Gauche (3).svg",
+      "filename" : "cloud-slash-circle-world-dark.svg",
       "idiom" : "universal"
     }
   ],
@@ -20,6 +20,7 @@
     "version" : 1
   },
   "properties" : {
+    "localizable" : true,
     "preserves-vector-representation" : true
   }
 }
