@@ -25,8 +25,9 @@ import WebKit
 
 @MainActor
 class EuriaWebViewDelegate: NSObject, ObservableObject {
+    @Published var isLoaded = false
+
     let webConfiguration = WKWebViewConfiguration()
-    @Published var didLoad = false
 }
 
 // MARK: - WKNavigationDelegate
@@ -52,9 +53,9 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
             decisionHandler(.cancel)
         }
     }
-    
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        didLoad = true
+        isLoaded = true
     }
 }
 

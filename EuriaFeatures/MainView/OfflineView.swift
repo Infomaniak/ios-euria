@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import DesignSystem
 import EuriaResources
 import Foundation
 import SwiftUI
@@ -23,21 +24,31 @@ import SwiftUI
 public struct OfflineView: View {
     public init() {}
     public var body: some View {
-        ZStack(alignment: .top) {
-            Image(uiImage: EuriaResourcesAsset.Images.onboardingBlurLeft.image)
-                .ignoresSafeArea(edges: [.top, .leading])
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        ZStack {
+            EuriaResourcesAsset.Images.onboardingBlurLeft.swiftUIImage
+                .resizable()
+                .scaledToFit()
+                .ignoresSafeArea()
+                .frame(maxHeight: .infinity, alignment: .top)
 
-            VStack(spacing: 16) {
+            VStack(spacing: IKPadding.huge) {
                 EuriaResourcesAsset.Images.noNetwork.swiftUIImage
-                Text(EuriaResourcesStrings.noNetworkTitle).font(.Euria.title)
-                Text(EuriaResourcesStrings.noNetworkDescription)
-                    .font(.Euria.body)
-                    .foregroundStyle(Color.Euria.secondary)
-                    .multilineTextAlignment(.center)
+
+                VStack(spacing: IKPadding.medium) {
+                    Text(EuriaResourcesStrings.noNetworkTitle)
+                        .font(.Euria.title)
+                        .foregroundStyle(EuriaResourcesAsset.Colors.textPrimary.swiftUIColor)
+                    Text(EuriaResourcesStrings.noNetworkDescription)
+                        .font(.Euria.body)
+                        .foregroundStyle(EuriaResourcesAsset.Colors.textSecondary.swiftUIColor)
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .multilineTextAlignment(.center)
+            .padding(IKPadding.medium)
         }
-        .background()
     }
+}
+
+#Preview {
+    OfflineView()
 }
