@@ -121,7 +121,7 @@ public struct MainView: View {
     }
 
     private func createCookie(name: String, value: String) -> HTTPCookie? {
-        return HTTPCookie(properties: [.name: name, .value: value, .path: "/", .domain: ApiEnvironment.current.euriaHost])
+        return HTTPCookie(properties: [.name: name, .value: value, .path: "/", .domain: "local.euria.dev.infomaniak.ch"])
     }
 }
 
