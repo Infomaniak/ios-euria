@@ -28,7 +28,7 @@ public struct OfflineView: View {
                 .ignoresSafeArea(edges: [.top, .leading])
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
-            VStack(spacing: 32) {
+            VStack(spacing: 16) {
                 EuriaResourcesAsset.Images.noNetwork.swiftUIImage
                 Text(EuriaResourcesStrings.noNetworkTitle).font(.Euria.title)
                 Text(EuriaResourcesStrings.noNetworkDescription)
