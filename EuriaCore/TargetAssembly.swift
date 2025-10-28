@@ -39,7 +39,7 @@ open class TargetAssembly {
     private static let logger = Logger(category: "TargetAssembly")
     private static let realmRootPath = "chats"
 
-    private static let apiEnvironment: ApiEnvironment = .preprod
+    private static let apiEnvironment: ApiEnvironment = .prod
     public static let loginConfig = InfomaniakLogin.Config(
         clientId: "10476B29-7B98-4D42-B06B-2B7AB0F06FDE",
         loginURL: URL(string: "https://login.\(apiEnvironment.host)/")!,

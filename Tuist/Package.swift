@@ -31,7 +31,7 @@ let package = Package(
     name: "Euria",
     dependencies: [
         .package(url: "https://github.com/getsentry/sentry-cocoa", .upToNextMajor(from: "8.0.0")),
-        .package(url: "https://github.com/Infomaniak/ios-core", .upToNextMajor(from: "18.2.0")),
+        .package(url: "https://github.com/Infomaniak/ios-core", branch: "feat/add-NetworkMonitor"),
         .package(url: "https://github.com/Infomaniak/ios-core-ui", .upToNextMajor(from: "24.0.0")),
         .package(url: "https://github.com/Infomaniak/ios-create-account", .upToNextMajor(from: "23.0.0")),
         .package(url: "https://github.com/Infomaniak/ios-dependency-injection", .upToNextMajor(from: "2.0.5")),

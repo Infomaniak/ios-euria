@@ -4,11 +4,18 @@
  * Locale: fr, French
  * Tagged: ios
  * Exported by: Baptiste Griva
- * Exported at: Mon, 27 Oct 2025 11:20:01 +0100
+ * Exported at: Tue, 28 Oct 2025 08:54:07 +0100
  */
 
 /* loco:68ff1e2dd83ab9aa2509ad92 */
 "onboardingEphemeralArgument" = "vos conversations avec Euria s’effacent à la fin de chaque session.";
+
+/* loco:68ff78eecc69b71eaf0c9713 */
+"noNetworkDescription" = "Vérifiez votre connexion Internet et réessayez pour reprendre votre conversation";
+
+/* loco:68ff78b957d8570aa903afe3 */
+"noNetworkTitle" = "Aucun accès à Internet";
+
 
 /* loco:68ff1a4275f0868be50057e3 */
 "onboardingEphemeralTemplate" = "Mode éphémère activé :\n%@";

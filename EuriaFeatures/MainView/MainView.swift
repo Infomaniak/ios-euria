@@ -30,18 +30,39 @@ public struct MainView: View {
 
     @EnvironmentObject private var mainViewState: MainViewState
 
-    @State private var webViewDelegate = EuriaWebViewDelegate()
+    @StateObject private var webViewDelegate = EuriaWebViewDelegate()
+    @State private var isShowingWebView = true
+
+    @ObservedObject var networkMonitor = NetworkMonitor.shared
+
+    private var isShowingOfflineView: Bool {
+        return !networkMonitor.isConnected && !webViewDelegate.isLoaded
+    }
 
     public init() {}
 
     public var body: some View {
-        WebView(
-            url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
-            webConfiguration: webViewDelegate.webConfiguration,
-            delegate: webViewDelegate
-        )
+        ZStack {
+            if isShowingWebView {
+                WebView(
+                    url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+                    webConfiguration: webViewDelegate.webConfiguration,
+                    delegate: webViewDelegate
+                )
+            }
+
+            if isShowingOfflineView {
+                OfflineView()
+            }
+        }
+        .ignoresSafeArea()
         .onAppear {
+            networkMonitor.start()
             setupWebViewConfiguration()
+        }
+        .onChange(of: networkMonitor.isConnected) { isConnected in
+            guard !webViewDelegate.isLoaded else { return }
+            isShowingWebView = isConnected
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }
