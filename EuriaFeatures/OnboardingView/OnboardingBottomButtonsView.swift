@@ -44,7 +44,11 @@ struct OnboardingBottomButtonsView: View {
 
     var body: some View {
         VStack(spacing: IKPadding.mini) {
-            ContinueWithAccountView(isLoading: loginHandler.isLoading, excludingUserIds: excludedUserIds) {
+            ContinueWithAccountView(
+                isLoading: loginHandler.isLoading,
+                excludingUserIds: excludedUserIds,
+                allowsMultipleSelection: false
+            ) {
                 loginPressed()
             } onLoginWithAccountsPressed: { accounts in
                 loginWithAccountsPressed(accounts: accounts)
