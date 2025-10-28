@@ -17,12 +17,6 @@
  */
 
 import DesignSystem
-import EuriaCore
-import EuriaCoreUI
-import InfomaniakCore
-import InfomaniakCoreCommonUI
-import InfomaniakCoreSwiftUI
-import InfomaniakDI
 import SwiftUI
 
 extension VerticalAlignment {
@@ -35,38 +29,34 @@ extension VerticalAlignment {
     static let splashScreenIconAlignment = VerticalAlignment(SplashScreenIconAlignment.self)
 }
 
-public struct PreloadingView: View {
-    @EnvironmentObject private var rootViewState: RootViewState
+public struct SplashScreenView: View {
+    private let backgroundImage = Image("splashscreen-background", bundle: .main)
+    private let logoImage = Image("splashscreen-euria", bundle: .main)
+    private let infomaniakLogoImage = Image("splashscreen-infomaniak", bundle: .main)
 
     public init() {}
 
     public var body: some View {
-        SplashScreenView()
-        .task {
-            await preloadApp()
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .splashScreenIconAlignment)) {
+            backgroundImage
+                .resizable()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+
+            VStack(spacing: IKPadding.large) {
+                logoImage
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 200)
+                    .alignmentGuide(.splashScreenIconAlignment) { d in d[VerticalAlignment.center] }
+
+                ProgressView()
+                    .progressViewStyle(.circular)
+            }
+        }
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            infomaniakLogoImage
+                .padding(.bottom, value: .medium)
         }
     }
-
-    private func preloadApp() async {
-        @InjectService var appLaunchCounter: AppLaunchCounter
-        guard !appLaunchCounter.isFirstLaunch else {
-            @InjectService var tokenStore: TokenStore
-            tokenStore.removeAllTokens()
-            appLaunchCounter.increase()
-            rootViewState.transition(toState: .onboarding)
-            return
-        }
-
-        @InjectService var accountManager: AccountManagerable
-        if let userSession = await accountManager.currentSession {
-            rootViewState.transition(toState: .mainView(MainViewState(userSession: userSession)))
-        } else {
-            rootViewState.transition(toState: .onboarding)
-        }
-    }
-}
-
-#Preview {
-    PreloadingView()
-        .environmentObject(RootViewState())
 }

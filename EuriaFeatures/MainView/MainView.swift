@@ -18,6 +18,7 @@
 
 import EuriaCore
 import EuriaCoreUI
+import EuriaPreloadingView
 import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
@@ -65,6 +66,12 @@ public struct MainView: View {
             isShowingWebView = isConnected
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
+        .overlay {
+            if !webViewDelegate.didLoad {
+                SplashScreenView()
+            }
+        }
+        .animation(.default, value: webViewDelegate.didLoad)
     }
 
     private func willEnterForeground() {

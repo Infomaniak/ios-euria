@@ -47,7 +47,11 @@ public final class RootViewState: ObservableObject {
             }
     }
 
-    public func transition(toState state: RootViewType) {
+    public func transition(toState state: RootViewType, animate: Bool = true) {
+        guard animate == true else {
+            self.state = state
+            return
+        }
         withAnimation {
             self.state = state
         }
@@ -61,7 +65,7 @@ public final class RootViewState: ObservableObject {
                 return
             }
 
-            transition(toState: .mainView(MainViewState(userSession: currentSession)))
+            transition(toState: .mainView(MainViewState(userSession: currentSession)), animate: false)
         }
     }
 }
