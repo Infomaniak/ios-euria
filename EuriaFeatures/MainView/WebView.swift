@@ -38,6 +38,7 @@ struct WebView: UIViewRepresentable {
         #if DEBUG
         webView.isInspectable = true
         #endif
+        webView.scrollView.bounces = false
 
         let request = URLRequest(url: url)
         webView.load(request)
