@@ -25,7 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>You will be able to transfer the photos and videos taken with your camera.</string>
+	<string>You will be able to attach photos and videos taken with your camera to the conversation with Euria.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>You will be able to use your microphone to transcribe speech into text</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>You will be able to save photos and videos in your photo library.</string>
 	<key>UIApplicationSceneManifest</key>
