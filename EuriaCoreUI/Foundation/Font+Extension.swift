@@ -21,6 +21,10 @@ import SwiftUI
 
 public extension Font {
     enum Euria {
+        /// Figma name: *Titre H1*
+        public static let title = Font.dynamicTypeSizeFont(size: 22, weight: .semibold, relativeTo: .title)
+        /// Figma name: *Body Regular*
+        public static let body = Font.dynamicTypeSizeFont(size: 16, weight: .regular, relativeTo: .body)
         /// Figma name: *Spécifique 22 Medium*
         public static let specificTitleMedium = Font.dynamicTypeSizeFont(size: 22, weight: .medium, relativeTo: .title)
         /// Figma name: *Spécifique 22 Light*
