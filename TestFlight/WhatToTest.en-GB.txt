@@ -1,10 +1,6 @@
-Second internal build!
-This version now targets the production environment.
+Third internal build!
 
 What’s new:
- - Improved safe area handling
- - Fixed microphone permission issue
- - Disabled bounce effects
- - Display images in discussions
- - Added offline view
- - And much more…
+ - Improved error handling for 401 responses
+ - Improved dark mode support
+ - Bug fixes and various improvements
