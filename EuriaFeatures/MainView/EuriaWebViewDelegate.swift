@@ -22,6 +22,7 @@ import InfomaniakDI
 import SwiftUI
 import UIKit
 import WebKit
+import Sentry
 
 @MainActor
 class EuriaWebViewDelegate: NSObject, ObservableObject {
@@ -76,8 +77,10 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
         guard let topic = MessageTopic(rawValue: message.name) else { return }
 
         switch topic {
-        case .logout, .unauthenticated:
+        case .logout:
             logoutUser()
+        case .unauthenticated:
+            userTokenIsInvalid()
         }
     }
 
@@ -90,5 +93,12 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
 
             await accountManager.removeTokenAndAccountFor(userId: userId)
         }
+    }
+
+    private func userTokenIsInvalid() {
+        SentrySDK.capture(message: "Refreshing token failed - Cannot refresh infinite token") { scope in
+            scope.setLevel(.error)
+        }
+        logoutUser()
     }
 }
