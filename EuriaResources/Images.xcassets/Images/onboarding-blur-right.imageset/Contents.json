@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Droite (3).svg",
+      "filename" : "right-light.svg",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Droite (4).svg",
+      "filename" : "right-dark.svg",
       "idiom" : "universal"
     }
   ],

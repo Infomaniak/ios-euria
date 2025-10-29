@@ -40,8 +40,8 @@ public struct PreloadingView: View {
 
     @EnvironmentObject private var rootViewState: RootViewState
 
-    private let backgroundImage = Image("", bundle: .main)
-    private let logoImage = Image("", bundle: .main)
+    private let backgroundImage = Image("splashscreen-background", bundle: .main)
+    private let logoImage = Image("splashscreen-euria", bundle: .main)
     private let infomaniakLogoImage = Image("splashscreen-infomaniak", bundle: .main)
 
     public init() {}
@@ -57,7 +57,7 @@ public struct PreloadingView: View {
                 logoImage
                     .resizable()
                     .scaledToFit()
-                    .frame(maxWidth: 156)
+                    .frame(maxWidth: 200)
                     .alignmentGuide(.splashScreenIconAlignment) { d in d[VerticalAlignment.center] }
 
                 ProgressView()

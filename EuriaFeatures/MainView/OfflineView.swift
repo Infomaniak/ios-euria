@@ -32,7 +32,7 @@ public struct OfflineView: View {
                 .frame(maxHeight: .infinity, alignment: .top)
 
             VStack(spacing: IKPadding.huge) {
-                EuriaResourcesAsset.Images.noNetwork.swiftUIImage
+                EuriaResourcesAsset.Images.cloudSlashCircleWorld.swiftUIImage
 
                 VStack(spacing: IKPadding.medium) {
                     Text(EuriaResourcesStrings.noNetworkTitle)
