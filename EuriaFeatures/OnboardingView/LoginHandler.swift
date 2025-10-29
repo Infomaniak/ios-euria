@@ -38,13 +38,27 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
     @Published var isLoading = false
     @Published var error: ErrorDomain?
 
-    enum ErrorDomain: Error, LocalizedError {
-        case loginFailed
+    enum ErrorDomain: Error, LocalizedError, Equatable {
+        case loginFailed(error: Error)
+        case genericError
 
         var errorDescription: String? {
             switch self {
-            case .loginFailed:
+            case .loginFailed(let error):
+                return error.localizedDescription
+            case .genericError:
                 return CoreUILocalizable.anErrorHasOccurred
+            }
+        }
+
+        static func == (lhs: LoginHandler.ErrorDomain, rhs: LoginHandler.ErrorDomain) -> Bool {
+            switch (lhs, rhs) {
+            case (.loginFailed, .loginFailed):
+                return true
+            case (.genericError, .genericError):
+                return true
+            default:
+                return false
             }
         }
     }
@@ -94,24 +108,28 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        let sessions = await accounts.asyncCompactMap { account in
+        let sessions: [Result<any UserSessionable, any Error>] = await accounts.asyncCompactMap { account in
             do {
                 let derivatedToken = try await self.tokenService.derivateApiToken(for: account)
 
                 let session = try await self.accountManager.createAccount(token: derivatedToken)
-                return session
+                return .success(session)
             } catch {
                 SentryDebug.loginError(error: error, step: "loginWith")
-                return nil
+                return .failure(error)
             }
         }
 
-        guard let firstSession = sessions.first else {
-            error = .loginFailed
-            return
-        }
+        do {
+            guard let firstSession = try sessions.first?.get() else {
+                error = .genericError
+                return
+            }
 
-        await accountManager.setCurrentSession(session: firstSession)
+            await accountManager.setCurrentSession(session: firstSession)
+        } catch {
+            self.error = .loginFailed(error: error)
+        }
     }
 
     private func loginSuccessful(code: String, codeVerifier verifier: String) async throws {
@@ -121,7 +139,7 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
     private func loginFailed(error: Error) {
         guard (error as? ASWebAuthenticationSessionError)?.code != .canceledLogin else { return }
 
-        self.error = .loginFailed
+        self.error = .loginFailed(error: error)
         SentryDebug.loginError(error: error, step: "loginFailed")
     }
 }
