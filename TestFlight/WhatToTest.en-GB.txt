@@ -1,1 +1,10 @@
-First internal release of Euria
+Second internal build!
+This version now targets the production environment.
+
+What’s new:
+ - Improved safe area handling
+ - Fixed microphone permission issue
+ - Disabled bounce effects
+ - Display images in discussions
+ - Added offline view
+ - And much more…
