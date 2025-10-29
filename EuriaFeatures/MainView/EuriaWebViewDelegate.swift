@@ -19,10 +19,10 @@
 import EuriaCore
 import InfomaniakCore
 import InfomaniakDI
+import Sentry
 import SwiftUI
 import UIKit
 import WebKit
-import Sentry
 
 @MainActor
 class EuriaWebViewDelegate: NSObject, ObservableObject {
