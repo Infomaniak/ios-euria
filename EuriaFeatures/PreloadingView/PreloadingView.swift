@@ -42,9 +42,9 @@ public struct PreloadingView: View {
 
     public var body: some View {
         SplashScreenView()
-        .task {
-            await preloadApp()
-        }
+            .task {
+                await preloadApp()
+            }
     }
 
     private func preloadApp() async {

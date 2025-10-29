@@ -36,6 +36,10 @@ public struct MainView: View {
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
 
+    private var isShowingLoadingView: Bool {
+        return !webViewDelegate.isLoaded && !isShowingOfflineView
+    }
+
     private var isShowingOfflineView: Bool {
         return !networkMonitor.isConnected && !webViewDelegate.isLoaded
     }
@@ -50,13 +54,15 @@ public struct MainView: View {
                     webConfiguration: webViewDelegate.webConfiguration,
                     delegate: webViewDelegate
                 )
+                .ignoresSafeArea()
             }
 
             if isShowingOfflineView {
                 OfflineView()
+            } else if isShowingLoadingView {
+                SplashScreenView()
             }
         }
-        .ignoresSafeArea()
         .onAppear {
             networkMonitor.start()
             setupWebViewConfiguration()
@@ -66,12 +72,6 @@ public struct MainView: View {
             isShowingWebView = isConnected
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
-        .overlay {
-            if !webViewDelegate.didLoad {
-                SplashScreenView()
-            }
-        }
-        .animation(.default, value: webViewDelegate.didLoad)
     }
 
     private func willEnterForeground() {
