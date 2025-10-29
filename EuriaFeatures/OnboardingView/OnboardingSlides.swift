@@ -33,7 +33,7 @@ extension Slide {
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurLeft.image,
                 backgroundImageTintColor: nil,
                 content: .illustration(EuriaResourcesAsset.Images.onboardingDatacenter.image),
-                bottomView: OnboardingTextView(text: .privacy)
+                bottomView: OnboardingTextView(text: .datacenter)
             ),
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
@@ -45,6 +45,12 @@ extension Slide {
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurLeft.image,
                 backgroundImageTintColor: nil,
                 content: .illustration(EuriaResourcesAsset.Images.onboardingMountain.image),
+                bottomView: OnboardingTextView(text: .privacy)
+            ),
+            Slide(
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
+                backgroundImageTintColor: nil,
+                content: .illustration(EuriaResourcesAsset.Images.onboardingEuria.image),
                 bottomView: OnboardingTextView(text: .login)
             )
         ]

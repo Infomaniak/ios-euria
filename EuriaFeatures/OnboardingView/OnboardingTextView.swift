@@ -23,44 +23,50 @@ import SwiftUI
 
 enum OnboardingText {
     case euria
-    case privacy
+    case datacenter
     case ephemeral
+    case privacy
     case login
 
+    private var title: String {
+        switch self {
+        case .euria:
+            EuriaResourcesStrings.onboardingEuriaTitle
+        case .datacenter:
+            EuriaResourcesStrings.onboardingDatacenterTitle
+        case .ephemeral:
+            EuriaResourcesStrings.onboardingEphemeralTitle
+        case .privacy:
+            EuriaResourcesStrings.onboardingPrivacyTitle
+        case .login:
+            EuriaResourcesStrings.onboardingLoginTitle
+        }
+    }
+
     var subtitle: AttributedString {
-        var result = AttributedString(template(argument))
+        var result = AttributedString(title) + AttributedString("\n") + AttributedString(description)
         result.font = .Euria.specificTitleLight
 
-        if let argumentRange = result.range(of: argument) {
+        if let argumentRange = result.range(of: description) {
             result[argumentRange].font = .Euria.specificTitleMedium
         }
 
         return result
     }
 
-    private var argument: String {
+    private var description: String {
         switch self {
         case .euria:
-            EuriaResourcesStrings.onboardingEuriaArgument
-        case .privacy:
-            EuriaResourcesStrings.onboardingPrivacyArgument
+            EuriaResourcesStrings.onboardingEuriaDescription
+        case .datacenter:
+            EuriaResourcesStrings.onboardingDatacenterDescription
         case .ephemeral:
-            EuriaResourcesStrings.onboardingEphemeralArgument
-        case .login:
-            EuriaResourcesStrings.onboardingLoginArgument
-        }
-    }
-
-    private var template: (Any) -> String {
-        switch self {
-        case .euria:
-            EuriaResourcesStrings.onboardingEuriaTemplate
+            EuriaResourcesStrings
+                .onboardingEphemeralDescriptionTemplate(EuriaResourcesStrings.onboardingEphemeralDescriptionArguments)
         case .privacy:
-            EuriaResourcesStrings.onboardingPrivacyTemplate
-        case .ephemeral:
-            EuriaResourcesStrings.onboardingEphemeralTemplate
+            EuriaResourcesStrings.onboardingPrivacyDescription
         case .login:
-            EuriaResourcesStrings.onboardingLoginTemplate
+            EuriaResourcesStrings.onboardingLoginTemplate(EuriaResourcesStrings.onboardingLoginArguments)
         }
     }
 }
