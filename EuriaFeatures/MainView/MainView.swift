@@ -18,7 +18,6 @@
 
 import EuriaCore
 import EuriaCoreUI
-import EuriaPreloadingView
 import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
