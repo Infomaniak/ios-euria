@@ -16,6 +16,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaResources
 import InfomaniakOnboarding
 import Lottie
 import SwiftUI
@@ -26,17 +27,20 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
     @Binding var selectedSlide: Int
 
     let slides: [Slide]
+    let headerImage: UIImage?
 
     let shouldAnimateBottomViewForIndex: (Int) -> Bool
     @ViewBuilder var bottomView: (Int) -> BottomView
 
     init(
         slides: [Slide],
+        headerImage: UIImage? = EuriaResourcesAsset.Images.logoText.image,
         selectedSlide: Binding<Int>,
         shouldAnimateBottomViewForIndex: @escaping (Int) -> Bool = { _ in return false },
         @ViewBuilder bottomView: @escaping (Int) -> BottomView
     ) {
         self.slides = slides
+        self.headerImage = headerImage
         _selectedSlide = selectedSlide
         self.shouldAnimateBottomViewForIndex = shouldAnimateBottomViewForIndex
         self.bottomView = bottomView
@@ -44,7 +48,7 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> OnboardingViewController {
         let configuration = OnboardingConfiguration(
-            headerImage: nil,
+            headerImage: headerImage,
             slides: slides,
             pageIndicatorColor: UIColor.tintColor,
             isScrollEnabled: true,
