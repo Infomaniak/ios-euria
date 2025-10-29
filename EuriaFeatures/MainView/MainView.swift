@@ -62,6 +62,7 @@ public struct MainView: View {
                 SplashScreenView()
             }
         }
+        .appBackground()
         .onAppear {
             networkMonitor.start()
             setupWebViewConfiguration()
