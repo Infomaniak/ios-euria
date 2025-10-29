@@ -38,16 +38,22 @@ public struct PreloadingView: View {
     }
 
     private func preloadApp() async {
+        @InjectService var accountManager: AccountManagerable
         @InjectService var appLaunchCounter: AppLaunchCounter
+        @InjectService var tokenStore: TokenStore
+
         guard !appLaunchCounter.isFirstLaunch else {
-            @InjectService var tokenStore: TokenStore
             tokenStore.removeAllTokens()
+
+            if let currentSession = await accountManager.currentSession {
+                await accountManager.removeTokenAndAccountFor(userId: currentSession.userId)
+            }
+
             appLaunchCounter.increase()
             rootViewState.transition(toState: .onboarding)
             return
         }
 
-        @InjectService var accountManager: AccountManagerable
         if let userSession = await accountManager.currentSession {
             rootViewState.transition(toState: .mainView(MainViewState(userSession: userSession)))
         } else {
