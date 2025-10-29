@@ -28,6 +28,11 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var isLoaded = false
 
     let webConfiguration = WKWebViewConfiguration()
+
+    enum Cookie: String {
+        case userToken = "USER-TOKEN"
+        case userLanguage = "USER-LANGUAGE"
+    }
 }
 
 // MARK: - WKNavigationDelegate
@@ -62,8 +67,16 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 // MARK: - WKScriptMessageHandler
 
 extension EuriaWebViewDelegate: WKScriptMessageHandler {
+    enum MessageTopic: String, CaseIterable {
+        case logout
+        case unauthenticated
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.body as? String == "logout" {
+        guard let topic = MessageTopic(rawValue: message.name) else { return }
+
+        switch topic {
+        case .logout, .unauthenticated:
             logoutUser()
         }
     }
@@ -74,7 +87,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             guard let userId = await accountManager.currentSession?.userId else {
                 return
             }
-            print("logOut")
+
             await accountManager.removeTokenAndAccountFor(userId: userId)
         }
     }
