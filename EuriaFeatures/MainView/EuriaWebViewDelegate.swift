@@ -19,6 +19,7 @@
 import EuriaCore
 import InfomaniakCore
 import InfomaniakDI
+import Sentry
 import SwiftUI
 import UIKit
 import WebKit
@@ -28,6 +29,11 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var isLoaded = false
 
     let webConfiguration = WKWebViewConfiguration()
+
+    enum Cookie: String {
+        case userToken = "USER-TOKEN"
+        case userLanguage = "USER-LANGUAGE"
+    }
 }
 
 // MARK: - WKNavigationDelegate
@@ -62,9 +68,19 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 // MARK: - WKScriptMessageHandler
 
 extension EuriaWebViewDelegate: WKScriptMessageHandler {
+    enum MessageTopic: String, CaseIterable {
+        case logout
+        case unauthenticated
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.body as? String == "logout" {
+        guard let topic = MessageTopic(rawValue: message.name) else { return }
+
+        switch topic {
+        case .logout:
             logoutUser()
+        case .unauthenticated:
+            userTokenIsInvalid()
         }
     }
 
@@ -74,8 +90,15 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             guard let userId = await accountManager.currentSession?.userId else {
                 return
             }
-            print("logOut")
+
             await accountManager.removeTokenAndAccountFor(userId: userId)
         }
+    }
+
+    private func userTokenIsInvalid() {
+        SentrySDK.capture(message: "Refreshing token failed - Cannot refresh infinite token") { scope in
+            scope.setLevel(.error)
+        }
+        logoutUser()
     }
 }

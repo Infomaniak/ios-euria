@@ -104,12 +104,12 @@ public struct MainView: View {
         let cookieStore = webViewDelegate.webConfiguration.websiteDataStore.httpCookieStore
 
         if let token = mainViewState.userSession.apiFetcher.currentToken,
-           let tokenCookie = createCookie(name: "USER-TOKEN", value: "\(token.accessToken)") {
+           let tokenCookie = createCookie(cookie: .userToken, value: "\(token.accessToken)") {
             cookieStore.setCookie(tokenCookie)
         }
 
         if let languageCookie = createCookie(
-            name: "USER-LANGUAGE",
+            cookie: .userLanguage,
             value: Locale.current.language.languageCode?.identifier ?? "en"
         ) {
             cookieStore.setCookie(languageCookie)
@@ -117,11 +117,15 @@ public struct MainView: View {
     }
 
     private func addUserContentControllers() {
-        webViewDelegate.webConfiguration.userContentController.add(webViewDelegate, name: "logout")
+        for topic in EuriaWebViewDelegate.MessageTopic.allCases {
+            webViewDelegate.webConfiguration.userContentController.add(webViewDelegate, name: topic.rawValue)
+        }
     }
 
-    private func createCookie(name: String, value: String) -> HTTPCookie? {
-        return HTTPCookie(properties: [.name: name, .value: value, .path: "/", .domain: ApiEnvironment.current.euriaHost])
+    private func createCookie(cookie: EuriaWebViewDelegate.Cookie, value: String) -> HTTPCookie? {
+        return HTTPCookie(
+            properties: [.name: cookie.rawValue, .value: value, .path: "/", .domain: ApiEnvironment.current.euriaHost]
+        )
     }
 }
 

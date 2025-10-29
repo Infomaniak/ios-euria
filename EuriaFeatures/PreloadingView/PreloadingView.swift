@@ -25,16 +25,6 @@ import InfomaniakCoreSwiftUI
 import InfomaniakDI
 import SwiftUI
 
-extension VerticalAlignment {
-    enum SplashScreenIconAlignment: AlignmentID {
-        static func defaultValue(in context: ViewDimensions) -> CGFloat {
-            return context[VerticalAlignment.center]
-        }
-    }
-
-    static let splashScreenIconAlignment = VerticalAlignment(SplashScreenIconAlignment.self)
-}
-
 public struct PreloadingView: View {
     @EnvironmentObject private var rootViewState: RootViewState
 
