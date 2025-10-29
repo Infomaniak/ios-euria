@@ -1,10 +1,6 @@
-Deuxième build interne !
-Cette version cible désormais l’environnement de production.
+Troisième build interne !
 
 Nouveautés :
- - Meilleure prise en charge des safe areas
- - Correction de la gestion des permissions micro
- - Désactivation des effets de rebond
- - Affichage des images dans les discussions
- - Vues pour le mode hors-ligne
- - Et bien plus encore…
+ - Gestion des erreurs 401
+ - Améliorations pour le dark mode
+ - Corrections de bugs et améliorations diverses
