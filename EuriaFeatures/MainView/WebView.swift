@@ -49,6 +49,10 @@ struct WebView: UIViewRepresentable {
         webView.scrollView.contentInsetAdjustmentBehavior = .never
         webView.scrollView.keyboardDismissMode = .interactive
 
+        webView.scrollView.backgroundColor = .clear
+        webView.backgroundColor = .clear
+        webView.isOpaque = false
+
         let request = URLRequest(url: url)
         webView.load(request)
 
