@@ -21,6 +21,12 @@ import SwiftUI
 import UIKit
 import WebKit
 
+final class EuriaWebView: WKWebView {
+    override var inputAccessoryView: UIView? {
+        return nil
+    }
+}
+
 struct WebView: UIViewRepresentable {
     typealias WebViewDelegate = WKNavigationDelegate & WKScriptMessageHandler
 
@@ -29,7 +35,7 @@ struct WebView: UIViewRepresentable {
     var delegate: WebViewDelegate?
 
     func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
 
         if let delegate {
             webView.navigationDelegate = delegate
@@ -41,6 +47,7 @@ struct WebView: UIViewRepresentable {
 
         webView.scrollView.bounces = false
         webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.scrollView.keyboardDismissMode = .interactive
 
         let request = URLRequest(url: url)
         webView.load(request)
