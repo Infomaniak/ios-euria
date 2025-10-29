@@ -35,6 +35,7 @@ public struct OnboardingView: View {
         } bottomView: { _ in
             OnboardingBottomButtonsView(loginHandler: loginHandler, selection: $selectedSlideIndex, slideCount: slides.count)
         }
+        .appBackground()
         .ignoresSafeArea()
     }
 }
