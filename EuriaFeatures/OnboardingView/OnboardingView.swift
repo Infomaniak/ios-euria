@@ -16,14 +16,17 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCoreUI
 import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakOnboarding
 import SwiftUI
 
 public struct OnboardingView: View {
-    @State private var loginHandler = LoginHandler()
+    @StateObject private var loginHandler = LoginHandler()
+
     @State private var selectedSlideIndex = 0
+    @State private var isShowingError = false
 
     private let slides = Slide.onboardingSlides
 
@@ -37,6 +40,16 @@ public struct OnboardingView: View {
         }
         .appBackground()
         .ignoresSafeArea()
+        .alert(isPresented: $isShowingError, error: loginHandler.error) {
+            Button(InfomaniakCoreUIResources.CoreUILocalizable.buttonClose) {
+                loginHandler.error = nil
+            }
+        }
+        .onChange(of: loginHandler.error) { newValue in
+            guard newValue != nil else { return }
+            isShowingError = true
+            print(isShowingError)
+        }
     }
 }
 
