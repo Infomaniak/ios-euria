@@ -36,12 +36,12 @@ public struct MainView: View {
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
 
-    private var isShowingLoadingView: Bool {
-        return !webViewDelegate.isLoaded && !isShowingOfflineView
-    }
-
     private var isShowingOfflineView: Bool {
         return !networkMonitor.isConnected && !webViewDelegate.isLoaded
+    }
+
+    private var isShowingLoadingView: Bool {
+        return !webViewDelegate.isLoaded && !isShowingOfflineView
     }
 
     public init() {}
