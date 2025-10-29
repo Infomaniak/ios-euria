@@ -70,7 +70,6 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         if colorScheme != context.coordinator.currentColorScheme,
            let currentSlideViewCell = uiViewController.currentSlideViewCell {
             context.coordinator.currentColorScheme = colorScheme
-            context.coordinator.selectCorrectAnimation(for: currentSlideViewCell, at: selectedSlide)
         }
     }
 
@@ -112,34 +111,6 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
             return shouldAnimateBottomViewForIndex(index)
         }
 
-        func willDisplaySlideViewCell(_ slideViewCell: SlideCollectionViewCell, at index: Int) {
-            selectCorrectAnimation(for: slideViewCell, at: index)
-        }
-
-        func selectCorrectAnimation(for slideViewCell: SlideCollectionViewCell, at index: Int) {
-            guard case .animation(let configuration) = parent.slides[index].content else { return }
-
-            let themedFileName = getAnimation(for: index)
-            Task {
-                let dotLottieFile = try await DotLottieFile.named(
-                    themedFileName,
-                    bundle: configuration.bundle
-                )
-
-                slideViewCell.illustrationAnimationView.loadAnimation(from: dotLottieFile)
-                slideViewCell.illustrationAnimationView.play()
-            }
-        }
-
-        private func getAnimation(for index: Int) -> String {
-            switch index {
-            case 1:
-                return ThemedAnimation.onboardingPrivacy.animationName(for: currentColorScheme)
-            case 2:
-                return ThemedAnimation.onboardingEphemeral.animationName(for: currentColorScheme)
-            default:
-                return ThemedAnimation.onboardingEuria.animationName(for: currentColorScheme)
-            }
-        }
+        func willDisplaySlideViewCell(_ slideViewCell: SlideCollectionViewCell, at index: Int) {}
     }
 }
