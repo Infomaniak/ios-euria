@@ -1,1 +1,10 @@
-Première version interne de Euria
+Deuxième build interne !
+Cette version cible désormais l’environnement de production.
+
+Nouveautés :
+ - Meilleure prise en charge des safe areas
+ - Correction de la gestion des permissions micro
+ - Désactivation des effets de rebond
+ - Affichage des images dans les discussions
+ - Vues pour le mode hors-ligne
+ - Et bien plus encore…
