@@ -92,6 +92,9 @@ open class TargetAssembly {
             },
             Factory(type: TokenStore.self) { _, _ in
                 TokenStore()
+            },
+            Factory(type: AppLaunchCounter.self) { _, _ in
+                AppLaunchCounter()
             }
         ]
     }
