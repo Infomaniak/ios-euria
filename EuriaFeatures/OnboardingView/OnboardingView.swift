@@ -48,7 +48,6 @@ public struct OnboardingView: View {
         .onChange(of: loginHandler.error) { newValue in
             guard newValue != nil else { return }
             isShowingError = true
-            print(isShowingError)
         }
     }
 }
