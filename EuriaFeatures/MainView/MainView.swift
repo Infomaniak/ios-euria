@@ -39,6 +39,10 @@ public struct MainView: View {
         return !networkMonitor.isConnected && !webViewDelegate.isLoaded
     }
 
+    private var isShowingLoadingView: Bool {
+        return !webViewDelegate.isLoaded && !isShowingOfflineView
+    }
+
     public init() {}
 
     public var body: some View {
@@ -49,13 +53,15 @@ public struct MainView: View {
                     webConfiguration: webViewDelegate.webConfiguration,
                     delegate: webViewDelegate
                 )
+                .ignoresSafeArea()
             }
 
             if isShowingOfflineView {
                 OfflineView()
+            } else if isShowingLoadingView {
+                SplashScreenView()
             }
         }
-        .ignoresSafeArea()
         .onAppear {
             networkMonitor.start()
             setupWebViewConfiguration()

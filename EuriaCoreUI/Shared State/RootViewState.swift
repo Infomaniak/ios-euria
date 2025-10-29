@@ -28,6 +28,14 @@ public enum RootViewType: @MainActor Equatable {
     case preloading
     case onboarding
     case updateRequired
+
+    func shouldAnimate(from state: RootViewType) -> Bool {
+        if case .mainView = self, state == .preloading {
+            return false
+        } else {
+            return true
+        }
+    }
 }
 
 @MainActor
@@ -48,7 +56,11 @@ public final class RootViewState: ObservableObject {
     }
 
     public func transition(toState state: RootViewType) {
-        withAnimation {
+        if state.shouldAnimate(from: self.state) {
+            withAnimation {
+                self.state = state
+            }
+        } else {
             self.state = state
         }
     }
