@@ -29,7 +29,9 @@ import WebKit
 
 public struct MainView: View {
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
+    @EnvironmentObject var universalLinksState: UniversalLinksState
     @State private var isShowingWebView = true
+    @State private var currentUrl = ApiEnvironment.current.euriaHost
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
 
@@ -49,7 +51,7 @@ public struct MainView: View {
         ZStack {
             if isShowingWebView {
                 WebView(
-                    url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+                    url: URL(string: "https://\(currentUrl)/")!,
                     webConfiguration: webViewDelegate.webConfiguration,
                     delegate: webViewDelegate
                 )
@@ -69,6 +71,12 @@ public struct MainView: View {
         .onChange(of: networkMonitor.isConnected) { isConnected in
             guard !webViewDelegate.isLoaded else { return }
             isShowingWebView = isConnected
+        }
+        .onChange(of: universalLinksState.linkedWebView) { url in
+            if let url {
+                currentUrl = url
+                universalLinksState.linkedWebView = nil
+            }
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }

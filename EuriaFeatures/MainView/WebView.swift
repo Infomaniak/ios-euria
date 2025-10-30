@@ -30,7 +30,7 @@ final class EuriaWebView: WKWebView {
 struct WebView: UIViewRepresentable {
     typealias WebViewDelegate = WKNavigationDelegate & WKScriptMessageHandler
 
-    let url: URL
+    var url: URL
     var webConfiguration = WKWebViewConfiguration()
     var delegate: WebViewDelegate?
 
@@ -60,6 +60,8 @@ struct WebView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Update the view.
+        if uiView.url != url {
+            uiView.load(URLRequest(url: url))
+        }
     }
 }

@@ -106,6 +106,10 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         isLoaded = true
     }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        webView.reload()
+    }
 }
 
 // MARK: - WKScriptMessageHandler
