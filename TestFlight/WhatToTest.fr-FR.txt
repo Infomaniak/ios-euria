@@ -1,6 +1,8 @@
-Troisième build interne !
+Quatrième build interne !
 
 Nouveautés :
- - Gestion des erreurs 401
- - Améliorations pour le dark mode
- - Corrections de bugs et améliorations diverses
+ - Nouvel onbarding
+ - Nouvelle icône d'app
+
+Corrections :
+ - L'app ne se déconnecte pas après une longue période sans être ouverte

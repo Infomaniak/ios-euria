@@ -1,6 +1,8 @@
-Third internal build!
+Fourth internal build!
 
 What’s new:
- - Improved error handling for 401 responses
- - Improved dark mode support
- - Bug fixes and various improvements
+ - New onboarding experience
+ - New app icon
+
+Fixes:
+ - App does not logout user after a long period of inactivity
