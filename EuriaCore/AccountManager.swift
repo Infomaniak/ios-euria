@@ -56,7 +56,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
 
     public let userProfileStore = UserProfileStore()
 
-    private let refreshTokenDelegate = RefreshTokenDelegate()
+    private let refreshTokenDelegate = EuriaRefreshTokenDelegate()
 
     public private(set) var currentSession: (any UserSessionable)? {
         didSet {

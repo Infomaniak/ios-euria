@@ -19,6 +19,7 @@
 import EuriaCore
 import InfomaniakCore
 import InfomaniakDI
+import InfomaniakLogin
 import Sentry
 import SwiftUI
 import UIKit
@@ -28,11 +29,53 @@ import WebKit
 class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var isLoaded = false
 
-    let webConfiguration = WKWebViewConfiguration()
+    let webConfiguration: WKWebViewConfiguration
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
         case userLanguage = "USER-LANGUAGE"
+    }
+
+    init(session: any UserSessionable) {
+        webConfiguration = WKWebViewConfiguration()
+        super.init()
+        setupWebViewConfiguration(token: session.apiFetcher.currentToken)
+    }
+
+    private func setupWebViewConfiguration(token: ApiToken?) {
+        addCookies(token: token)
+        addUserContentControllers()
+    }
+
+    private func addCookies(token: ApiToken?) {
+        let cookieStore = webConfiguration.websiteDataStore.httpCookieStore
+
+        if let token, let tokenCookie = createCookie(cookie: .userToken, value: "\(token.accessToken)") {
+            cookieStore.setCookie(tokenCookie)
+        }
+
+        let language = Locale.current.language.languageCode?.identifier ?? "en"
+        if let languageCookie = createCookie(cookie: .userLanguage, value: language) {
+            cookieStore.setCookie(languageCookie)
+        }
+    }
+
+    private func addUserContentControllers() {
+        for topic in EuriaWebViewDelegate.MessageTopic.allCases {
+            webConfiguration.userContentController.add(self, name: topic.rawValue)
+        }
+    }
+
+    private func createCookie(cookie: EuriaWebViewDelegate.Cookie, value: String) -> HTTPCookie? {
+        return HTTPCookie(
+            properties: [
+                .name: cookie.rawValue,
+                .value: value,
+                .path: "/",
+                .domain: ApiEnvironment.current.euriaHost,
+                .maximumAge: TimeInterval.sixMonths
+            ]
+        )
     }
 }
 
