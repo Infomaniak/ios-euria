@@ -46,6 +46,7 @@ public struct OfflineView: View {
             .multilineTextAlignment(.center)
             .padding(IKPadding.medium)
         }
+        .appBackground()
     }
 }
 

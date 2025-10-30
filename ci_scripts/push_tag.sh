@@ -60,20 +60,19 @@ MESSAGE_JSON=$(printf '%s' "$MESSAGE" | jq -Rs '{text: .}')
 
 retries=0
 max_retries=3
-until [ $retries -ge $max_retries ]
+until [ "$retries" -ge "$max_retries" ]
 do
-    curl -i -X --fail POST \
+    curl --fail -i -X POST \
         -H 'Content-Type: application/json' \
         -d "$MESSAGE_JSON" \
-        "$KCHAT_WEBHOOK_URL" \
-        && break
+        "$KCHAT_WEBHOOK_URL" && break
 
     retries=$((retries+1))
     echo "Retry $retries/$max_retries for kChat notification failed."
     sleep 2
 done
 
-if [ $retries -eq $max_retries ]; then
+if [ "$retries" -eq "$max_retries" ]; then
     echo "kChat notification failed after $max_retries attempts."
     exit 1
 fi

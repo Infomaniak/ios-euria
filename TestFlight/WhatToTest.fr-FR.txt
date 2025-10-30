@@ -1,1 +1,6 @@
-Première version interne de Euria
+Troisième build interne !
+
+Nouveautés :
+ - Gestion des erreurs 401
+ - Améliorations pour le dark mode
+ - Corrections de bugs et améliorations diverses

@@ -1,1 +1,6 @@
-First internal release of Euria
+Third internal build!
+
+What’s new:
+ - Improved error handling for 401 responses
+ - Improved dark mode support
+ - Bug fixes and various improvements
