@@ -31,7 +31,7 @@ public struct RootView: View {
         ZStack {
             switch rootViewState.state {
             case .mainView(let mainViewState):
-                MainView()
+                MainView(session: mainViewState.userSession)
                     .environmentObject(mainViewState)
             case .preloading:
                 PreloadingView()

@@ -20,10 +20,10 @@ import Foundation
 @preconcurrency import InfomaniakCore
 import InfomaniakLogin
 
-final class RefreshTokenDelegate: InfomaniakCore.RefreshTokenDelegate, Sendable {
-    func didUpdateToken(newToken: ApiToken, oldToken: ApiToken) {}
+public final class EuriaRefreshTokenDelegate: InfomaniakCore.RefreshTokenDelegate, Sendable {
+    public func didUpdateToken(newToken: ApiToken, oldToken: ApiToken) {}
 
-    func didFailRefreshToken(_ token: ApiToken) {}
+    public func didFailRefreshToken(_ token: ApiToken) {}
 }
 
 public protocol UserSessionable: Sendable {
@@ -31,16 +31,18 @@ public protocol UserSessionable: Sendable {
     var apiFetcher: ApiFetcher { get }
 }
 
-extension ApiFetcher {
+public extension ApiFetcher {
     convenience init(token: ApiToken, delegate: RefreshTokenDelegate) {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .iso8601
         decoder.keyDecodingStrategy = .convertFromSnakeCase
 
         self.init(decoder: decoder)
-        createAuthenticatedSession(token,
-                                   authenticator: OAuthAuthenticator(refreshTokenDelegate: delegate),
-                                   additionalAdapters: [UserAgentAdapter()])
+        createAuthenticatedSession(
+            token,
+            authenticator: OAuthAuthenticator(refreshTokenDelegate: delegate),
+            additionalAdapters: [UserAgentAdapter()]
+        )
     }
 }
 
@@ -48,7 +50,7 @@ public struct UserSession: UserSessionable {
     public let apiFetcher: ApiFetcher
     public let userId: Int
 
-    init(userId: Int, apiFetcher: ApiFetcher) {
+    public init(userId: Int, apiFetcher: ApiFetcher) {
         self.userId = userId
         self.apiFetcher = apiFetcher
     }

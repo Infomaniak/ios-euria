@@ -16,21 +16,19 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import AVFoundation
 import EuriaCore
 import EuriaCoreUI
 import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakDI
+import InfomaniakLogin
 import SwiftUI
 import WebKit
 
 public struct MainView: View {
-    @InjectService private var accountManager: AccountManagerable
-
-    @EnvironmentObject private var mainViewState: MainViewState
-
-    @StateObject private var webViewDelegate = EuriaWebViewDelegate()
+    @StateObject private var webViewDelegate: EuriaWebViewDelegate
     @State private var isShowingWebView = true
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
@@ -43,7 +41,9 @@ public struct MainView: View {
         return !webViewDelegate.isLoaded && !isShowingOfflineView
     }
 
-    public init() {}
+    public init(session: any UserSessionable) {
+        _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(session: session))
+    }
 
     public var body: some View {
         ZStack {
@@ -65,7 +65,6 @@ public struct MainView: View {
         .appBackground()
         .onAppear {
             networkMonitor.start()
-            setupWebViewConfiguration()
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
             guard !webViewDelegate.isLoaded else { return }
@@ -81,6 +80,7 @@ public struct MainView: View {
     }
 
     private func checkTwoFAChallenges() async {
+        @InjectService var accountManager: AccountManagerable
         let sessions: [InAppTwoFactorAuthenticationSession] = await accountManager.accounts.asyncCompactMap { account in
             guard let user = await accountManager.userProfileStore.getUserProfile(id: account.userId) else {
                 return nil
@@ -95,41 +95,9 @@ public struct MainView: View {
         @InjectService var inAppTwoFactorAuthenticationManager: InAppTwoFactorAuthenticationManagerable
         inAppTwoFactorAuthenticationManager.checkConnectionAttempts(using: sessions)
     }
-
-    private func setupWebViewConfiguration() {
-        addCookies()
-        addUserContentControllers()
-    }
-
-    private func addCookies() {
-        let cookieStore = webViewDelegate.webConfiguration.websiteDataStore.httpCookieStore
-
-        if let token = mainViewState.userSession.apiFetcher.currentToken,
-           let tokenCookie = createCookie(cookie: .userToken, value: "\(token.accessToken)") {
-            cookieStore.setCookie(tokenCookie)
-        }
-
-        if let languageCookie = createCookie(
-            cookie: .userLanguage,
-            value: Locale.current.language.languageCode?.identifier ?? "en"
-        ) {
-            cookieStore.setCookie(languageCookie)
-        }
-    }
-
-    private func addUserContentControllers() {
-        for topic in EuriaWebViewDelegate.MessageTopic.allCases {
-            webViewDelegate.webConfiguration.userContentController.add(webViewDelegate, name: topic.rawValue)
-        }
-    }
-
-    private func createCookie(cookie: EuriaWebViewDelegate.Cookie, value: String) -> HTTPCookie? {
-        return HTTPCookie(
-            properties: [.name: cookie.rawValue, .value: value, .path: "/", .domain: ApiEnvironment.current.euriaHost]
-        )
-    }
 }
 
 #Preview {
-    MainView()
+    MainView(session: PreviewHelper.userSession)
+        .environmentObject(MainViewState(userSession: PreviewHelper.userSession))
 }
