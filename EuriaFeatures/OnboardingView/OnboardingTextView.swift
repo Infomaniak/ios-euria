@@ -59,7 +59,7 @@ enum OnboardingText {
         case .euria:
             EuriaResourcesStrings.onboardingEuriaDescription
         case .datacenter:
-            EuriaResourcesStrings.onboardingDatacenterDescription
+            EuriaResourcesStrings.iosOnboardingDatacenterDescription
         case .ephemeral:
             EuriaResourcesStrings
                 .onboardingEphemeralDescriptionTemplate(EuriaResourcesStrings.onboardingEphemeralDescriptionArguments)

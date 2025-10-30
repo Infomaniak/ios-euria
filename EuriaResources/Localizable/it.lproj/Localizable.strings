@@ -4,21 +4,21 @@
  * Locale: it, Italian
  * Tagged: ios
  * Exported by: Baptiste Griva
- * Exported at: Wed, 29 Oct 2025 14:44:27 +0100
+ * Exported at: Thu, 30 Oct 2025 14:14:43 +0100
  */
 
 /* loco:68ff77d06bd131d99b010d73 */
 " onboardingEphemeralDescriptionArguments" = "Euria non lascia traccia";
 
 
+/* loco:69036475604798d6e00235e2 */
+"iosOnboardingDatacenterDescription" = "L’energia AI è 100%% rivalutata.";
+
 /* loco:68ff78eecc69b71eaf0c9713 */
 "noNetworkDescription" = "Controlla la tua connessione Internet e riprova per riprendere la conversazione";
 
 /* loco:68ff78b957d8570aa903afe3 */
 "noNetworkTitle" = "Nessun accesso a Internet";
-
-/* loco:690211445685faad01009642 */
-"onboardingDatacenterDescription" = "L’energia AI è 100%% rivalutata.";
 
 /* loco:690210b2297064b77306d174 */
 "onboardingDatacenterTitle" = "Euria riscalda le abitazioni.";
