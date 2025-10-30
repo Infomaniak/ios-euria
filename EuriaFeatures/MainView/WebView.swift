@@ -36,6 +36,7 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
         setupWebView(webView, coordinator: webViewCoordinator)
 
+        }
         let request = URLRequest(url: url)
         webView.load(request)
 
@@ -43,7 +44,8 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Update the view.
+        if uiView.url != url {
+            uiView.load(URLRequest(url: url))
     }
 
     private func setupWebView(_ webView: WKWebView, coordinator webViewCoordinator: WebViewCoordinator?) {

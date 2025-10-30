@@ -30,6 +30,8 @@ import SwiftUI
 import WebKit
 
 public struct MainView: View {
+    @EnvironmentObject var universalLinksState: UniversalLinksState
+
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
 
     @State private var isShowingWebView = true
@@ -56,7 +58,7 @@ public struct MainView: View {
         ZStack {
             if isShowingWebView {
                 WebView(
-                    url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+                    url: URL(string: "https://\(currentUrl)/")!,
                     webConfiguration: webViewDelegate.webConfiguration,
                     webViewCoordinator: webViewDelegate
                 )
@@ -88,6 +90,12 @@ public struct MainView: View {
         .onChange(of: networkMonitor.isConnected) { isConnected in
             guard !webViewDelegate.isLoaded else { return }
             isShowingWebView = isConnected
+        }
+        .onChange(of: universalLinksState.linkedWebView) { url in
+            if let url {
+                currentUrl = url
+                universalLinksState.linkedWebView = nil
+            }
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }
