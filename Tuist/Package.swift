@@ -38,7 +38,7 @@ let package = Package(
         .package(url: "https://github.com/Infomaniak/ios-device-check", .upToNextMajor(from: "1.1.1")),
         .package(url: "https://github.com/Infomaniak/ios-features", .upToNextMajor(from: "8.3.0")),
         .package(url: "https://github.com/Infomaniak/ios-login", .upToNextMajor(from: "7.5.0")),
-        .package(url: "https://github.com/Infomaniak/ios-onboarding", .upToNextMajor(from: "1.4.1")),
+        .package(url: "https://github.com/Infomaniak/ios-onboarding", .upToNextMajor(from: "1.4.2")),
         .package(url: "https://github.com/Infomaniak/ios-version-checker", .upToNextMajor(from: "16.0.0")),
         .package(url: "https://github.com/Infomaniak/swift-concurrency", .upToNextMajor(from: "1.0.0")),
         .package(url: "https://github.com/matomo-org/matomo-sdk-ios", .upToNextMajor(from: "7.7.0"))
