@@ -4,11 +4,15 @@
  * Locale: de, German
  * Tagged: ios
  * Exported by: Baptiste Griva
- * Exported at: Tue, 28 Oct 2025 08:54:07 +0100
+ * Exported at: Thu, 30 Oct 2025 14:14:43 +0100
  */
 
-/* loco:68ff1e2dd83ab9aa2509ad92 */
-"onboardingEphemeralArgument" = "ihre Unterhaltung mit Euria verblassen am Ende jeder Sitzung.";
+/* loco:68ff77d06bd131d99b010d73 */
+" onboardingEphemeralDescriptionArguments" = "Euria hinterlässt keine Spuren";
+
+
+/* loco:69036475604798d6e00235e2 */
+"iosOnboardingDatacenterDescription" = "AI-Energie wird zu 100%% aufgewertet.";
 
 /* loco:68ff78eecc69b71eaf0c9713 */
 "noNetworkDescription" = "Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut, um Ihr Unterhaltung fortzusetzen";
@@ -16,28 +20,35 @@
 /* loco:68ff78b957d8570aa903afe3 */
 "noNetworkTitle" = "Keine Internetverbindung";
 
+/* loco:690210b2297064b77306d174 */
+"onboardingDatacenterTitle" = "Euria heizt Häuser.";
+
+/* loco:68ff778f862219a3260cee52 */
+"onboardingEphemeralDescriptionTemplate" = "%@ Ihrer Vermittlungen.";
 
 /* loco:68ff1a4275f0868be50057e3 */
-"onboardingEphemeralTemplate" = "Ephemerer Modus aktiviert:\n%@";
+"onboardingEphemeralTitle" = "Mit dem ephemeren Modus,";
 
 /* loco:68ff15ef184733f2080e3484 */
-"onboardingEuriaArgument" = "ethisch, souverän und unabhängig.";
+"onboardingEuriaDescription" = "Souveräne KI, die Ihre Daten und den Planeten respektiert.";
 
 /* loco:68ff154bb297799a18033994 */
-"onboardingEuriaTemplate" = "Euria\nDer IA-Assistent %@";
+"onboardingEuriaTitle" = "Willkommen bei Euria";
+
+/* loco:68ff7942dc8cdafd0704f1d3 */
+"onboardingLoginArguments" = "Chatte jetzt";
 
 /* loco:68ff458ed23e12776a0209c2 */
-"onboardingLoginArgument" = "Chatte jetzt mit Euria.";
+"onboardingLoginTemplate" = "%@ mit Euria.";
 
 /* loco:68ff44d0c7acdcfd0806acb3 */
-"onboardingLoginTemplate" = "Bereit zum Start?\n%@";
+"onboardingLoginTitle" = "Bereit zum Start?";
 
 /* loco:68ff18295557e819550517a2 */
-"onboardingPrivacyArgument" = "chiffriert, privat und respektiert.";
+"onboardingPrivacyDescription" = "Es wird nichts gesammelt, Ihre Daten gehören Ihnen.";
 
 /* loco:68ff1702d6e8ef51560e41e2 */
-"onboardingPrivacyTemplate" = "Mit Euria,\nsind Ihre Unterhaltungen %@";
-
 /* loco:68ff4981634f6375880c8ba2 */
 "buttonLogin" = "Anmeldung";
+"onboardingPrivacyTitle" = "Euria ist in der Schweiz beheimatet.";
 

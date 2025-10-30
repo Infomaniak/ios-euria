@@ -16,6 +16,7 @@
  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaResources
 import InfomaniakOnboarding
 import Lottie
 import SwiftUI
@@ -26,17 +27,20 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
     @Binding var selectedSlide: Int
 
     let slides: [Slide]
+    let headerImage: UIImage?
 
     let shouldAnimateBottomViewForIndex: (Int) -> Bool
     @ViewBuilder var bottomView: (Int) -> BottomView
 
     init(
         slides: [Slide],
+        headerImage: UIImage? = EuriaResourcesAsset.Images.logoText.image,
         selectedSlide: Binding<Int>,
         shouldAnimateBottomViewForIndex: @escaping (Int) -> Bool = { _ in return false },
         @ViewBuilder bottomView: @escaping (Int) -> BottomView
     ) {
         self.slides = slides
+        self.headerImage = headerImage
         _selectedSlide = selectedSlide
         self.shouldAnimateBottomViewForIndex = shouldAnimateBottomViewForIndex
         self.bottomView = bottomView
@@ -44,7 +48,7 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> OnboardingViewController {
         let configuration = OnboardingConfiguration(
-            headerImage: nil,
+            headerImage: headerImage,
             slides: slides,
             pageIndicatorColor: UIColor.tintColor,
             isScrollEnabled: true,
@@ -66,7 +70,6 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         if colorScheme != context.coordinator.currentColorScheme,
            let currentSlideViewCell = uiViewController.currentSlideViewCell {
             context.coordinator.currentColorScheme = colorScheme
-            context.coordinator.selectCorrectAnimation(for: currentSlideViewCell, at: selectedSlide)
         }
     }
 
@@ -108,34 +111,6 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
             return shouldAnimateBottomViewForIndex(index)
         }
 
-        func willDisplaySlideViewCell(_ slideViewCell: SlideCollectionViewCell, at index: Int) {
-            selectCorrectAnimation(for: slideViewCell, at: index)
-        }
-
-        func selectCorrectAnimation(for slideViewCell: SlideCollectionViewCell, at index: Int) {
-            guard case .animation(let configuration) = parent.slides[index].content else { return }
-
-            let themedFileName = getAnimation(for: index)
-            Task {
-                let dotLottieFile = try await DotLottieFile.named(
-                    themedFileName,
-                    bundle: configuration.bundle
-                )
-
-                slideViewCell.illustrationAnimationView.loadAnimation(from: dotLottieFile)
-                slideViewCell.illustrationAnimationView.play()
-            }
-        }
-
-        private func getAnimation(for index: Int) -> String {
-            switch index {
-            case 1:
-                return ThemedAnimation.onboardingPrivacy.animationName(for: currentColorScheme)
-            case 2:
-                return ThemedAnimation.onboardingEphemeral.animationName(for: currentColorScheme)
-            default:
-                return ThemedAnimation.onboardingEuria.animationName(for: currentColorScheme)
-            }
-        }
+        func willDisplaySlideViewCell(_ slideViewCell: SlideCollectionViewCell, at index: Int) {}
     }
 }

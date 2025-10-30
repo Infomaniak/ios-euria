@@ -26,45 +26,31 @@ extension Slide {
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
                 backgroundImageTintColor: nil,
-                content: .animation(IKLottieConfiguration(
-                    id: 1,
-                    filename: ThemedAnimation.onboardingEuria.animationName(),
-                    bundle: EuriaResourcesResources.bundle,
-                    animationType: .dotLottie
-                )),
+                content: .illustration(EuriaResourcesAsset.Images.onboardingEuria.image),
                 bottomView: OnboardingTextView(text: .euria)
             ),
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurLeft.image,
                 backgroundImageTintColor: nil,
-                content: .animation(IKLottieConfiguration(
-                    id: 2,
-                    filename: ThemedAnimation.onboardingPrivacy.animationName(),
-                    bundle: EuriaResourcesResources.bundle,
-                    animationType: .dotLottie
-                )),
-                bottomView: OnboardingTextView(text: .privacy)
+                content: .illustration(EuriaResourcesAsset.Images.onboardingDatacenter.image),
+                bottomView: OnboardingTextView(text: .datacenter)
             ),
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
                 backgroundImageTintColor: nil,
-                content: .animation(IKLottieConfiguration(
-                    id: 3,
-                    filename: ThemedAnimation.onboardingEphemeral.animationName(),
-                    bundle: EuriaResourcesResources.bundle,
-                    animationType: .dotLottie
-                )),
+                content: .illustration(EuriaResourcesAsset.Images.onboardingGhostEuria.image),
                 bottomView: OnboardingTextView(text: .ephemeral)
             ),
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurLeft.image,
                 backgroundImageTintColor: nil,
-                content: .animation(IKLottieConfiguration(
-                    id: 4,
-                    filename: ThemedAnimation.onboardingEuria.animationName(),
-                    bundle: EuriaResourcesResources.bundle,
-                    animationType: .dotLottie
-                )),
+                content: .illustration(EuriaResourcesAsset.Images.onboardingMountain.image),
+                bottomView: OnboardingTextView(text: .privacy)
+            ),
+            Slide(
+                backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
+                backgroundImageTintColor: nil,
+                content: .illustration(EuriaResourcesAsset.Images.onboardingEuria.image),
                 bottomView: OnboardingTextView(text: .login)
             )
         ]
