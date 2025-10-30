@@ -39,6 +39,10 @@ struct EuriaApp: App {
                 .environmentObject(rootViewState)
                 .environmentObject(universalLinksState)
                 .ikButtonTheme(.euria)
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in
+                    guard let url = activity.webpageURL else { return }
+                    handleURL(url)
+                }
                 .onOpenURL(perform: handleURL)
         }
         .defaultAppStorage(.shared)
