@@ -16,10 +16,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCore
 import Foundation
 
 public class UniversalLinksState: ObservableObject {
-    @Published public var linkedWebView: String?
+    @Published public var linkedWebView: IdentifiableURL?
 
     public init() {}
 }

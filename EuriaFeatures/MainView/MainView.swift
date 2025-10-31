@@ -34,6 +34,8 @@ public struct MainView: View {
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
 
+    @State private var webViewURL = URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!
+
     @State private var isShowingWebView = true
     @State private var isShowingErrorAlert = false
 
@@ -58,7 +60,7 @@ public struct MainView: View {
         ZStack {
             if isShowingWebView {
                 WebView(
-                    url: URL(string: "https://\(currentUrl)/")!,
+                    url: webViewURL,
                     webConfiguration: webViewDelegate.webConfiguration,
                     webViewCoordinator: webViewDelegate
                 )
@@ -91,11 +93,11 @@ public struct MainView: View {
             guard !webViewDelegate.isLoaded else { return }
             isShowingWebView = isConnected
         }
-        .onChange(of: universalLinksState.linkedWebView) { url in
-            if let url {
-                currentUrl = url
-                universalLinksState.linkedWebView = nil
-            }
+        .onChange(of: universalLinksState.linkedWebView) { identifiableURL in
+            guard let identifiableURL else { return }
+
+            webViewURL = identifiableURL.url
+            universalLinksState.linkedWebView = nil
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }

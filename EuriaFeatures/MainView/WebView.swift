@@ -29,8 +29,14 @@ final class EuriaWebView: WKWebView {
 
 struct WebView<WebViewCoordinator>: UIViewRepresentable {
     let url: URL
-    var webConfiguration = WKWebViewConfiguration()
+    let webConfiguration: WKWebViewConfiguration
     var webViewCoordinator: WebViewCoordinator?
+
+    init(url: URL, webConfiguration: WKWebViewConfiguration = WKWebViewConfiguration(), webViewCoordinator: WebViewCoordinator?) {
+        self.url = url
+        self.webConfiguration = webConfiguration
+        self.webViewCoordinator = webViewCoordinator
+    }
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
