@@ -19,25 +19,49 @@
 import Foundation
 import InfomaniakCore
 
-public struct UniversalLinkHandler {
+public struct IdentifiableURL: Identifiable, Equatable {
+    public var id: String { return url.absoluteString }
+    public let url: URL
+
+    init(url: URL) {
+        self.url = url
+    }
+
+    init?(string: String) {
+        guard let url = URL(string: string) else { return nil }
+        self.init(url: url)
+    }
+}
+
+public struct UniversalLinkHandler: Sendable {
     public init() {}
 
-    public func handlePossibleUniversalLink(_ url: URL) -> String? {
-        let path = url.path
-        if path.starts(with: "/all") {
-            if let range = path.range(of: "euria/") {
-                let remainingPath = String(path[range.upperBound...])
-                let destinationLink = "\(ApiEnvironment.current.euriaHost)/\(remainingPath)"
-                return destinationLink
-            }
+    public func handlePossibleUniversalLink(_ url: URL) -> IdentifiableURL? {
+        if let euriaUniversalLink = tryToHandleEuriaUniversalLink(url) {
+            return euriaUniversalLink
+        }
 
-        } else {
-            let stringPath = String(path)
-            let remainingPath = stringPath.replacingOccurrences(of: "/euria", with: "")
-            let destinationLink = "\(ApiEnvironment.current.euriaHost)\(remainingPath)"
-            return destinationLink
+        if let kSuiteUniversalLink = tryToHandleKSuiteUniversalLink(url) {
+            return kSuiteUniversalLink
         }
 
         return nil
+    }
+
+    private func tryToHandleEuriaUniversalLink(_ url: URL) -> IdentifiableURL? {
+        guard url.host() == ApiEnvironment.current.euriaHost else { return nil }
+        return IdentifiableURL(url: url)
+    }
+
+    private func tryToHandleKSuiteUniversalLink(_ url: URL) -> IdentifiableURL? {
+        let urlPath = url.path()
+
+        if urlPath.starts(with: "/all"), let range = urlPath.range(of: "euria/") {
+            let remainingPath = String(urlPath[range.upperBound...])
+            return IdentifiableURL(string: "\(ApiEnvironment.current.euriaHost)/\(remainingPath)")
+        } else {
+            let remainingPath = urlPath.replacingOccurrences(of: "/euria", with: "")
+            return IdentifiableURL(string: "\(ApiEnvironment.current.euriaHost)\(remainingPath)")
+        }
     }
 }

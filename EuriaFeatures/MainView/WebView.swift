@@ -30,9 +30,15 @@ final class EuriaWebView: WKWebView {
 struct WebView: UIViewRepresentable {
     typealias WebViewDelegate = WKNavigationDelegate & WKScriptMessageHandler
 
-    var url: URL
-    var webConfiguration = WKWebViewConfiguration()
-    var delegate: WebViewDelegate?
+    let url: URL
+    let webConfiguration: WKWebViewConfiguration
+    let delegate: WebViewDelegate?
+
+    init(url: URL, webConfiguration: WKWebViewConfiguration = WKWebViewConfiguration(), delegate: WebViewDelegate?) {
+        self.url = url
+        self.webConfiguration = webConfiguration
+        self.delegate = delegate
+    }
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)

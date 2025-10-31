@@ -29,7 +29,7 @@ struct EuriaApp: App {
     private let dependencyInjectionHook = TargetAssembly()
 
     @StateObject private var rootViewState = RootViewState()
-    @StateObject var universalLinksState = UniversalLinksState()
+    @StateObject private var universalLinksState = UniversalLinksState()
 
     var body: some Scene {
         WindowGroup {
@@ -42,14 +42,12 @@ struct EuriaApp: App {
         .defaultAppStorage(.shared)
     }
 
-    @MainActor
-    func handleURL(_ url: URL) {
-        Task {
-            let linkHandler = UniversalLinkHandler()
-            guard let universalLink = linkHandler.handlePossibleUniversalLink(url) else {
-                return
-            }
-            universalLinksState.linkedWebView = universalLink
+    private func handleURL(_ url: URL) {
+        let linkHandler = UniversalLinkHandler()
+        guard let universalLink = linkHandler.handlePossibleUniversalLink(url) else {
+            return
         }
+        
+        universalLinksState.linkedWebView = universalLink
     }
 }
