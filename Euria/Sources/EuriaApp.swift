@@ -29,13 +29,25 @@ struct EuriaApp: App {
     private let dependencyInjectionHook = TargetAssembly()
 
     @StateObject private var rootViewState = RootViewState()
+    @StateObject private var universalLinksState = UniversalLinksState()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(rootViewState)
+                .environmentObject(universalLinksState)
                 .ikButtonTheme(.euria)
+                .onOpenURL(perform: handleURL)
         }
         .defaultAppStorage(.shared)
+    }
+
+    private func handleURL(_ url: URL) {
+        let linkHandler = UniversalLinkHandler()
+        guard let universalLink = linkHandler.handlePossibleUniversalLink(url) else {
+            return
+        }
+        
+        universalLinksState.linkedWebView = universalLink
     }
 }
