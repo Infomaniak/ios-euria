@@ -26,16 +26,16 @@ public struct UniversalLinkHandler {
         let path = url.path
         if path.starts(with: "/all") {
             if let range = path.range(of: "euria/") {
-                let result = String(path[range.upperBound...])
-                let res = "\(ApiEnvironment.current.euriaHost)/\(result)"
-                return res
+                let remainingPath = String(path[range.upperBound...])
+                let destinationLink = "\(ApiEnvironment.current.euriaHost)/\(remainingPath)"
+                return destinationLink
             }
 
         } else {
             let stringPath = String(path)
-            let result = stringPath.replacingOccurrences(of: "/euria", with: "")
-            let res = "\(ApiEnvironment.current.euriaHost)\(result)"
-            return res
+            let remainingPath = stringPath.replacingOccurrences(of: "/euria", with: "")
+            let destinationLink = "\(ApiEnvironment.current.euriaHost)\(remainingPath)"
+            return destinationLink
         }
 
         return nil
