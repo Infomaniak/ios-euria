@@ -67,6 +67,7 @@ let project = Project(
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
+                .target(name: "EuriaWidget"),
                 .external(name: "InfomaniakCoreCommonUI"),
                 .external(name: "InfomaniakDI"),
                 rootView.asDependency
@@ -123,7 +124,22 @@ let project = Project(
                     "EuriaResources/**/*.json",
                     "EuriaResources/**/*.lottie"
                 ],
-                settings: .settings(base: Constants.baseSettings))
+                settings: .settings(base: Constants.baseSettings)),
+        .target(
+            name: "EuriaWidget",
+            destinations: .iOS,
+            product: .appExtension,
+            bundleId: "\(Constants.baseIdentifier).EuriaWidget",
+            deploymentTargets: Constants.deploymentTarget,
+            infoPlist: "EuriaWidget/Info.plist",
+            sources: "EuriaWidget/**",
+            resources: [],
+            dependencies: [
+                .target(name: "EuriaCore"),
+                .target(name: "EuriaCoreUI"),
+            ],
+            settings: .settings(base: Constants.baseSettings)
+        )
     ],
     fileHeaderTemplate: .file("file-header-template.txt")
 )
