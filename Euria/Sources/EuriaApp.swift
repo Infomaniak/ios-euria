@@ -62,5 +62,7 @@ struct EuriaApp: App {
 
             universalLinksState.linkedWebView = universalLink
         }
+        
+        universalLinksState.linkedWebView = universalLink
     }
 }
