@@ -49,9 +49,13 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         return webView
     }
 
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        if uiView.url != url {
-            uiView.load(URLRequest(url: url))
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        guard webView.url != url else {
+            return
+        }
+
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
 
     private func setupWebView(_ webView: WKWebView, coordinator webViewCoordinator: WebViewCoordinator?) {
@@ -71,6 +75,9 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         if let uiDelegate = webViewCoordinator as? WKUIDelegate {
             webView.uiDelegate = uiDelegate
         }
+
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
 
     private func configureScrollView(_ webView: WKWebView) {
