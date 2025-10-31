@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaResources
 import SwiftUI
 import WidgetKit
 
@@ -30,14 +31,84 @@ struct Provider: TimelineProvider {
     }
 }
 
+private struct SearchLinkBar: View {
+    var url: URL
+
+    var body: some View {
+        Link(destination: url) {
+            HStack(spacing: 8) {
+                EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
+                    .resizable()
+                    .scaledToFit()
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .fill(.thinMaterial)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .stroke(.quaternary, lineWidth: 0)
+            )
+        }
+    }
+}
+
+private struct CircleIcon: View {
+    var size: CGFloat = 40
+    var symbolColor: Color = .primary
+    var borderWidth: CGFloat = 1
+    var image: Image
+
+    init(image: Image) {
+        self.image = image
+    }
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(.blue)
+
+            image
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(symbolColor)
+                .padding(size * 0.28)
+        }
+        .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+}
+
+struct widgetEntryView: View {
+    private let searchURL = URL(string: "euria://search")!
+
+    var body: some View {
+        VStack(spacing: 12) {
+            SearchLinkBar(url: searchURL)
+
+            HStack {
+                CircleIcon(image: Image(systemName: "clock"))
+                Spacer()
+                CircleIcon(image: Image(systemName:"star"))
+
+            }
+        }
+        .padding(8)
+    }
+}
+
 struct EuriaWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "EuriaWidget", provider: Provider()) { entry in
-            ZStack {
-                ContainerRelativeShape().fill(.background)
-                Text("Euria")
-                    .font(.headline)
-                    .padding()
+            if #available(iOS 17.0, *) {
+                widgetEntryView()
+                    .containerBackground(for: .widget) {}
+            } else {
+                widgetEntryView()
             }
         }
         .configurationDisplayName("Euria")
@@ -49,7 +120,7 @@ struct EuriaWidget: Widget {
 struct Entry: TimelineEntry { let date: Date }
 
 @available(iOSApplicationExtension 17.0, *)
-#Preview(as: .systemMedium) {
+#Preview(as: .systemSmall) {
     EuriaWidget()
 } timeline: {
     Entry(date: .now)

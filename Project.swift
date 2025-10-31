@@ -135,6 +135,7 @@ let project = Project(
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
+                .target(name: "EuriaResources")
             ],
             settings: .settings(base: Constants.baseSettings)
         )
