@@ -31,55 +31,49 @@ struct Provider: TimelineProvider {
     }
 }
 
+struct Entry: TimelineEntry { let date: Date }
+
 private struct SearchLinkBar: View {
     var url: URL
 
     var body: some View {
         Link(destination: url) {
-            HStack(spacing: 8) {
+            HStack {
                 EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
                     .resizable()
                     .scaledToFit()
+                    .frame(width: 24, height: 24)
+                    .foregroundStyle(.white.opacity(0.95))
 
-                Spacer(minLength: 0)
+                Spacer()
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
             .background(
-                RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .fill(.thinMaterial)
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .stroke(.quaternary, lineWidth: 0)
+                RoundedRectangle(cornerRadius: 25, style: .continuous)
+                    .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
             )
         }
     }
 }
 
 private struct CircleIcon: View {
-    var size: CGFloat = 40
-    var symbolColor: Color = .primary
-    var borderWidth: CGFloat = 1
-    var image: Image
-
-    init(image: Image) {
-        self.image = image
-    }
+    var size: CGFloat = 60
+    let image: Image
 
     var body: some View {
-        ZStack {
-            Circle()
-                .fill(.blue)
+        Link(destination: URL(string: "url")!) {
+            ZStack {
+                Circle()
+                    .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
+                    .frame(width: size, height: size)
 
-            image
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(symbolColor)
-                .padding(size * 0.28)
+                image
+                    .foregroundStyle(.white)
+                    .font(.system(size: 25, weight: .semibold))
+            }
+            .contentShape(Circle())
         }
-        .frame(width: size, height: size)
-        .accessibilityHidden(true)
     }
 }
 
@@ -87,26 +81,28 @@ struct widgetEntryView: View {
     private let searchURL = URL(string: "euria://search")!
 
     var body: some View {
-        VStack(spacing: 12) {
-            SearchLinkBar(url: searchURL)
+        ZStack {
+            VStack(spacing: 12) {
+                SearchLinkBar(url: searchURL)
 
-            HStack {
-                CircleIcon(image: Image(systemName: "clock"))
-                Spacer()
-                CircleIcon(image: Image(systemName:"star"))
-
+                HStack {
+                    CircleIcon(image: Image(systemName: "camera"))
+                    Spacer()
+                    CircleIcon(image: Image(systemName: "waveform"))
+                }
             }
         }
-        .padding(8)
     }
 }
 
 struct EuriaWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "EuriaWidget", provider: Provider()) { entry in
+        StaticConfiguration(kind: "EuriaWidget", provider: Provider()) { _ in
             if #available(iOS 17.0, *) {
                 widgetEntryView()
-                    .containerBackground(for: .widget) {}
+                    .containerBackground(for: .widget) {
+                        Color(EuriaResourcesAsset.Colors.background.swiftUIColor)
+                    }
             } else {
                 widgetEntryView()
             }
@@ -116,8 +112,6 @@ struct EuriaWidget: Widget {
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
-
-struct Entry: TimelineEntry { let date: Date }
 
 @available(iOSApplicationExtension 17.0, *)
 #Preview(as: .systemSmall) {
