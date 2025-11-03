@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCoreUI
 import EuriaResources
 import SwiftUI
 import WidgetKit
@@ -34,35 +35,32 @@ struct Provider: TimelineProvider {
 struct Entry: TimelineEntry { let date: Date }
 
 private struct SearchLinkBar: View {
-    var url: URL
-
     var body: some View {
-        Link(destination: url) {
-            HStack {
-                EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(.white.opacity(0.95))
+        HStack {
+            EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
+                .resizable()
+                .scaledToFit()
+                .frame(width: 24, height: 24)
+                .foregroundStyle(.white.opacity(0.95))
 
-                Spacer()
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(
-                RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
-            )
+            Spacer()
         }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 25, style: .continuous)
+                .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
+        )
     }
 }
 
 private struct CircleIcon: View {
     var size: CGFloat = 60
     let image: Image
+    let url: URL
 
     var body: some View {
-        Link(destination: URL(string: "url")!) {
+        Link(destination: url) {
             ZStack {
                 Circle()
                     .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
@@ -78,38 +76,47 @@ private struct CircleIcon: View {
 }
 
 struct widgetEntryView: View {
-    private let searchURL = URL(string: "euria://search")!
+    private let ephemeralURL = URL(string: "https://ksuite.infomaniak.com/all/euria?ephemeral")!
+    private let voiceURL = URL(string: "https://ksuite.infomaniak.com/all/euria?speech")!
 
     var body: some View {
         ZStack {
             VStack(spacing: 12) {
-                SearchLinkBar(url: searchURL)
+                SearchLinkBar()
 
                 HStack {
-                    CircleIcon(image: Image(systemName: "camera"))
+                    CircleIcon(image: Image(systemName: "clock"), url: ephemeralURL)
                     Spacer()
-                    CircleIcon(image: Image(systemName: "waveform"))
+                    CircleIcon(image: Image(systemName: "waveform"), url: voiceURL)
                 }
             }
         }
+        .padding(30)
     }
 }
 
 struct EuriaWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "EuriaWidget", provider: Provider()) { _ in
-            if #available(iOS 17.0, *) {
-                widgetEntryView()
-                    .containerBackground(for: .widget) {
-                        Color(EuriaResourcesAsset.Colors.background.swiftUIColor)
-                    }
-            } else {
-                widgetEntryView()
-            }
+            makeEuriaWidget()
         }
         .configurationDisplayName("Euria")
         .description("Description")
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+    }
+}
+
+@MainActor
+@ViewBuilder
+func makeEuriaWidget() -> some View {
+    if #available(iOS 17.0, *) {
+        widgetEntryView()
+            .containerBackground(for: .widget) {
+                Color(EuriaResourcesAsset.Colors.background.swiftUIColor)
+            }
+    } else {
+        widgetEntryView()
+            .appBackground()
     }
 }
 
