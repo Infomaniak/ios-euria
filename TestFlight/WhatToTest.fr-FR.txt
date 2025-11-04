@@ -1,8 +1,4 @@
-Quatrième build interne !
+Nouveau build interne !
 
 Nouveautés :
- - Nouvel onbarding
- - Nouvelle icône d'app
-
-Corrections :
- - L'app ne se déconnecte pas après une longue période sans être ouverte
+ - Améliorations mineures et corrections de bugs.

@@ -1,8 +1,4 @@
-Fourth internal build!
+New internal build!
 
 What’s new:
- - New onboarding experience
- - New app icon
-
-Fixes:
- - App does not logout user after a long period of inactivity
+ - Minor improvements and bug fixes.
