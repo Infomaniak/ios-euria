@@ -49,7 +49,7 @@ struct EuriaApp: App {
         guard let universalLink = linkHandler.handlePossibleUniversalLink(url) else {
             return
         }
-        
+
         universalLinksState.linkedWebView = universalLink
     }
 }

@@ -30,7 +30,7 @@ import SwiftUI
 import WebKit
 
 public struct MainView: View {
-    @EnvironmentObject var universalLinksState: UniversalLinksState
+    @EnvironmentObject private var universalLinksState: UniversalLinksState
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
 
