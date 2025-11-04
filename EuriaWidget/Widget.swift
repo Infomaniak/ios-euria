@@ -17,6 +17,7 @@
  */
 
 import DesignSystem
+import EuriaCore
 import EuriaCoreUI
 import EuriaResources
 import SwiftUI
@@ -36,21 +37,24 @@ struct Provider: TimelineProvider {
 struct Entry: TimelineEntry { let date: Date }
 
 private struct SearchLinkBar: View {
+    let url: URL
     var body: some View {
-        HStack {
-            EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
-                .resizable()
-                .scaledToFit()
-                .frame(width: IKPadding.large, height: IKPadding.large)
+        Link(destination: url) {
+            HStack {
+                EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: IKPadding.large, height: IKPadding.large)
 
-            Spacer()
+                Spacer()
+            }
+            .padding(.horizontal, IKPadding.medium)
+            .padding(.vertical, IKPadding.small)
+            .background(
+                RoundedRectangle(cornerRadius: IKPadding.large, style: .continuous)
+                    .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
+            )
         }
-        .padding(.horizontal, IKPadding.medium)
-        .padding(.vertical, IKPadding.small)
-        .background(
-            RoundedRectangle(cornerRadius: IKPadding.large, style: .continuous)
-                .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
-        )
     }
 }
 
@@ -76,18 +80,15 @@ private struct CircleIcon: View {
 }
 
 struct widgetEntryView: View {
-    private let ephemeralURL = URL(string: "https://ksuite.infomaniak.com/all/euria?ephemeral")!
-    private let voiceURL = URL(string: "https://ksuite.infomaniak.com/all/euria?speech")!
-
     var body: some View {
         ZStack {
             VStack(spacing: IKPadding.small) {
-                SearchLinkBar()
+                SearchLinkBar(url: DeeplinkConstants.newChatURL)
 
                 HStack {
-                    CircleIcon(image: Image(systemName: "clock"), url: ephemeralURL)
+                    CircleIcon(image: Image(systemName: "clock"), url: DeeplinkConstants.ephemeralURL)
                     Spacer()
-                    CircleIcon(image: Image(systemName: "waveform"), url: voiceURL)
+                    CircleIcon(image: Image(systemName: "waveform"), url: DeeplinkConstants.speechURL)
                 }
             }
         }

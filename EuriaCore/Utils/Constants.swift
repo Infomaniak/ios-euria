@@ -28,3 +28,9 @@ public enum Constants {
     private static let appIdentifierPrefix = Bundle.main.infoDictionary!["AppIdentifierPrefix"] as! String
     public static let accessGroup: String = Constants.appIdentifierPrefix + Constants.bundleId
 }
+
+public enum DeeplinkConstants {
+    public static let newChatURL = URL(string: "euria://widget-new-chat")!
+    public static let ephemeralURL = URL(string: "euria://widget-ephemeral")!
+    public static let speechURL = URL(string: "euria://widget-speech")!
+}
