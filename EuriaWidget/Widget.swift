@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import DesignSystem
 import EuriaCoreUI
 import EuriaResources
 import SwiftUI
@@ -40,15 +41,14 @@ private struct SearchLinkBar: View {
             EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
                 .resizable()
                 .scaledToFit()
-                .frame(width: 24, height: 24)
-                .foregroundStyle(.white.opacity(0.95))
+                .frame(width: IKPadding.large, height: IKPadding.large)
 
             Spacer()
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, IKPadding.medium)
+        .padding(.vertical, IKPadding.small)
         .background(
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
+            RoundedRectangle(cornerRadius: IKPadding.large, style: .continuous)
                 .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
         )
     }
@@ -68,7 +68,7 @@ private struct CircleIcon: View {
 
                 image
                     .foregroundStyle(.white)
-                    .font(.system(size: 25, weight: .semibold))
+                    .font(.system(size: IKPadding.large, weight: .semibold))
             }
             .contentShape(Circle())
         }
@@ -81,7 +81,7 @@ struct widgetEntryView: View {
 
     var body: some View {
         ZStack {
-            VStack(spacing: 12) {
+            VStack(spacing: IKPadding.small) {
                 SearchLinkBar()
 
                 HStack {
@@ -91,7 +91,7 @@ struct widgetEntryView: View {
                 }
             }
         }
-        .padding(30)
+        .padding(IKPadding.huge)
     }
 }
 
