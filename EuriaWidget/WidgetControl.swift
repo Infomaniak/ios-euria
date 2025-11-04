@@ -16,15 +16,20 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import AppIntents
 import SwiftUI
 import WidgetKit
 
-@main
-struct widgetBundle: WidgetBundle {
-    var body: some Widget {
-        QuickActionsWidget()
-        if #available(iOS 18.0, *) {
-            WidgetControl()
+@available(iOS 18.0, *)
+struct WidgetControl: ControlWidget {
+    var body: some ControlWidgetConfiguration {
+        StaticControlConfiguration(
+            kind: "performOpenApp"
+        ) {
+            ControlWidgetButton(action: OpenApp()) {
+                Label("Open Euria", systemImage: "checkmark.circle")
+            }
         }
+        .displayName("Open Euria")
     }
 }
