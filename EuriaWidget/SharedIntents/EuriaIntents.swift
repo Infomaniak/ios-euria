@@ -16,15 +16,14 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
+import AppIntents
 import WidgetKit
 
-@main
-struct widgetBundle: WidgetBundle {
-    var body: some Widget {
-        QuickActionsWidget()
-        if #available(iOS 18.0, *) {
-            WidgetControl()
-        }
+struct OpenApp: AppIntent {
+    static let title: LocalizedStringResource = "Open App"
+    static let openAppWhenRun = true
+
+    func perform() async throws -> some IntentResult {
+        return .result()
     }
 }
