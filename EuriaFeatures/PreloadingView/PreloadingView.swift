@@ -20,7 +20,6 @@ import DesignSystem
 import EuriaCore
 import EuriaCoreUI
 import InfomaniakCore
-import InfomaniakCoreCommonUI
 import InfomaniakCoreSwiftUI
 import InfomaniakDI
 import SwiftUI
