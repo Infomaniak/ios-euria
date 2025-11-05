@@ -74,6 +74,15 @@
       }
     },
     {
+      "identity" : "ios-notifications",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Infomaniak/ios-notifications",
+      "state" : {
+        "revision" : "bf0722c1392a783ac3e1fe2a69b10ae3e45350ff",
+        "version" : "15.1.0"
+      }
+    },
+    {
       "identity" : "ios-onboarding",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-onboarding",

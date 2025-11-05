@@ -1,0 +1,14 @@
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: es, Spanish
+ * Tagged: ios-main-target
+ * Exported by: Philippe Weidmann
+ * Exported at: Wed, 05 Nov 2025 10:05:38 +0100
+ */
+
+/* loco:690b123776e967e9360076c2 */
+"notification2faApproval" = "Confirmar inicio de sesión";
+
+/* loco:690b11f742c139ffa504d032 */
+"notificationTitle2faApproval" = "Euria";

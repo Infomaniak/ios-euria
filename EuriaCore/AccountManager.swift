@@ -19,9 +19,11 @@
 import Combine
 import DeviceAssociation
 import Foundation
+import InAppTwoFactorAuthentication
 import InfomaniakCore
 import InfomaniakDI
 import InfomaniakLogin
+import InfomaniakNotifications
 import OSLog
 
 public protocol AccountManagerable: Sendable {
@@ -53,6 +55,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
     @LazyInjectService var deviceManager: DeviceManagerable
     @LazyInjectService var tokenStore: TokenStore
     @LazyInjectService var networkLoginService: InfomaniakNetworkLoginable
+    @LazyInjectService var notificationService: InfomaniakNotifications
 
     public let userProfileStore = UserProfileStore()
 
@@ -108,6 +111,7 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         }
 
         attachDeviceToApiToken(token, apiFetcher: session.apiFetcher)
+        await notificationService.updateTopicsIfNeeded([Topic.twoFAPushChallenge], userApiFetcher: session.apiFetcher)
 
         return session
     }
@@ -119,6 +123,10 @@ public actor AccountManager: AccountManagerable, ObservableObject {
     public func removeTokenAndAccountFor(userId: UserId) {
         let removedToken = tokenStore.removeTokenFor(userId: userId)
         removeSession(userId: userId)
+
+        Task {
+            await notificationService.removeStoredTokenFor(userId: userId)
+        }
 
         guard let removedToken else { return }
 
