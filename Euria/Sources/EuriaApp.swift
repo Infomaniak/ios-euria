@@ -28,6 +28,8 @@ struct EuriaApp: App {
     // periphery:ignore - Making sure the DI is registered at a very early stage of the app launch.
     private let dependencyInjectionHook = TargetAssembly()
 
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
     @StateObject private var rootViewState = RootViewState()
 
     var body: some Scene {
