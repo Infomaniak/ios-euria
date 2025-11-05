@@ -131,7 +131,7 @@ let project = Project(
             product: .appExtension,
             bundleId: "\(Constants.baseIdentifier).EuriaWidget",
             deploymentTargets: Constants.deploymentTarget,
-            infoPlist: "EuriaWidget/Info.plist",
+            infoPlist: "EuriaWidget/Resources/Info.plist",
             sources: "EuriaWidget/**",
             resources: [],
             dependencies: [
