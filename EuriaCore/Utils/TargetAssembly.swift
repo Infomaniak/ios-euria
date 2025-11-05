@@ -21,7 +21,6 @@ import Foundation
 import InAppTwoFactorAuthentication
 import InfomaniakCore
 import InfomaniakCoreCommonUI
-import InfomaniakCoreSwiftUI
 import InfomaniakDI
 import InfomaniakLogin
 import InterAppLogin

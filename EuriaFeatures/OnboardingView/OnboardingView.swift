@@ -17,7 +17,7 @@
  */
 
 import EuriaCoreUI
-import InfomaniakCoreSwiftUI
+import InfomaniakCoreCommonUI
 import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakOnboarding
