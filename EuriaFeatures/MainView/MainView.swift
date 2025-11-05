@@ -22,6 +22,7 @@ import EuriaCoreUI
 import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
+import InfomaniakCoreCommonUI
 import InfomaniakDI
 import InfomaniakLogin
 import SwiftUI
@@ -65,6 +66,8 @@ public struct MainView: View {
         .appBackground()
         .onAppear {
             networkMonitor.start()
+            @InjectService var orientationManager: OrientationManageable
+            orientationManager.setOrientationLock(.all)
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
             guard !webViewDelegate.isLoaded else { return }
