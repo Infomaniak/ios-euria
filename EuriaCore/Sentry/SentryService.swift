@@ -25,7 +25,7 @@ public struct SentryService {
 
     private func initSentry() {
         SentrySDK.start { options in
-            options.dsn = "https://200ddb73d9c67f455b0e2d190016715b@sentry-mobile.infomaniak.com/21"
+            options.dsn = "https://8018fd7b5c8adf98e1052d5bea678793@sentry-mobile.infomaniak.com/21"
             options.environment = Bundle.main.isRunningInTestFlight ? "testflight" : "production"
             options.tracePropagationTargets = []
             options.enableUIViewControllerTracing = false
