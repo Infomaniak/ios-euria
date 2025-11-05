@@ -67,6 +67,8 @@ let project = Project(
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
+                .external(name: "InfomaniakCoreCommonUI"),
+                .external(name: "InfomaniakDI"),
                 rootView.asDependency
             ],
             settings: .settings(base: Constants.baseSettings),
