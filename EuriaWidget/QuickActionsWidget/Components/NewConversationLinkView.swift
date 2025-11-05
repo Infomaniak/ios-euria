@@ -23,7 +23,7 @@ struct NewConversationLinkView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: Alignment(horizontal: .leading, vertical: .center))
                 .background(
                     Capsule()
-                        .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
+                        .fill(EuriaWidgetAsset.Colors.buttonColor.swiftUIColor)
                 )
         }
     }

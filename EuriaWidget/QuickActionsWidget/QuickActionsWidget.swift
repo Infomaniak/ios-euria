@@ -44,9 +44,9 @@ struct QuickActionsWidgetView: View {
             Spacer(minLength: IKPadding.mini)
 
             HStack(spacing: 0) {
-                CircleIconLinkView(image: Image(systemName: "clock"), url: DeeplinkConstants.ephemeralURL)
+                CircleIconLinkView(image: EuriaWidgetAsset.Images.clockDashed.swiftUIImage, url: DeeplinkConstants.ephemeralURL)
                 Spacer(minLength: IKPadding.mini)
-                CircleIconLinkView(image: Image(systemName: "waveform"), url: DeeplinkConstants.speechURL)
+                CircleIconLinkView(image: EuriaWidgetAsset.Images.microphone.swiftUIImage, url: DeeplinkConstants.speechURL)
             }
         }
     }
@@ -56,7 +56,7 @@ struct QuickActionsWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "EuriaWidget", provider: QuickActionsProvider()) { _ in
             QuickActionsWidgetView()
-                .containerBackgroundForWidget(color: EuriaResourcesAsset.Colors.background.swiftUIColor)
+                .containerBackgroundForWidget(color: EuriaWidgetAsset.Colors.backgroundColor.swiftUIColor)
         }
         .configurationDisplayName("Euria")
         .description("Description") // TODO: update description

@@ -133,7 +133,9 @@ let project = Project(
             deploymentTargets: Constants.deploymentTarget,
             infoPlist: "EuriaWidget/Resources/Info.plist",
             sources: "EuriaWidget/**",
-            resources: [],
+            resources: [
+                "EuriaWidget/Resources/*.xcassets",
+            ],
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),

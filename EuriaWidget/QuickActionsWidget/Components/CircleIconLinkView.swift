@@ -7,6 +7,7 @@
 
 import DesignSystem
 import EuriaResources
+import InfomaniakCoreSwiftUI
 import SwiftUI
 
 struct CircleIconLinkView: View {
@@ -16,12 +17,11 @@ struct CircleIconLinkView: View {
     var body: some View {
         Link(destination: url) {
             Circle()
-                .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
+                .fill(EuriaWidgetAsset.Colors.buttonColor.swiftUIColor)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .overlay {
                     image
-                        .foregroundStyle(.white)
-                        .font(.system(size: IKIconSize.large.rawValue, weight: .semibold))
+                        .iconSize(.large)
                 }
         }
     }
