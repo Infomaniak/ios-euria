@@ -14,24 +14,17 @@ struct NewConversationLinkView: View {
 
     var body: some View {
         Link(destination: url) {
-            HStack {
-                EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: IKPadding.large, height: IKPadding.large)
-
-                Spacer()
-            }
-            .padding(.horizontal, IKPadding.medium)
-            .padding(.vertical, IKPadding.small)
-            .background(
-                RoundedRectangle(cornerRadius: IKPadding.large, style: .continuous)
-                    .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
-            )
+            EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
+                .resizable()
+                .scaledToFit()
+                .frame(width: IKIconSize.large.rawValue, height: IKIconSize.large.rawValue)
+                .padding(.horizontal, IKPadding.medium)
+                .padding(.vertical, IKPadding.small)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: Alignment(horizontal: .leading, vertical: .center))
+                .background(
+                    Capsule()
+                        .fill(EuriaResourcesAsset.Colors.disabledPrimary.swiftUIColor)
+                )
         }
     }
-}
-
-#Preview {
-    NewConversationLinkView(url: URL(string: "https://euria.infomaniak.com")!)
 }

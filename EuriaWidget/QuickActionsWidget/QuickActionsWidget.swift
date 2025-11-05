@@ -38,18 +38,17 @@ extension View {
 
 struct QuickActionsWidgetView: View {
     var body: some View {
-        ZStack {
-            VStack(spacing: IKPadding.small) {
-                NewConversationLinkView(url: DeeplinkConstants.newChatURL)
+        VStack(spacing: 0) {
+            NewConversationLinkView(url: DeeplinkConstants.newChatURL)
 
-                HStack {
-                    CircleIconLinkView(image: Image(systemName: "clock"), url: DeeplinkConstants.ephemeralURL)
-                    Spacer()
-                    CircleIconLinkView(image: Image(systemName: "waveform"), url: DeeplinkConstants.speechURL)
-                }
+            Spacer(minLength: IKPadding.mini)
+
+            HStack(spacing: 0) {
+                CircleIconLinkView(image: Image(systemName: "clock"), url: DeeplinkConstants.ephemeralURL)
+                Spacer(minLength: IKPadding.mini)
+                CircleIconLinkView(image: Image(systemName: "waveform"), url: DeeplinkConstants.speechURL)
             }
         }
-        .padding(IKPadding.huge)
     }
 }
 
@@ -60,13 +59,13 @@ struct QuickActionsWidget: Widget {
                 .containerBackgroundForWidget(color: EuriaResourcesAsset.Colors.background.swiftUIColor)
         }
         .configurationDisplayName("Euria")
-        .description("Description")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
+        .description("Description") // TODO: update description
+        .supportedFamilies([.systemSmall])
     }
 }
 
 @available(iOSApplicationExtension 17.0, *)
-#Preview(as: .systemSmall) {
+#Preview("System Small", as: .systemSmall) {
     QuickActionsWidget()
 } timeline: {
     QuickActionsEntry(date: .now)
