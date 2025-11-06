@@ -23,6 +23,7 @@ import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakCoreCommonUI
+import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakLogin
 import SwiftUI
@@ -30,7 +31,9 @@ import WebKit
 
 public struct MainView: View {
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
+
     @State private var isShowingWebView = true
+    @State private var isShowingErrorAlert = false
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
 
@@ -55,6 +58,16 @@ public struct MainView: View {
                     delegate: webViewDelegate
                 )
                 .ignoresSafeArea()
+                .quickLookPreview($webViewDelegate.isPresentingDocument)
+                .onChange(of: webViewDelegate.error) { newValue in
+                    guard newValue != nil else { return }
+                    isShowingErrorAlert = true
+                }
+                .alert(isPresented: $isShowingErrorAlert, error: webViewDelegate.error) {
+                    Button(InfomaniakCoreUIResources.CoreUILocalizable.buttonClose) {
+                        webViewDelegate.error = nil
+                    }
+                }
             }
 
             if isShowingOfflineView {
