@@ -3,8 +3,8 @@
  * Project: Euria
  * Locale: es, Spanish
  * Tagged: ios
- * Exported by: Valentin Perignon
- * Exported at: Thu, 06 Nov 2025 09:12:45 +0100
+ * Exported by: Baptiste Griva
+ * Exported at: Thu, 06 Nov 2025 11:37:16 +0100
  */
 
 /* loco:68ff77d06bd131d99b010d73 */
@@ -54,6 +54,9 @@
 
 /* loco:68ff1702d6e8ef51560e41e2 */
 "onboardingPrivacyTitle" = "Euria tiene su sede en Suiza.";
+
+/* loco:690c7a374c68a94f4a0d60c2 */
+"openAppControlTitle" = "Abrir Euria";
 
 /* loco:68ff7ce0af97f687ca0a3032 */
 "serverError" = "Error del servidor";
