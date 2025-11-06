@@ -95,6 +95,9 @@ open class TargetAssembly {
             },
             Factory(type: AppLaunchCounter.self) { _, _ in
                 AppLaunchCounter()
+            },
+            Factory(type: OrientationManageable.self) { _, _ in
+                OrientationManager()
             }
         ]
     }

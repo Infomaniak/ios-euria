@@ -17,6 +17,7 @@
  */
 
 import EuriaCoreUI
+import InfomaniakCoreCommonUI
 import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakOnboarding
@@ -43,6 +44,16 @@ public struct OnboardingView: View {
         .alert(isPresented: $isShowingError, error: loginHandler.error) {
             Button(InfomaniakCoreUIResources.CoreUILocalizable.buttonClose) {
                 loginHandler.error = nil
+            }
+        }
+        .onAppear {
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                @InjectService var orientationManager: OrientationManageable
+                UIDevice.current
+                    .setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+                orientationManager.setOrientationLock(.portrait)
+                UIApplication.shared.mainSceneKeyWindow?.rootViewController?
+                    .setNeedsUpdateOfSupportedInterfaceOrientations()
             }
         }
         .onChange(of: loginHandler.error) { newValue in

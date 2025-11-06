@@ -32,6 +32,10 @@ public struct PreloadingView: View {
 
     public var body: some View {
         SplashScreenView()
+            .onAppear {
+                @InjectService var orientationManager: OrientationManageable
+                orientationManager.setOrientationLock(.all)
+            }
             .task {
                 await preloadApp()
             }
