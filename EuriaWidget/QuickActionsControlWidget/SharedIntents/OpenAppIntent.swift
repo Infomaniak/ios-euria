@@ -17,10 +17,16 @@
  */
 
 import AppIntents
+import EuriaResources
 import WidgetKit
 
-struct OpenApp: AppIntent {
-    static let title: LocalizedStringResource = "Open App"
+struct OpenAppIntent: AppIntent {
+    static let title: LocalizedStringResource = .init(
+        "openAppControlTitle",
+        table: "Localizable",
+        bundle: EuriaResourcesResources.bundle
+    )
+
     static let openAppWhenRun = true
 
     func perform() async throws -> some IntentResult {
