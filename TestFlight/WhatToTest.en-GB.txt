@@ -1,4 +1,2 @@
-New internal build!
-
-What’s new:
+ - Download management
  - Minor improvements and bug fixes.
