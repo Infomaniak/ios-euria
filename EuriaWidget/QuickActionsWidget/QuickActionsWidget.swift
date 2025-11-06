@@ -44,22 +44,30 @@ struct QuickActionsWidgetView: View {
             Spacer(minLength: IKPadding.mini)
 
             HStack(spacing: 0) {
-                CircleIconLinkView(image: EuriaWidgetAsset.Images.clockDashed.swiftUIImage, url: DeeplinkConstants.ephemeralURL)
+                CircleIconLinkView(
+                    image: EuriaResourcesAsset.Images.clockDashed.swiftUIImage,
+                    url: DeeplinkConstants.ephemeralURL
+                )
                 Spacer(minLength: IKPadding.mini)
-                CircleIconLinkView(image: EuriaWidgetAsset.Images.microphone.swiftUIImage, url: DeeplinkConstants.speechURL)
+                CircleIconLinkView(
+                    image: EuriaResourcesAsset.Images.microphone.swiftUIImage,
+                    url: DeeplinkConstants.speechURL
+                )
             }
         }
     }
 }
 
 struct QuickActionsWidget: Widget {
+    static let kind = "\(Constants.bundleId).quickActionsWidget"
+
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "EuriaWidget", provider: QuickActionsProvider()) { _ in
+        StaticConfiguration(kind: Self.kind, provider: QuickActionsProvider()) { _ in
             QuickActionsWidgetView()
-                .containerBackgroundForWidget(color: EuriaWidgetAsset.Colors.backgroundColor.swiftUIColor)
+                .containerBackgroundForWidget(color: EuriaResourcesAsset.Colors.widgetBackgroundColor.swiftUIColor)
         }
-        .configurationDisplayName("Euria")
-        .description("Description") // TODO: update description
+        .configurationDisplayName(EuriaResourcesStrings.widgetQuickActionsTitle)
+        .description(EuriaResourcesStrings.widgetQuickActionsDescription)
         .supportedFamilies([.systemSmall])
     }
 }

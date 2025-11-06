@@ -17,7 +17,7 @@ struct CircleIconLinkView: View {
     var body: some View {
         Link(destination: url) {
             Circle()
-                .fill(EuriaWidgetAsset.Colors.buttonColor.swiftUIColor)
+                .fill(EuriaResourcesAsset.Colors.widgetButtonColor.swiftUIColor)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .overlay {
                     image

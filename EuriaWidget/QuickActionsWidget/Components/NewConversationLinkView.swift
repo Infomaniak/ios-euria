@@ -8,23 +8,29 @@
 import DesignSystem
 import EuriaResources
 import SwiftUI
+import EuriaCore
 
 struct NewConversationLinkView: View {
     let url: URL
 
     var body: some View {
         Link(destination: url) {
-            EuriaResourcesAsset.Images.widgetEuria.swiftUIImage
-                .resizable()
-                .scaledToFit()
-                .frame(width: IKIconSize.large.rawValue, height: IKIconSize.large.rawValue)
-                .padding(.horizontal, IKPadding.medium)
-                .padding(.vertical, IKPadding.small)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: Alignment(horizontal: .leading, vertical: .center))
-                .background(
-                    Capsule()
-                        .fill(EuriaWidgetAsset.Colors.buttonColor.swiftUIColor)
-                )
+            HStack(spacing: 4) {
+                EuriaResourcesAsset.Images.euriaLogo.swiftUIImage
+                    .resizable()
+                    .scaledToFit()
+
+                Text("Euria")
+                    .fontWeight(.bold)
+                    .foregroundStyle(EuriaResourcesAsset.Colors.widgetTextPrimaryColor.swiftUIColor)
+                    .minimumScaleFactor(0.5)
+            }
+            .padding(IKPadding.small)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .background(
+                Capsule()
+                    .fill(EuriaResourcesAsset.Colors.widgetButtonColor.swiftUIColor)
+            )
         }
     }
 }
