@@ -17,19 +17,21 @@
  */
 
 import AppIntents
+import EuriaCore
+import EuriaResources
 import SwiftUI
 import WidgetKit
 
 @available(iOS 18.0, *)
-struct WidgetControl: ControlWidget {
+struct OpenAppControl: ControlWidget {
     var body: some ControlWidgetConfiguration {
         StaticControlConfiguration(
-            kind: "performOpenApp"
+            kind: "\(Constants.bundleId).openAppControl"
         ) {
-            ControlWidgetButton(action: OpenApp()) {
-                Label("Open Euria", systemImage: "checkmark.circle")
+            ControlWidgetButton(action: OpenAppIntent()) {
+                Label(EuriaResourcesStrings.openAppControlTitle, systemImage: "apple.image.playground.fill")
             }
         }
-        .displayName("Open Euria")
+        .displayName(LocalizedStringResource(String.LocalizationValue(EuriaResourcesStrings.openAppControlTitle)))
     }
 }
