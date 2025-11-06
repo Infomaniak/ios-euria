@@ -10,7 +10,20 @@ import EuriaResources
 import SwiftUI
 import EuriaCore
 
+extension Image {
+    @ViewBuilder
+    func widgetFullColorRenderingMode() -> some View {
+        if #available(iOS 26.0, *) {
+            widgetAccentedRenderingMode(.fullColor)
+        } else {
+            self
+        }
+    }
+}
+
 struct NewConversationLinkView: View {
+    @Environment(\.widgetRenderingMode) private var widgetRenderingMode
+
     let url: URL
 
     var body: some View {
@@ -18,6 +31,7 @@ struct NewConversationLinkView: View {
             HStack(spacing: 4) {
                 EuriaResourcesAsset.Images.euriaLogo.swiftUIImage
                     .resizable()
+                    .widgetFullColorRenderingMode()
                     .scaledToFit()
 
                 Text("Euria")
@@ -27,10 +41,10 @@ struct NewConversationLinkView: View {
             }
             .padding(IKPadding.small)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .background(
+            .background {
                 Capsule()
-                    .fill(EuriaResourcesAsset.Colors.widgetButtonColor.swiftUIColor)
-            )
+                    .fill(Color.buttonColor(in: widgetRenderingMode))
+            }
         }
     }
 }

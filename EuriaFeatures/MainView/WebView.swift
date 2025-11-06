@@ -89,12 +89,5 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         webView.scrollView.backgroundColor = .clear
         webView.backgroundColor = .clear
         webView.isOpaque = false
-
-        let request = URLRequest(url: url)
-        webView.load(request)
-
-        return webView
-    }
-
     }
 }

@@ -23,6 +23,13 @@ import EuriaResources
 import SwiftUI
 import WidgetKit
 
+extension Color {
+    static func buttonColor(in renderingMode: WidgetRenderingMode) -> Color {
+        let opacity = renderingMode == .fullColor ? 1 : 0.1
+        return EuriaResourcesAsset.Colors.widgetButtonColor.swiftUIColor.opacity(opacity)
+    }
+}
+
 extension View {
     @ViewBuilder
     func containerBackgroundForWidget(color: Color) -> some View {
