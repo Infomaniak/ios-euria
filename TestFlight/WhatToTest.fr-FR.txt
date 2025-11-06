@@ -1,4 +1,2 @@
-Nouveau build interne !
-
-Nouveautés :
+ - Gestion des téléchargements
  - Améliorations mineures et corrections de bugs.
