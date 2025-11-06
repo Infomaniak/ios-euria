@@ -20,6 +20,7 @@ import EuriaCore
 import InfomaniakCore
 import InfomaniakDI
 import InfomaniakLogin
+import OSLog
 import Sentry
 import SwiftUI
 import UIKit
@@ -29,17 +30,52 @@ import WebKit
 class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var isLoaded = false
 
+    @Published var isPresentingDocument: URL?
+    @Published var error: ErrorDomain?
+
     let webConfiguration: WKWebViewConfiguration
+    var downloads = [WKDownload: URL]()
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
         case userLanguage = "USER-LANGUAGE"
     }
 
+    enum ErrorDomain: LocalizedError, Equatable {
+        case urlGenerationFailed(error: Error)
+        case downloadFailed(error: Error)
+
+        var errorDescription: String? {
+            switch self {
+            case .urlGenerationFailed(let error):
+                return error.localizedDescription
+            case .downloadFailed(let error):
+                return error.localizedDescription
+            }
+        }
+
+        static func == (lhs: ErrorDomain, rhs: ErrorDomain) -> Bool {
+            switch (lhs, rhs) {
+            case (.urlGenerationFailed, .urlGenerationFailed):
+                return true
+            case (.downloadFailed, .downloadFailed):
+                return true
+            default:
+                return false
+            }
+        }
+    }
+
     init(session: any UserSessionable) {
         webConfiguration = WKWebViewConfiguration()
         super.init()
         setupWebViewConfiguration(token: session.apiFetcher.currentToken)
+    }
+
+    deinit {
+        Task {
+            await EuriaWebViewDelegate.cleanTemporaryFolder()
+        }
     }
 
     private func setupWebViewConfiguration(token: ApiToken?) {
@@ -77,34 +113,81 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
             ]
         )
     }
+
+    private nonisolated static func cleanTemporaryFolder() async {
+        do {
+            try FileManager.default.removeItem(at: URL.temporaryDownloadsDirectory())
+        } catch {
+            Logger.general.error("Error while cleaning temporary folder: \(error)")
+        }
+    }
 }
 
 // MARK: - WKNavigationDelegate
 
 extension EuriaWebViewDelegate: WKNavigationDelegate {
-    func webView(
-        _ webView: WKWebView,
-        decidePolicyFor navigationAction: WKNavigationAction,
-        decisionHandler: @MainActor (WKNavigationActionPolicy) -> Void
-    ) {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
+        guard !navigationAction.shouldPerformDownload else {
+            return .download
+        }
+
         guard let navigationHost = navigationAction.request.url?.host() else {
-            decisionHandler(.allow)
-            return
+            return .allow
         }
 
         if navigationHost == ApiEnvironment.current.euriaHost {
-            decisionHandler(.allow)
-        } else {
-            if navigationAction.navigationType == .linkActivated,
-               let url = navigationAction.request.url {
-                UIApplication.shared.open(url)
-            }
-            decisionHandler(.cancel)
+            return .allow
         }
+
+        if navigationAction.navigationType == .linkActivated, let url = navigationAction.request.url {
+            await UIApplication.shared.open(url)
+        }
+        return .cancel
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         isLoaded = true
+    }
+
+    func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
+        download.delegate = self
+    }
+}
+
+// MARK: - WKDownloadDelegate
+
+extension EuriaWebViewDelegate: WKDownloadDelegate {
+    func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String) async -> URL? {
+        do {
+            let fileDestinationURL = try URL.temporaryDownloadsDirectory().appending(path: suggestedFilename)
+            guard !FileManager.default.fileExists(atPath: fileDestinationURL.path(percentEncoded: false)) else {
+                isPresentingDocument = fileDestinationURL
+                return nil
+            }
+
+            downloads[download] = fileDestinationURL
+            return fileDestinationURL
+        } catch {
+            self.error = .urlGenerationFailed(error: error)
+            Logger.general.error("Error while generating the destination URL for a download: \(error)")
+            return nil
+        }
+    }
+
+    func downloadDidFinish(_ download: WKDownload) {
+        guard let fileURL = downloads[download] else {
+            return
+        }
+
+        isPresentingDocument = fileURL
+        downloads[download] = nil
+    }
+
+    func download(_ download: WKDownload, didFailWithError error: any Error, resumeData: Data?) {
+        self.error = .downloadFailed(error: error)
+        Logger.general.error("Error while downloading a file: \(error)")
+
+        downloads[download] = nil
     }
 }
 
