@@ -167,6 +167,7 @@ let project = Project(
             ]),
             sources: "EuriaShareExtension/Sources/**",
             resources: [],
+            entitlements: "EuriaShareExtension/Resources/Euria.entitlements",
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
