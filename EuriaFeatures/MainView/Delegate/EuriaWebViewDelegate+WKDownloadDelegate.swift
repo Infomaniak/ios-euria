@@ -17,8 +17,8 @@
  */
 
 import Foundation
-import WebKit
 import OSLog
+import WebKit
 
 // MARK: - WKDownloadDelegate
 
@@ -56,4 +56,3 @@ extension EuriaWebViewDelegate: WKDownloadDelegate {
         downloads[download] = nil
     }
 }
-
