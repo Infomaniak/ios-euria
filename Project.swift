@@ -124,5 +124,6 @@ let project = Project(
                     "EuriaResources/**/*.lottie"
                 ],
                 settings: .settings(base: Constants.baseSettings))
-    ]
+    ],
+    fileHeaderTemplate: .file("file-header-template.txt")
 )
