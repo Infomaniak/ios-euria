@@ -33,10 +33,10 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var isPresentingDocument: URL?
     @Published var error: ErrorDomain?
 
+    let host: String
     let webConfiguration: WKWebViewConfiguration
 
-    private let host: String
-    private var downloads = [WKDownload: URL]()
+    var downloads = [WKDownload: URL]()
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -124,117 +124,5 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
         } catch {
             Logger.general.error("Error while cleaning temporary folder: \(error)")
         }
-    }
-}
-
-// MARK: - WKNavigationDelegate
-
-extension EuriaWebViewDelegate: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        guard !navigationAction.shouldPerformDownload else {
-            return .download
-        }
-
-        guard let navigationHost = navigationAction.request.url?.host() else {
-            return .allow
-        }
-
-        if navigationHost == host {
-            return .allow
-        }
-
-        if navigationAction.navigationType == .linkActivated, let url = navigationAction.request.url {
-            await UIApplication.shared.open(url)
-        }
-        return .cancel
-    }
-
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        isLoaded = true
-    }
-
-    func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
-        download.delegate = self
-    }
-}
-
-// MARK: - WKDownloadDelegate
-
-extension EuriaWebViewDelegate: WKDownloadDelegate {
-    func download(_ download: WKDownload, decideDestinationUsing response: URLResponse, suggestedFilename: String) async -> URL? {
-        do {
-            let fileDestinationURL = try URL.temporaryDownloadsDirectory().appending(path: suggestedFilename)
-            guard !FileManager.default.fileExists(atPath: fileDestinationURL.path(percentEncoded: false)) else {
-                isPresentingDocument = fileDestinationURL
-                return nil
-            }
-
-            downloads[download] = fileDestinationURL
-            return fileDestinationURL
-        } catch {
-            self.error = .urlGenerationFailed(error: error)
-            Logger.general.error("Error while generating the destination URL for a download: \(error)")
-            return nil
-        }
-    }
-
-    func downloadDidFinish(_ download: WKDownload) {
-        guard let fileURL = downloads[download] else {
-            return
-        }
-
-        isPresentingDocument = fileURL
-        downloads[download] = nil
-    }
-
-    func download(_ download: WKDownload, didFailWithError error: any Error, resumeData: Data?) {
-        self.error = .downloadFailed(error: error)
-        Logger.general.error("Error while downloading a file: \(error)")
-
-        downloads[download] = nil
-    }
-}
-
-// MARK: - WKScriptMessageHandler
-
-extension EuriaWebViewDelegate: WKScriptMessageHandler {
-    enum MessageTopic: String, CaseIterable {
-        case logout
-        case unauthenticated
-    }
-
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let topic = MessageTopic(rawValue: message.name) else { return }
-
-        switch topic {
-        case .logout:
-            logoutUser()
-        case .unauthenticated:
-            userTokenIsInvalid()
-        }
-    }
-
-    private func logoutUser() {
-        Task {
-            let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
-            await webConfiguration.websiteDataStore.removeData(
-                ofTypes: dataTypes,
-                modifiedSince: Date(timeIntervalSinceReferenceDate: 0)
-            )
-
-            @InjectService var accountManager: AccountManagerable
-            guard let userId = await accountManager.currentSession?.userId else {
-                return
-            }
-
-            await accountManager.removeTokenAndAccountFor(userId: userId)
-        }
-    }
-
-    private func userTokenIsInvalid() {
-        SentrySDK.capture(message: "Refreshing token failed - Cannot refresh infinite token") { scope in
-            scope.setLevel(.error)
-        }
-        logoutUser()
     }
 }
