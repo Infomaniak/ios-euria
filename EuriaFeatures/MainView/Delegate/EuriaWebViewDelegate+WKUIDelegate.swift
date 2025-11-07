@@ -18,6 +18,8 @@
 
 import AVFoundation
 import Foundation
+import OSLog
+import Sentry
 import WebKit
 
 extension EuriaWebViewDelegate: WKUIDelegate {
@@ -42,6 +44,10 @@ extension EuriaWebViewDelegate: WKUIDelegate {
             return canAccessCamera && canAccessMicrophone ? .grant : .deny
 
         @unknown default:
+            Logger.general.info("The WebView asked for a permission we do not handle.")
+            SentrySDK.capture(message: "The WebView asked for a permission we do not handle.") { scope in
+                scope.setContext(value: ["Type RawValue": type.rawValue], key: "Information")
+            }
             return .prompt
         }
     }
