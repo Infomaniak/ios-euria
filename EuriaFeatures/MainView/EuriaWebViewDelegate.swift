@@ -34,7 +34,9 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var error: ErrorDomain?
 
     let webConfiguration: WKWebViewConfiguration
-    var downloads = [WKDownload: URL]()
+
+    private let host: String
+    private var downloads = [WKDownload: URL]()
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -66,8 +68,10 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
         }
     }
 
-    init(session: any UserSessionable) {
+    init(host: String, session: any UserSessionable) {
+        self.host = host
         webConfiguration = WKWebViewConfiguration()
+
         super.init()
         setupWebViewConfiguration(token: session.apiFetcher.currentToken)
     }
@@ -108,7 +112,7 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
                 .name: cookie.rawValue,
                 .value: value,
                 .path: "/",
-                .domain: ApiEnvironment.current.euriaHost,
+                .domain: host,
                 .maximumAge: TimeInterval.sixMonths
             ]
         )
@@ -135,7 +139,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
             return .allow
         }
 
-        if navigationHost == ApiEnvironment.current.euriaHost {
+        if navigationHost == host {
             return .allow
         }
 
