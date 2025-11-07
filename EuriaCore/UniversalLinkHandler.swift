@@ -56,9 +56,9 @@ public struct UniversalLinkHandler: Sendable {
     private func tryToHandleKSuiteUniversalLink(_ url: URL) -> IdentifiableURL? {
         let urlPath = url.path()
 
-        if urlPath.starts(with: "/all"), let range = urlPath.range(of: "euria/") {
+        if urlPath.starts(with: "/all"), let range = urlPath.range(of: "euria") {
             let remainingPath = String(urlPath[range.upperBound...])
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/\(remainingPath)")
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)\(remainingPath)")
         } else {
             let remainingPath = urlPath.replacingOccurrences(of: "/euria", with: "")
             return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)\(remainingPath)")
