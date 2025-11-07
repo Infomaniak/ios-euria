@@ -58,7 +58,7 @@ public struct MainView: View {
                 WebView(
                     url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
                     webConfiguration: webViewDelegate.webConfiguration,
-                    delegate: webViewDelegate
+                    webViewCoordinator: webViewDelegate
                 )
                 .ignoresSafeArea()
                 .quickLookPreview($webViewDelegate.isPresentingDocument)
