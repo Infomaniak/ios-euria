@@ -34,8 +34,7 @@ public struct MainView: View {
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
 
-    @State private var webViewURL = URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!
-
+    @State private var webViewURL: URL
     @State private var isShowingWebView = true
     @State private var isShowingErrorAlert = false
 
@@ -50,10 +49,10 @@ public struct MainView: View {
     }
 
     public init(session: any UserSessionable) {
-        _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(
-            host: ApiEnvironment.current.euriaHost,
-            session: session
-        ))
+        let euriaHost = ApiEnvironment.current.euriaHost
+
+        _webViewURL = State(wrappedValue: URL(string: "https://\(euriaHost)/")!)
+        _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(host: euriaHost, session: session))
     }
 
     public var body: some View {

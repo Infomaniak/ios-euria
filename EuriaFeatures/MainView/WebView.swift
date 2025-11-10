@@ -49,7 +49,7 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        guard webView.url != url else {
+        guard url != webView.url else {
             return
         }
 
