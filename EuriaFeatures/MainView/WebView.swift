@@ -29,8 +29,14 @@ final class EuriaWebView: WKWebView {
 
 struct WebView<WebViewCoordinator>: UIViewRepresentable {
     let url: URL
-    var webConfiguration = WKWebViewConfiguration()
+    let webConfiguration: WKWebViewConfiguration
     var webViewCoordinator: WebViewCoordinator?
+
+    init(url: URL, webConfiguration: WKWebViewConfiguration = WKWebViewConfiguration(), webViewCoordinator: WebViewCoordinator?) {
+        self.url = url
+        self.webConfiguration = webConfiguration
+        self.webViewCoordinator = webViewCoordinator
+    }
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
@@ -42,8 +48,13 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         return webView
     }
 
-    func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Update the view.
+    func updateUIView(_ webView: WKWebView, context: Context) {
+        guard url != webView.url else {
+            return
+        }
+
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
 
     private func setupWebView(_ webView: WKWebView, coordinator webViewCoordinator: WebViewCoordinator?) {
@@ -63,6 +74,9 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         if let uiDelegate = webViewCoordinator as? WKUIDelegate {
             webView.uiDelegate = uiDelegate
         }
+
+        let request = URLRequest(url: url)
+        webView.load(request)
     }
 
     private func configureScrollView(_ webView: WKWebView) {

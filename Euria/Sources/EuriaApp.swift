@@ -31,13 +31,32 @@ struct EuriaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     @StateObject private var rootViewState = RootViewState()
+    @StateObject private var universalLinksState = UniversalLinksState()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(rootViewState)
+                .environmentObject(universalLinksState)
                 .ikButtonTheme(.euria)
+                .onOpenURL(perform: handleURL)
         }
         .defaultAppStorage(.shared)
+    }
+
+    private func handleURL(_ url: URL) {
+        let linkHandler = UniversalLinkHandler()
+        guard let universalLink = linkHandler.handlePossibleUniversalLink(url) else {
+            return
+        }
+
+        Task {
+            // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
+            // which causes the user to be logged out.
+            // To avoid this, we wait a few milliseconds before updating the state, giving Euria time to access it.
+            try? await Task.sleep(for: .milliseconds(500))
+
+            universalLinksState.linkedWebView = universalLink
+        }
     }
 }
