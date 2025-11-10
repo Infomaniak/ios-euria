@@ -46,7 +46,10 @@ public struct MainView: View {
     }
 
     public init(session: any UserSessionable) {
-        _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(session: session))
+        _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(
+            host: ApiEnvironment.current.euriaHost,
+            session: session
+        ))
     }
 
     public var body: some View {
@@ -55,7 +58,7 @@ public struct MainView: View {
                 WebView(
                     url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
                     webConfiguration: webViewDelegate.webConfiguration,
-                    delegate: webViewDelegate
+                    webViewCoordinator: webViewDelegate
                 )
                 .ignoresSafeArea()
                 .quickLookPreview($webViewDelegate.isPresentingDocument)

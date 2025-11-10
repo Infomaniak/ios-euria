@@ -27,31 +27,14 @@ final class EuriaWebView: WKWebView {
     }
 }
 
-struct WebView: UIViewRepresentable {
-    typealias WebViewDelegate = WKNavigationDelegate & WKScriptMessageHandler
-
+struct WebView<WebViewCoordinator>: UIViewRepresentable {
     let url: URL
     var webConfiguration = WKWebViewConfiguration()
-    var delegate: WebViewDelegate?
+    var webViewCoordinator: WebViewCoordinator?
 
     func makeUIView(context: Context) -> WKWebView {
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
-
-        if let delegate {
-            webView.navigationDelegate = delegate
-        }
-
-        #if DEBUG
-        webView.isInspectable = true
-        #endif
-
-        webView.scrollView.bounces = false
-        webView.scrollView.contentInsetAdjustmentBehavior = .never
-        webView.scrollView.keyboardDismissMode = .interactive
-
-        webView.scrollView.backgroundColor = .clear
-        webView.backgroundColor = .clear
-        webView.isOpaque = false
+        setupWebView(webView, coordinator: webViewCoordinator)
 
         let request = URLRequest(url: url)
         webView.load(request)
@@ -61,5 +44,36 @@ struct WebView: UIViewRepresentable {
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
         // Update the view.
+    }
+
+    private func setupWebView(_ webView: WKWebView, coordinator webViewCoordinator: WebViewCoordinator?) {
+        setupDelegates(webView, coordinator: webViewCoordinator)
+        configureScrollView(webView)
+        removeBackground(webView)
+
+        #if DEBUG
+        webView.isInspectable = true
+        #endif
+    }
+
+    private func setupDelegates(_ webView: WKWebView, coordinator webViewCoordinator: WebViewCoordinator?) {
+        if let navigationDelegate = webViewCoordinator as? WKNavigationDelegate {
+            webView.navigationDelegate = navigationDelegate
+        }
+        if let uiDelegate = webViewCoordinator as? WKUIDelegate {
+            webView.uiDelegate = uiDelegate
+        }
+    }
+
+    private func configureScrollView(_ webView: WKWebView) {
+        webView.scrollView.bounces = false
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
+        webView.scrollView.keyboardDismissMode = .interactive
+    }
+
+    private func removeBackground(_ webView: WKWebView) {
+        webView.scrollView.backgroundColor = .clear
+        webView.backgroundColor = .clear
+        webView.isOpaque = false
     }
 }
