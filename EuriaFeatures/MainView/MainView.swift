@@ -54,7 +54,7 @@ public struct MainView: View {
     public init(session: any UserSessionable) {
         self.session = session
         _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(
-            host: "https://local.euria.preprod.dev.infomaniak.ch:5173",
+            host: "local.euria.preprod.dev.infomaniak.ch",
             session: session
         ))
     }
