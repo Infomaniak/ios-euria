@@ -29,7 +29,7 @@ struct OpenAppControl: ControlWidget {
             kind: "\(Constants.bundleId).openAppControl"
         ) {
             ControlWidgetButton(action: OpenAppIntent()) {
-                Label(EuriaResourcesStrings.openAppControlTitle, systemImage: "apple.image.playground.fill")
+                Label(EuriaResourcesStrings.openAppControlTitle, image: EuriaWidgetAsset.euriaControl.name)
             }
         }
         .displayName(LocalizedStringResource(String.LocalizationValue(EuriaResourcesStrings.openAppControlTitle)))
