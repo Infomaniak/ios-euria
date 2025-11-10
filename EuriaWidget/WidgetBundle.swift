@@ -23,6 +23,7 @@ import WidgetKit
 struct widgetBundle: WidgetBundle {
     var body: some Widget {
         QuickActionsWidget()
+        
         if #available(iOS 18.0, *) {
             OpenAppControl()
         }
