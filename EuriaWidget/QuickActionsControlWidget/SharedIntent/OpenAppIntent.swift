@@ -16,16 +16,20 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
+import AppIntents
+import EuriaCore
+import EuriaCoreUI
+import EuriaResources
+import InfomaniakCore
 import WidgetKit
 
-@main
-struct widgetBundle: WidgetBundle {
-    var body: some Widget {
-        QuickActionsWidget()
-        
-        if #available(iOS 18.0, *) {
-            OpenAppControl()
-        }
+@available(iOS 18.0, *)
+struct OpenAppIntent: AppIntent {
+    static let title = LocalizedStringResource("openAppControlTitle", bundle: EuriaResourcesResources.bundle)
+
+    static let openAppWhenRun = true
+
+    func perform() async throws -> some IntentResult {
+        return .result()
     }
 }

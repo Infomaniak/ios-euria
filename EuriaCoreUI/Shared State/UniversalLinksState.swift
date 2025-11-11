@@ -19,6 +19,7 @@
 import EuriaCore
 import Foundation
 
+@MainActor
 public class UniversalLinksState: ObservableObject {
     @Published public var linkedWebView: IdentifiableURL?
 
