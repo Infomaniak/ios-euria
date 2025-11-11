@@ -55,7 +55,7 @@ public struct UniversalLinkHandler: Sendable {
     private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableURL? {
         switch url {
         case DeeplinkConstants.newChatURL:
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)")
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/")
         case DeeplinkConstants.ephemeralURL:
             return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/?ephemeral=true")
         case DeeplinkConstants.speechURL:
