@@ -3,8 +3,8 @@
  * Project: Euria
  * Locale: fr, French
  * Tagged: ios
- * Exported by: Baptiste Griva
- * Exported at: Thu, 06 Nov 2025 11:37:16 +0100
+ * Exported by: Valentin Perignon
+ * Exported at: Tue, 11 Nov 2025 13:46:09 +0100
  */
 
 /* loco:68ff77d06bd131d99b010d73 */
@@ -54,6 +54,12 @@
 
 /* loco:68ff1702d6e8ef51560e41e2 */
 "onboardingPrivacyTitle" = "Euria est hébergée en Suisse.";
+
+/* loco:69132de4951e208fa10324a2 */
+"openAppControlDescription" = "Ouvrez Euria et entamez une nouvelle conversation";
+
+/* loco:69132e13d18e10b67d0b2036 */
+"openAppControlLabel" = "Nouvelle conversation avec Euria";
 
 /* loco:690c7a374c68a94f4a0d60c2 */
 "openAppControlTitle" = "Ouvrir Euria";

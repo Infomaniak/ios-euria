@@ -21,11 +21,7 @@ import EuriaResources
 import WidgetKit
 
 struct OpenAppIntent: AppIntent {
-    static let title: LocalizedStringResource = .init(
-        "openAppControlTitle",
-        table: "Localizable",
-        bundle: EuriaResourcesResources.bundle
-    )
+    static let title = LocalizedStringResource("openAppControlTitle", bundle: EuriaResourcesResources.bundle)
 
     static let openAppWhenRun = true
 
