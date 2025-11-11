@@ -136,7 +136,9 @@ let project = Project(
             resources: [],
             dependencies: [
                 .target(name: "EuriaCore"),
-                .target(name: "EuriaCoreUI")
+                .target(name: "EuriaCoreUI"),
+                .external(name: "DesignSystem"),
+                .external(name: "InfomaniakCoreSwiftUI")
             ],
             settings: .settings(base: Constants.baseSettings)
         )
