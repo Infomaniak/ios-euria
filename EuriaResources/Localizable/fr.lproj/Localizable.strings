@@ -3,13 +3,18 @@
  * Project: Euria
  * Locale: fr, French
  * Tagged: ios
- * Exported by: Baptiste Griva
- * Exported at: Thu, 30 Oct 2025 14:14:43 +0100
+ * Exported by: Valentin Perignon
+ * Exported at: Thu, 06 Nov 2025 09:12:45 +0100
  */
 
 /* loco:68ff77d06bd131d99b010d73 */
 " onboardingEphemeralDescriptionArguments" = "Euria ne garde aucune trace";
 
+/* loco:68ff4981634f6375880c8ba2 */
+"buttonLogin" = "Connexion";
+
+/* loco:68ff7cb3182d19eb830448e3 */
+"connectionError" = "Problème de connexion à Internet";
 
 /* loco:69036475604798d6e00235e2 */
 "iosOnboardingDatacenterDescription" = "L’énergie de l’IA est 100%% revalorisée.";
@@ -48,7 +53,13 @@
 "onboardingPrivacyDescription" = "Rien n’est collecté, vos données vous appartiennent.";
 
 /* loco:68ff1702d6e8ef51560e41e2 */
-/* loco:68ff4981634f6375880c8ba2 */
-"buttonLogin" = "Connexion";
 "onboardingPrivacyTitle" = "Euria est hébergée en Suisse.";
 
+/* loco:68ff7ce0af97f687ca0a3032 */
+"serverError" = "Erreur du serveur";
+
+/* loco:690c58164a2b5c9988009442 */
+"widgetQuickActionsDescription" = "Accès rapide aux fonctionnalités d’Euria";
+
+/* loco:690c57686d4ac8795e0d91a5 */
+"widgetQuickActionsTitle" = "Actions rapides Euria";

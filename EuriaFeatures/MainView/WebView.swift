@@ -21,6 +21,16 @@ import SwiftUI
 import UIKit
 import WebKit
 
+struct NavigationDestination: Identifiable {
+    let id: UUID
+    let url: URL
+
+    init(id: UUID = UUID(), url: URL) {
+        self.id = id
+        self.url = url
+    }
+}
+
 final class EuriaWebView: WKWebView {
     override var inputAccessoryView: UIView? {
         return nil
@@ -29,11 +39,18 @@ final class EuriaWebView: WKWebView {
 
 struct WebView<WebViewCoordinator>: UIViewRepresentable {
     let url: URL
+    let navigationDestination: NavigationDestination?
     let webConfiguration: WKWebViewConfiguration
     var webViewCoordinator: WebViewCoordinator?
 
-    init(url: URL, webConfiguration: WKWebViewConfiguration = WKWebViewConfiguration(), webViewCoordinator: WebViewCoordinator?) {
+    init(
+        url: URL,
+        navigationDestination: NavigationDestination? = nil,
+        webConfiguration: WKWebViewConfiguration = WKWebViewConfiguration(),
+        webViewCoordinator: WebViewCoordinator?
+    ) {
         self.url = url
+        self.navigationDestination = navigationDestination
         self.webConfiguration = webConfiguration
         self.webViewCoordinator = webViewCoordinator
     }
@@ -49,11 +66,11 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
-        guard url != webView.url else {
+        guard let navigationDestination else {
             return
         }
 
-        let request = URLRequest(url: url)
+        let request = URLRequest(url: navigationDestination.url)
         webView.load(request)
     }
 

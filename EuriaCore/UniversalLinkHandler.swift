@@ -37,6 +37,10 @@ public struct UniversalLinkHandler: Sendable {
     public init() {}
 
     public func handlePossibleUniversalLink(_ url: URL) -> IdentifiableURL? {
+        if let widgetLink = tryToHandleWidgetLink(url) {
+            return widgetLink
+        }
+
         if let euriaUniversalLink = tryToHandleEuriaUniversalLink(url) {
             return euriaUniversalLink
         }
@@ -46,6 +50,19 @@ public struct UniversalLinkHandler: Sendable {
         }
 
         return nil
+    }
+
+    private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableURL? {
+        switch url {
+        case DeeplinkConstants.newChatURL:
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/")
+        case DeeplinkConstants.ephemeralURL:
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/?ephemeral=true")
+        case DeeplinkConstants.speechURL:
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/?speech=true")
+        default:
+            return nil
+        }
     }
 
     private func tryToHandleEuriaUniversalLink(_ url: URL) -> IdentifiableURL? {
