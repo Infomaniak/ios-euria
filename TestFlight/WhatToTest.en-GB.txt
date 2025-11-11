@@ -1,2 +1,3 @@
- - Download management
- - Minor improvements and bug fixes.
+- Deep link management
+- New widget with shortcuts to ephemeral mode and speech-to-text mode
+- Bug fixes and improvements
