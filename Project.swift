@@ -145,8 +145,8 @@ let project = Project(
                 .external(name: "InfomaniakCoreSwiftUI")
             ],
             settings: .settings(base: Constants.baseSettings)
-        )),
-	.target(
+        ),
+        .target(
             name: "EuriaShareExtension",
             destinations: Set<Destination>([.iPhone, .iPad]),
             product: .appExtension,
