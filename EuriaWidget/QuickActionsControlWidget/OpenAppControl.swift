@@ -24,14 +24,19 @@ import WidgetKit
 
 @available(iOS 18.0, *)
 struct OpenAppControl: ControlWidget {
+    static let kind = "\(Constants.bundleId).openAppControl"
+
     var body: some ControlWidgetConfiguration {
-        StaticControlConfiguration(
-            kind: "\(Constants.bundleId).openAppControl"
-        ) {
+        StaticControlConfiguration(kind: Self.kind) {
             ControlWidgetButton(action: OpenAppIntent()) {
-                Label(EuriaResourcesStrings.openAppControlTitle, image: EuriaWidgetAsset.euriaControl.name)
+                Label {
+                    Text(EuriaResourcesStrings.openAppControlLabel)
+                } icon: {
+                    EuriaWidgetAsset.euriaControl.swiftUIImage
+                }
             }
         }
-        .displayName(LocalizedStringResource(String.LocalizationValue(EuriaResourcesStrings.openAppControlTitle)))
+        .displayName(LocalizedStringResource("openAppControlTitle", bundle: EuriaResourcesResources.bundle))
+        .description(LocalizedStringResource("openAppControlDescription", bundle: EuriaResourcesResources.bundle))
     }
 }
