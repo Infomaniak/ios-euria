@@ -16,7 +16,9 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCore
 import UIKit
+import UniformTypeIdentifiers
 
 final class ShareViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
@@ -25,7 +27,8 @@ final class ShareViewController: UIViewController {
     }
 
     private func openMainApp() {
-        guard let url = URL(string: "euria://") else { return }
+        guard let url = URL(string: "euria://import-image") else { return }
+        handleShare()
         openURL(url)
         extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
@@ -38,5 +41,39 @@ final class ShareViewController: UIViewController {
             }
             responder = responder?.next
         }
+    }
+
+    private func handleShare() {
+        guard let item = (extensionContext?.inputItems.first as? NSExtensionItem),
+              let attachment = item.attachments?
+              .first(where: { $0.hasItemConformingToTypeIdentifier(UTType.image.identifier) }),
+              let container = FileManager.default
+              .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier)
+        else {
+            close()
+            return
+        }
+
+        let sharedDirectory = container.appendingPathComponent("SharedData", isDirectory: true)
+        try? FileManager.default.createDirectory(at: sharedDirectory, withIntermediateDirectories: true)
+
+        attachment.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { url, error in
+            if let url {
+                let destinationURL = sharedDirectory.appendingPathComponent(url.lastPathComponent)
+                try? FileManager.default.removeItem(at: destinationURL)
+                do {
+                    try FileManager.default.copyItem(at: url, to: destinationURL)
+                    if let sharedDefaults = UserDefaults(suiteName: Constants.appGroupIdentifier) {
+                        sharedDefaults.set(destinationURL.path, forKey: "sharedImagePath")
+                    }
+                } catch {
+                    print("Error copying file: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    private func close() {
+        extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
 }
