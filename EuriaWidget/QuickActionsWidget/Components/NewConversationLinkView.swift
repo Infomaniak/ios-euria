@@ -17,7 +17,6 @@
  */
 
 import DesignSystem
-import EuriaCore
 import EuriaResources
 import SwiftUI
 

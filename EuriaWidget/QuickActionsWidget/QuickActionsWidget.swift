@@ -18,7 +18,6 @@
 
 import DesignSystem
 import EuriaCore
-import EuriaCoreUI
 import EuriaResources
 import SwiftUI
 import WidgetKit
