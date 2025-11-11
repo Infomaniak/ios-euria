@@ -17,9 +17,13 @@
  */
 
 import AppIntents
+import EuriaCore
+import EuriaCoreUI
 import EuriaResources
+import InfomaniakCore
 import WidgetKit
 
+@available(iOS 18.0, *)
 struct OpenAppIntent: AppIntent {
     static let title = LocalizedStringResource("openAppControlTitle", bundle: EuriaResourcesResources.bundle)
 
