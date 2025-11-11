@@ -52,6 +52,19 @@ public struct UniversalLinkHandler: Sendable {
         return nil
     }
 
+    private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableURL? {
+        switch url {
+        case DeeplinkConstants.newChatURL:
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)")
+        case DeeplinkConstants.ephemeralURL:
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/?ephemeral=true")
+        case DeeplinkConstants.speechURL:
+            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/?speech=true")
+        default:
+            return nil
+        }
+    }
+
     private func tryToHandleEuriaUniversalLink(_ url: URL) -> IdentifiableURL? {
         guard url.host() == ApiEnvironment.current.euriaHost else { return nil }
         return IdentifiableURL(url: url)
@@ -67,18 +80,5 @@ public struct UniversalLinkHandler: Sendable {
             let remainingPath = urlPath.replacingOccurrences(of: "/euria", with: "")
             return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)\(remainingPath)")
         }
-    }
-
-    private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableURL? {
-        if url == DeeplinkConstants.newChatURL {
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)")
-        }
-        if url == DeeplinkConstants.ephemeralURL {
-            return IdentifiableURL(string: "link1")
-        }
-        if url == DeeplinkConstants.speechURL {
-            return IdentifiableURL(string: "link2")
-        }
-        return nil
     }
 }

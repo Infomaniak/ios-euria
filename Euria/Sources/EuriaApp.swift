@@ -39,10 +39,6 @@ struct EuriaApp: App {
                 .environmentObject(rootViewState)
                 .environmentObject(universalLinksState)
                 .ikButtonTheme(.euria)
-                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in
-                    guard let url = activity.webpageURL else { return }
-                    handleURL(url)
-                }
                 .onOpenURL(perform: handleURL)
         }
         .defaultAppStorage(.shared)
@@ -59,10 +55,7 @@ struct EuriaApp: App {
             // which causes the user to be logged out.
             // To avoid this, we wait a few milliseconds before updating the state, giving Euria time to access it.
             try? await Task.sleep(for: .milliseconds(500))
-
             universalLinksState.linkedWebView = universalLink
         }
-        
-        universalLinksState.linkedWebView = universalLink
     }
 }
