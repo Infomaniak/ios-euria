@@ -50,12 +50,6 @@ struct EuriaApp: App {
             return
         }
 
-        Task {
-            // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
-            // which causes the user to be logged out.
-            // To avoid this, we wait a few milliseconds before updating the state, giving Euria time to access it.
-            try? await Task.sleep(for: .milliseconds(500))
-            universalLinksState.linkedWebView = universalLink
-        }
+        universalLinksState.linkedWebView = universalLink
     }
 }

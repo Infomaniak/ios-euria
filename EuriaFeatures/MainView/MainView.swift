@@ -96,7 +96,13 @@ public struct MainView: View {
         .onChange(of: universalLinksState.linkedWebView) { identifiableURL in
             guard let identifiableURL else { return }
 
-            navigationDestination = NavigationDestination(url: identifiableURL.url)
+            Task {
+                // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
+                // which causes the user to be logged out.
+                // To avoid this, we wait a few milliseconds before updating the state, giving Euria time to access it.
+                try? await Task.sleep(for: .milliseconds(400))
+                navigationDestination = NavigationDestination(url: identifiableURL.url)
+            }
             universalLinksState.linkedWebView = nil
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
