@@ -1,5 +1,5 @@
 {
-  "originHash" : "0aefb881ed2fef7f4e0a387ff582df30df2da30d483e0cbfe2ffa5aeb119e611",
+  "originHash" : "c2522b454a0a67822e6d9454a520c94be3adc7d64f8afca9a87c081f81936890",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-onboarding",
       "state" : {
-        "revision" : "9abb167e652678ce56aba00deedb10a6d48b40cd",
-        "version" : "1.4.2"
+        "revision" : "a4591b91d977c33a5e2dd361dca2799a8815ce82",
+        "version" : "1.4.3"
       }
     },
     {
