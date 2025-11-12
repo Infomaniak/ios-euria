@@ -1,2 +1,3 @@
- - Gestion des téléchargements
- - Améliorations mineures et corrections de bugs.
+ - Gestion des deeplinks
+ - Nouveau Widget avec raccourcis vers le mode éphemère et le mode speech-to-text
+ - Corrections de bugs et améliorations
