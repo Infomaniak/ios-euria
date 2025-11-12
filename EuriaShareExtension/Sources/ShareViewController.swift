@@ -46,7 +46,10 @@ final class ShareViewController: UIViewController {
     private func handleShare() {
         guard let item = (extensionContext?.inputItems.first as? NSExtensionItem),
               let attachment = item.attachments?
-              .first(where: { $0.hasItemConformingToTypeIdentifier(UTType.image.identifier) }),
+              .first(where: {
+                  $0.hasItemConformingToTypeIdentifier(UTType.image.identifier) ||
+                      $0.hasItemConformingToTypeIdentifier(UTType.movie.identifier)
+              }),
               let container = FileManager.default
               .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier)
         else {
@@ -57,7 +60,14 @@ final class ShareViewController: UIViewController {
         let sharedDirectory = container.appendingPathComponent("SharedData", isDirectory: true)
         try? FileManager.default.createDirectory(at: sharedDirectory, withIntermediateDirectories: true)
 
-        attachment.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { url, error in
+        let chosenTypeIdentifier: String
+        if attachment.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+            chosenTypeIdentifier = UTType.movie.identifier
+        } else {
+            chosenTypeIdentifier = UTType.image.identifier
+        }
+
+        attachment.loadFileRepresentation(forTypeIdentifier: chosenTypeIdentifier) { url, error in
             if let url {
                 let destinationURL = sharedDirectory.appendingPathComponent(url.lastPathComponent)
                 try? FileManager.default.removeItem(at: destinationURL)
