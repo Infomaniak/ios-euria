@@ -27,7 +27,7 @@ final class ShareViewController: UIViewController {
     }
 
     private func openMainApp() {
-        guard let url = URL(string: "euria://import-image") else { return }
+        guard let url = URL(string: "\(ShareExtensionConstants.scheme)://\(ShareExtensionConstants.shareImage)") else { return }
         handleShare()
         openURL(url)
         extensionContext?.completeRequest(returningItems: [], completionHandler: nil)

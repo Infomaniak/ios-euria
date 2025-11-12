@@ -8,6 +8,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>euria</string>
+				<string>euria-share-extension</string>
 			</array>
 		</dict>
 	</array>

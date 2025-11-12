@@ -28,6 +28,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
     enum MessageTopic: String, CaseIterable {
         case logout
         case unauthenticated
+        case shareImage
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -38,7 +39,19 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             logoutUser()
         case .unauthenticated:
             userTokenIsInvalid()
+        default:
+            break
         }
+    }
+
+    func uploadImageToWebView(image: UIImage) {
+        guard let imageData = image.jpegData(compressionQuality: 1) else {
+            return
+        }
+        let imageFromBase64 = imageData.base64EncodedString()
+        let script = "window.receiveImageFromApp('data:image/jpeg;base64,\(imageFromBase64)');"
+
+        weakWebView?.evaluateJavaScript(script)
     }
 
     private func logoutUser() {

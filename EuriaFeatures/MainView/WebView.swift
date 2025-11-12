@@ -59,6 +59,10 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
         setupWebView(webView, coordinator: webViewCoordinator)
 
+        if let euriaWebViewDelegate = webViewCoordinator as? EuriaWebViewDelegate {
+            euriaWebViewDelegate.weakWebView = webView
+        }
+
         let request = URLRequest(url: url)
         webView.load(request)
 

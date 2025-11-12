@@ -34,3 +34,8 @@ public enum DeeplinkConstants {
     public static let ephemeralURL = URL(string: "euria://widget-ephemeral")!
     public static let speechURL = URL(string: "euria://widget-speech")!
 }
+
+public enum ShareExtensionConstants {
+    public static let scheme = "euria-share-extension"
+    public static let shareImage = "shared-image"
+}

@@ -32,14 +32,22 @@ struct EuriaApp: App {
 
     @StateObject private var rootViewState = RootViewState()
     @StateObject private var universalLinksState = UniversalLinksState()
+    @StateObject private var shareExtensionState = ShareExtensionState()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(rootViewState)
                 .environmentObject(universalLinksState)
+                .environmentObject(shareExtensionState)
                 .ikButtonTheme(.euria)
-                .onOpenURL(perform: handleURL)
+                .onOpenURL { url in
+                    if url.scheme == ShareExtensionConstants.scheme {
+                        handleShare(url)
+                    } else {
+                        handleURL(url)
+                    }
+                }
         }
         .defaultAppStorage(.shared)
     }
@@ -51,5 +59,14 @@ struct EuriaApp: App {
         }
 
         universalLinksState.linkedWebView = universalLink
+    }
+
+    private func handleShare(_ url: URL) {
+        let shareExtensionHandler = ShareExtensionHandler()
+        guard let image = shareExtensionHandler.fetchLastSharedImage() else {
+            return
+        }
+
+        shareExtensionState.sharedImage = image
     }
 }
