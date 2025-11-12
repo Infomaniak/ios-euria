@@ -26,6 +26,7 @@ import InfomaniakCoreCommonUI
 import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakLogin
+import InfomaniakNotifications
 import SwiftUI
 import WebKit
 
@@ -40,6 +41,8 @@ public struct MainView: View {
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
 
+    private let session: any UserSessionable
+
     private var isShowingOfflineView: Bool {
         return !networkMonitor.isConnected && !webViewDelegate.isLoaded
     }
@@ -49,6 +52,7 @@ public struct MainView: View {
     }
 
     public init(session: any UserSessionable) {
+        self.session = session
         _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(
             host: ApiEnvironment.current.euriaHost,
             session: session
@@ -110,8 +114,20 @@ public struct MainView: View {
 
     private func willEnterForeground() {
         Task {
+            async let _ = registerForNotificationIfNeeded()
             await checkTwoFAChallenges()
         }
+    }
+
+    private func registerForNotificationIfNeeded() async {
+        let options: UNAuthorizationOptions = [.alert, .sound]
+        guard let granted = try? await UNUserNotificationCenter.current().requestAuthorization(options: options),
+              granted else {
+            return
+        }
+
+        @InjectService var notificationService: InfomaniakNotifications
+        await notificationService.updateTopicsIfNeeded([Topic.twoFAPushChallenge], userApiFetcher: session.apiFetcher)
     }
 
     private func checkTwoFAChallenges() async {
@@ -123,8 +139,7 @@ public struct MainView: View {
 
             let apiFetcher = await accountManager.getApiFetcher(for: account.userId, token: account)
 
-            let session = InAppTwoFactorAuthenticationSession(user: user, apiFetcher: apiFetcher)
-            return session
+            return InAppTwoFactorAuthenticationSession(user: user, apiFetcher: apiFetcher)
         }
 
         @InjectService var inAppTwoFactorAuthenticationManager: InAppTwoFactorAuthenticationManagerable

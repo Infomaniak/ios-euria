@@ -23,6 +23,7 @@ import InfomaniakCore
 import InfomaniakCoreCommonUI
 import InfomaniakDI
 import InfomaniakLogin
+import InfomaniakNotifications
 import InterAppLogin
 import OSLog
 import Sentry
@@ -98,6 +99,9 @@ open class TargetAssembly {
             },
             Factory(type: OrientationManageable.self) { _, _ in
                 OrientationManager()
+            },
+            Factory(type: InfomaniakNotifications.self) { _, _ in
+                InfomaniakNotifications(appGroup: Constants.appGroupIdentifier)
             }
         ]
     }

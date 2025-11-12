@@ -14,6 +14,7 @@ let mainView = Feature(
     name: "MainView",
     additionalDependencies: [
         TargetDependency.external(name: "InfomaniakCoreUIResources"),
+        TargetDependency.external(name: "InfomaniakNotifications"),
         TargetDependency.external(name: "VersionChecker")
     ]
 )
@@ -56,7 +57,7 @@ let project = Project(
                 "Euria/Resources/LaunchScreen.storyboard",
                 "Euria/Resources/Assets.xcassets", // Needed for AppIcon and LaunchScreen
                 "Euria/Resources/PrivacyInfo.xcprivacy",
-                "Euria/Resources/Localizable/**/InfoPlist.strings",
+                "Euria/Resources/Localizable/**/*.strings",
                 "Euria/Resources/AppIcon.icon/**"
             ],
             entitlements: "Euria/Resources/Euria.entitlements",
@@ -70,6 +71,7 @@ let project = Project(
                 .target(name: "EuriaWidget"),
                 .external(name: "InfomaniakCoreCommonUI"),
                 .external(name: "InfomaniakDI"),
+                .external(name: "InfomaniakNotifications"),
                 rootView.asDependency
             ],
             settings: .settings(base: Constants.baseSettings),
@@ -95,6 +97,7 @@ let project = Project(
                     .external(name: "InfomaniakCoreUIKit"),
                     .external(name: "InfomaniakCreateAccount"),
                     .external(name: "InfomaniakLogin"),
+                    .external(name: "InfomaniakNotifications"),
                     .external(name: "InterAppLogin"),
                     .external(name: "Sentry-Dynamic")
                 ],
