@@ -110,9 +110,9 @@ public struct MainView: View {
             }
             universalLinksState.linkedWebView = nil
         }
-        .onChange(of: shareExtensionState.sharedImage) { image in
-            guard let image else { return }
-            webViewDelegate.uploadImageToWebView(image: image)
+        .onChange(of: shareExtensionState.sharedMedia) { url in
+            guard let url else { return }
+            webViewDelegate.uploadImageToWebView(url)
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }

@@ -64,7 +64,7 @@ final class ShareViewController: UIViewController {
                 do {
                     try FileManager.default.copyItem(at: url, to: destinationURL)
                     if let sharedDefaults = UserDefaults(suiteName: Constants.appGroupIdentifier) {
-                        sharedDefaults.set(destinationURL.path, forKey: "sharedImagePath")
+                        sharedDefaults.set(destinationURL.path, forKey: "sharedMediaPath")
                     }
                 } catch {
                     print("Error copying file: \(error.localizedDescription)")

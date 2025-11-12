@@ -63,10 +63,10 @@ struct EuriaApp: App {
 
     private func handleShare(_ url: URL) {
         let shareExtensionHandler = ShareExtensionHandler()
-        guard let image = shareExtensionHandler.fetchLastSharedImage() else {
+        guard let url = shareExtensionHandler.fetchLastSharedMedia() else {
             return
         }
 
-        shareExtensionState.sharedImage = image
+        shareExtensionState.sharedMedia = url
     }
 }

@@ -20,7 +20,7 @@ import Foundation
 import SwiftUI
 
 public class ShareExtensionState: ObservableObject {
-    @Published public var sharedImage: UIImage?
+    @Published public var sharedMedia: URL?
 
     public init() {}
 }

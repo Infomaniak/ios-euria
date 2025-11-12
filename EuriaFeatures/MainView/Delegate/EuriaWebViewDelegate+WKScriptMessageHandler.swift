@@ -44,14 +44,18 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
         }
     }
 
-    func uploadImageToWebView(image: UIImage) {
-        guard let imageData = image.jpegData(compressionQuality: 1) else {
+    func uploadImageToWebView(_ url: URL) {
+        guard let image = UIImage(contentsOfFile: url.path(percentEncoded: false)),
+              let imageData = image.jpegData(compressionQuality: 0.8) else {
             return
         }
         let imageFromBase64 = imageData.base64EncodedString()
         let script = "window.receiveImageFromApp('data:image/jpeg;base64,\(imageFromBase64)');"
 
-        weakWebView?.evaluateJavaScript(script)
+        weakWebView?.evaluateJavaScript(script) { _, _ in
+            try? FileManager.default.removeItem(at: url)
+        }
+    }
     }
 
     private func logoutUser() {

@@ -16,24 +16,23 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import AVFoundation
 import Foundation
 import SwiftUI
 
 public struct ShareExtensionHandler: Sendable {
     public init() {}
 
-    public func fetchLastSharedImage() -> UIImage? {
+    public func fetchLastSharedMedia() -> URL? {
         guard
             let userDefaults = UserDefaults(suiteName: Constants.appGroupIdentifier),
-            let sharedImagePath = userDefaults.string(forKey: "sharedImagePath")
+            let sharedMediaPath = userDefaults.string(forKey: "sharedMediaPath")
         else { return nil }
 
-        guard FileManager.default.fileExists(atPath: sharedImagePath) else { return nil }
-        let sharedImage = UIImage(contentsOfFile: sharedImagePath)
+        let url = URL(fileURLWithPath: sharedMediaPath)
+        guard FileManager.default.fileExists(atPath: url.path) else { return nil }
 
-        try? FileManager.default.removeItem(atPath: sharedImagePath)
-        userDefaults.removeObject(forKey: "sharedImagePath")
-
-        return sharedImage
+        userDefaults.removeObject(forKey: "sharedMediaPath")
+        return url
     }
 }
