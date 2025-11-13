@@ -29,7 +29,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
     enum MessageTopic: String, CaseIterable {
         case logout
         case unauthenticated
-        case shareImage
+        case shareMedia
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {

@@ -37,5 +37,5 @@ public enum DeeplinkConstants {
 
 public enum ShareExtensionConstants {
     public static let scheme = "euria-share-extension"
-    public static let shareImage = "shared-image"
+    public static let shareMedia = "share-media"
 }
