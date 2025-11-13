@@ -113,6 +113,7 @@ public struct MainView: View {
         .onChange(of: shareExtensionState.sharedMedia) { url in
             guard let url else { return }
             webViewDelegate.uploadMediaToWebView(url)
+            shareExtensionState.sharedMedia = nil
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }
