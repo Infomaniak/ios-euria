@@ -48,7 +48,8 @@ final class ShareViewController: UIViewController {
               let attachment = item.attachments?
               .first(where: {
                   $0.hasItemConformingToTypeIdentifier(UTType.image.identifier) ||
-                      $0.hasItemConformingToTypeIdentifier(UTType.movie.identifier)
+                      $0.hasItemConformingToTypeIdentifier(UTType.movie.identifier) ||
+                      $0.hasItemConformingToTypeIdentifier(UTType.audio.identifier)
               }),
               let container = FileManager.default
               .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier)
@@ -63,6 +64,8 @@ final class ShareViewController: UIViewController {
         let chosenTypeIdentifier: String
         if attachment.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
             chosenTypeIdentifier = UTType.movie.identifier
+        } else if attachment.hasItemConformingToTypeIdentifier(UTType.audio.identifier) {
+            chosenTypeIdentifier = UTType.audio.identifier
         } else {
             chosenTypeIdentifier = UTType.image.identifier
         }

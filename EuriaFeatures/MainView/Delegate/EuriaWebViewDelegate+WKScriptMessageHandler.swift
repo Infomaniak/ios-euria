@@ -49,7 +49,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
         let mime = mimeType(for: url)
         if mime.hasPrefix("image") {
             uploadImageToWebView(url)
-        } else if mime.hasPrefix("video") {
+        } else if mime.hasPrefix("video") || mime.hasPrefix("audio") {
             sendVideoFileInChunks(url) {
                 try? FileManager.default.removeItem(at: url)
             }
@@ -117,20 +117,20 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
 
         Task.detached {
             do {
-                let video = try FileHandle(forReadingFrom: url)
-                defer { try? video.close() }
+                let file = try FileHandle(forReadingFrom: url)
+                defer { try? file.close() }
 
                 let attributes = try? FileManager.default.attributesOfItem(atPath: url.path)
-                let videoSize = (attributes?[.size] as? NSNumber)?.intValue ?? 0
+                let fileSize = (attributes?[.size] as? NSNumber)?.intValue ?? 0
 
-                await self.evaluateJS("window.receiveVideoBegin('\(mime)', \(videoSize));")
+                await self.evaluateJS("window.receiveVideoBegin('\(mime)', \(fileSize));")
 
                 while true {
-                    guard let data = try video.read(upToCount: chunkSize),
+                    guard let data = try file.read(upToCount: chunkSize),
                           !data.isEmpty else { break }
-                    let videoFromBase64 = data.base64EncodedString()
+                    let fileFromBase64 = data.base64EncodedString()
 
-                    await self.evaluateJS("window.receiveVideoChunk('\(mime)', '\(videoFromBase64)', false);")
+                    await self.evaluateJS("window.receiveVideoChunk('\(mime)', '\(fileFromBase64)', false);")
                 }
 
                 await self.evaluateJS("window.receiveVideoChunk('\(mime)', '', true);")
