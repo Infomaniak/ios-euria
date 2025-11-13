@@ -91,9 +91,6 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         if let uiDelegate = webViewCoordinator as? WKUIDelegate {
             webView.uiDelegate = uiDelegate
         }
-
-        let request = URLRequest(url: url)
-        webView.load(request)
     }
 
     private func configureScrollView(_ webView: WKWebView) {
