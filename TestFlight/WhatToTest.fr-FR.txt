@@ -1,3 +1,9 @@
- - Gestion des deeplinks
- - Nouveau Widget avec raccourcis vers le mode éphemère et le mode speech-to-text
- - Corrections de bugs et améliorations
+Quoi de neuf :
+ - Notifications de 2FA (staff uniquement)
+
+Chasse aux bugs :
+ - Amélioration de l'onboarding pour les petits écrans
+ - Double chargement de la page la première fois
+
+Problèmes connus :
+ - Quelques fois le raccourci pour ouvrir le microphone ne fonctionne pas correctement

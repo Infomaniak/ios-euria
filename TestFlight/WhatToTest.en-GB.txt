@@ -1,3 +1,9 @@
-- Deep link management
-- New widget with shortcuts to ephemeral mode and speech-to-text mode
-- Bug fixes and improvements
+What’s new:
+ - 2FA notifications (staff only)
+
+Bug hunt:
+ - Improved onboarding on smaller screens
+ - Fixed double loading of the page on first launch
+
+Known issues:
+ - Sometimes the shortcut to open the microphone doesn’t work properly
