@@ -32,6 +32,7 @@ import WebKit
 
 public struct MainView: View {
     @EnvironmentObject private var universalLinksState: UniversalLinksState
+    @EnvironmentObject private var shareExtensionState: ShareExtensionState
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
 
@@ -108,6 +109,11 @@ public struct MainView: View {
                 navigationDestination = NavigationDestination(url: identifiableURL.url)
             }
             universalLinksState.linkedWebView = nil
+        }
+        .onChange(of: shareExtensionState.sharedMedia) { url in
+            guard let url else { return }
+            webViewDelegate.uploadMediaToWebView(url)
+            shareExtensionState.sharedMedia = nil
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground)
     }
