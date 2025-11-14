@@ -78,6 +78,7 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         setupDelegates(webView, coordinator: webViewCoordinator)
         configureScrollView(webView)
         removeBackground(webView)
+        addCustomUserAgent(webView)
 
         #if DEBUG
         webView.isInspectable = true
@@ -103,5 +104,9 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         webView.scrollView.backgroundColor = .clear
         webView.backgroundColor = .clear
         webView.isOpaque = false
+    }
+
+    private func addCustomUserAgent(_ webView: WKWebView) {
+        webView.customUserAgent = UserAgentBuilder().userAgent
     }
 }
