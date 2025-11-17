@@ -28,6 +28,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
     enum MessageTopic: String, CaseIterable {
         case logout
         case unauthenticated
+        case keepDeviceAwake
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -38,6 +39,9 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             logoutUser()
         case .unauthenticated:
             userTokenIsInvalid()
+        case .keepDeviceAwake:
+            guard let shouldKeepDeviceAwake = message.body as? Bool else { return }
+            keepDeviceAwake(shouldKeepDeviceAwake)
         }
     }
 
@@ -63,5 +67,9 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             scope.setLevel(.error)
         }
         logoutUser()
+    }
+
+    private func keepDeviceAwake(_ shouldKeepDeviceAwake: Bool) {
+        UIApplication.shared.isIdleTimerDisabled = shouldKeepDeviceAwake
     }
 }
