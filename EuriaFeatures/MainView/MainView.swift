@@ -109,7 +109,7 @@ public struct MainView: View {
             }
             universalLinksState.linkedWebView = nil
         }
-        .sceneLifecycle(willEnterForeground: willEnterForeground)
+        .sceneLifecycle(willEnterForeground: willEnterForeground, didEnterBackground: didEnterBackground)
     }
 
     private func willEnterForeground() {
@@ -117,6 +117,10 @@ public struct MainView: View {
             async let _ = registerForNotificationIfNeeded()
             await checkTwoFAChallenges()
         }
+    }
+
+    private func didEnterBackground() {
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 
     private func registerForNotificationIfNeeded() async {
