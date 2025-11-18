@@ -30,6 +30,7 @@ struct OpenAppIntent: AppIntent {
     static let openAppWhenRun = true
 
     func perform() async throws -> some IntentResult {
+        NotificationCenter.default.post(name: .openURL, object: DeeplinkConstants.newChatURL)
         return .result()
     }
 }
