@@ -40,6 +40,10 @@ struct EuriaApp: App {
                 .environmentObject(universalLinksState)
                 .ikButtonTheme(.euria)
                 .onOpenURL(perform: handleURL)
+                .onReceive(NotificationCenter.default.publisher(for: .openURL).receive(on: DispatchQueue.main)) { notification in
+                    guard let url = (notification.object as? URL) else { return }
+                    handleURL(url)
+                }
         }
         .defaultAppStorage(.shared)
     }
