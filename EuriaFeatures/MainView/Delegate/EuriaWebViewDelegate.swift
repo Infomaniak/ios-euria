@@ -39,7 +39,7 @@ final class EuriaWebViewDelegate: NSObject, ObservableObject {
     var downloads = [WKDownload: URL]()
     var isReadyToReceiveEvents = false
     weak var weakWebView: WKWebView?
-    private var pendingDestinations: [String] = []
+    private var pendingDestinations = [String]()
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
