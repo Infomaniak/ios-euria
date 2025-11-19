@@ -52,9 +52,9 @@ final class EuriaWebViewDelegate: NSObject, ObservableObject {
 
         var errorDescription: String? {
             switch self {
-            case let .urlGenerationFailed(error):
+            case .urlGenerationFailed(let error):
                 return error.localizedDescription
-            case let .downloadFailed(error):
+            case .downloadFailed(let error):
                 return error.localizedDescription
             }
         }
