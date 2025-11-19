@@ -19,24 +19,19 @@
 import Foundation
 import InfomaniakCore
 
-public struct IdentifiableURL: Identifiable, Equatable {
-    public var id: String { return url.absoluteString }
-    public let url: URL
+public struct IdentifiableDestination: Identifiable, Equatable {
+    public var id: String { return string }
+    public let string: String
 
-    init(url: URL) {
-        self.url = url
-    }
-
-    init?(string: String) {
-        guard let url = URL(string: string) else { return nil }
-        self.init(url: url)
+    init(string: String) {
+        self.string = string
     }
 }
 
 public struct UniversalLinkHandler: Sendable {
     public init() {}
 
-    public func handlePossibleUniversalLink(_ url: URL) -> IdentifiableURL? {
+    public func handlePossibleUniversalLink(_ url: URL) -> IdentifiableDestination? {
         if let widgetLink = tryToHandleWidgetLink(url) {
             return widgetLink
         }
@@ -52,33 +47,33 @@ public struct UniversalLinkHandler: Sendable {
         return nil
     }
 
-    private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableURL? {
+    private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableDestination? {
         switch url {
         case DeeplinkConstants.newChatURL:
-            return IdentifiableURL(string: "/")
+            return IdentifiableDestination(string: "/")
         case DeeplinkConstants.ephemeralURL:
-            return IdentifiableURL(string: "/?ephemeral=true")
+            return IdentifiableDestination(string: "/?ephemeral=true")
         case DeeplinkConstants.speechURL:
-            return IdentifiableURL(string: "/?speech=true")
+            return IdentifiableDestination(string: "/?speech=true")
         default:
             return nil
         }
     }
 
-    private func tryToHandleEuriaUniversalLink(_ url: URL) -> IdentifiableURL? {
+    private func tryToHandleEuriaUniversalLink(_ url: URL) -> IdentifiableDestination? {
         guard url.host() == ApiEnvironment.current.euriaHost else { return nil }
-        return IdentifiableURL(url: url)
+        return IdentifiableDestination(string: url.path())
     }
 
-    private func tryToHandleKSuiteUniversalLink(_ url: URL) -> IdentifiableURL? {
+    private func tryToHandleKSuiteUniversalLink(_ url: URL) -> IdentifiableDestination? {
         let urlPath = url.path()
 
         if urlPath.starts(with: "/all"), let range = urlPath.range(of: "euria") {
             let remainingPath = String(urlPath[range.upperBound...])
-            return IdentifiableURL(string: remainingPath)
+            return IdentifiableDestination(string: remainingPath)
         } else {
             let remainingPath = urlPath.replacingOccurrences(of: "/euria", with: "")
-            return IdentifiableURL(string: remainingPath)
+            return IdentifiableDestination(string: remainingPath)
         }
     }
 }
