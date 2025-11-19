@@ -44,7 +44,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             guard let shouldKeepDeviceAwake = message.body as? Bool else { return }
             keepDeviceAwake(shouldKeepDeviceAwake)
         case .ready:
-            isWebViewReady = true
+            isReadyToReceiveEvents = true
             drainIfPossible()
         }
     }

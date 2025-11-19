@@ -27,7 +27,7 @@ import UIKit
 import WebKit
 
 @MainActor
-class EuriaWebViewDelegate: NSObject, ObservableObject {
+final class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var isLoaded = false
 
     @Published var isPresentingDocument: URL?
@@ -37,7 +37,7 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     let webConfiguration: WKWebViewConfiguration
 
     var downloads = [WKDownload: URL]()
-    var isWebViewReady = false
+    var isReadyToReceiveEvents = false
     weak var weakWebView: WKWebView?
     private var pendingDestinations: [String] = []
 
@@ -135,19 +135,15 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     }
 
     func drainIfPossible() {
-        guard let webView = weakWebView, isWebViewReady else {
+        guard let webView = weakWebView, isReadyToReceiveEvents else {
             return
         }
 
         while !pendingDestinations.isEmpty {
             let nextDestination = pendingDestinations.removeFirst()
 
-            let script = "goTo(\"\(nextDestination)\")"
-
-            webView.evaluateJavaScript(script) { _, error in
-                if let error {
-                    Logger.general.error("JS goTo failed: \(error.localizedDescription)")
-                }
+            Task {
+                webView.callAsyncJavaScript(JSBridge().goTo(nextDestination), in: nil, in: .page)
             }
         }
     }
