@@ -95,10 +95,10 @@ public struct MainView: View {
             guard !webViewDelegate.isLoaded else { return }
             isShowingWebView = isConnected
         }
-        .onChange(of: universalLinksState.linkedWebView) { identifiableURL in
-            guard let identifiableURL else { return }
+        .onChange(of: universalLinksState.linkedWebView) { IdentifiableDestination in
+            guard let IdentifiableDestination else { return }
 
-            webViewDelegate.enqueueNavigation(url: identifiableURL.url)
+            webViewDelegate.enqueueNavigation(destination: IdentifiableDestination.string)
             universalLinksState.linkedWebView = nil
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground, didEnterBackground: didEnterBackground)

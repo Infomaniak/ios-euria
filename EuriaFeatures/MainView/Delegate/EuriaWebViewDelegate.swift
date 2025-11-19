@@ -39,7 +39,7 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     var downloads = [WKDownload: URL]()
     var isWebViewReady = false
     weak var weakWebView: WKWebView?
-    private var pendingURLs: [URL] = []
+    private var pendingDestinations: [String] = []
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -129,8 +129,8 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
         }
     }
 
-    func enqueueNavigation(url: URL) {
-        pendingURLs.append(url)
+    func enqueueNavigation(destination: String) {
+        pendingDestinations.append(destination)
         drainIfPossible()
     }
 
@@ -139,10 +139,10 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
             return
         }
 
-        while !pendingURLs.isEmpty {
-            let nextURL = pendingURLs.removeFirst()
+        while !pendingDestinations.isEmpty {
+            let nextDestination = pendingDestinations.removeFirst()
 
-            let script = "goTo(\"\(nextURL)\")"
+            let script = "goTo(\"\(nextDestination)\")"
 
             webView.evaluateJavaScript(script) { _, error in
                 if let error {
