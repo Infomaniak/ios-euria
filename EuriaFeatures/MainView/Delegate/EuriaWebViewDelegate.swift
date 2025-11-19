@@ -27,7 +27,7 @@ import UIKit
 import WebKit
 
 @MainActor
-class EuriaWebViewDelegate: NSObject, ObservableObject {
+final class EuriaWebViewDelegate: NSObject, ObservableObject {
     @Published var isLoaded = false
 
     @Published var isPresentingDocument: URL?
@@ -37,6 +37,9 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     let webConfiguration: WKWebViewConfiguration
 
     var downloads = [WKDownload: URL]()
+    var isReadyToReceiveEvents = false
+    weak var weakWebView: WKWebView?
+    private var pendingDestinations = [String]()
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -123,6 +126,25 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
             try FileManager.default.removeItem(at: URL.temporaryDownloadsDirectory())
         } catch {
             Logger.general.error("Error while cleaning temporary folder: \(error)")
+        }
+    }
+
+    func enqueueNavigation(destination: String) {
+        pendingDestinations.append(destination)
+        drainIfPossible()
+    }
+
+    func drainIfPossible() {
+        guard let webView = weakWebView, isReadyToReceiveEvents else {
+            return
+        }
+
+        while !pendingDestinations.isEmpty {
+            let nextDestination = pendingDestinations.removeFirst()
+
+            Task {
+                webView.callAsyncJavaScript(JSBridge().goTo(nextDestination), in: nil, in: .page)
+            }
         }
     }
 }
