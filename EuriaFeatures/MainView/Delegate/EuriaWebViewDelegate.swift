@@ -37,6 +37,9 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     let webConfiguration: WKWebViewConfiguration
 
     var downloads = [WKDownload: URL]()
+    var isWebViewReady = false
+    weak var weakWebView: WKWebView?
+    private var pendingURLs: [URL] = []
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -49,9 +52,9 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
 
         var errorDescription: String? {
             switch self {
-            case .urlGenerationFailed(let error):
+            case let .urlGenerationFailed(error):
                 return error.localizedDescription
-            case .downloadFailed(let error):
+            case let .downloadFailed(error):
                 return error.localizedDescription
             }
         }
@@ -123,6 +126,29 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
             try FileManager.default.removeItem(at: URL.temporaryDownloadsDirectory())
         } catch {
             Logger.general.error("Error while cleaning temporary folder: \(error)")
+        }
+    }
+
+    func enqueueNavigation(url: URL) {
+        pendingURLs.append(url)
+        drainIfPossible()
+    }
+
+    func drainIfPossible() {
+        guard let webView = weakWebView, isWebViewReady else {
+            return
+        }
+
+        while !pendingURLs.isEmpty {
+            let nextURL = pendingURLs.removeFirst()
+
+            let script = "goTo(\"\(nextURL)\")"
+
+            webView.evaluateJavaScript(script) { _, error in
+                if let error {
+                    Logger.general.error("JS goTo failed: \(error.localizedDescription)")
+                }
+            }
         }
     }
 }
