@@ -31,7 +31,7 @@ struct SingleOnboardingView: View {
     private let slide = [Slide.onboardingSlides.last!]
 
     var body: some View {
-        WaveView(slides: slide, selectedSlide: .constant(0), dismissHandler: dismiss.callAsFunction) { _ in
+        WaveView(slides: slide, headerImage: nil, selectedSlide: .constant(0), dismissHandler: dismiss.callAsFunction) { _ in
             OnboardingBottomButtonsView(loginHandler: loginHandler, selection: .constant(0), slideCount: 1)
         }
         .ignoresSafeArea()
