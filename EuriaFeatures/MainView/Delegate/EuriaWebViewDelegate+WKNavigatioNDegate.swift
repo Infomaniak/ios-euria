@@ -48,4 +48,9 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
     func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
         download.delegate = self
     }
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        isLoaded = false
+        weakWebView?.reload()
+    }
 }
