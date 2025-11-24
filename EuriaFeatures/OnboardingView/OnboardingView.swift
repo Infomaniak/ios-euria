@@ -34,7 +34,7 @@ public struct OnboardingView: View {
     public init() {}
 
     public var body: some View {
-        WaveView(slides: slides, selectedSlide: $selectedSlideIndex) { slideIndex in
+        WaveView(slides: slides, selectedSlide: $selectedSlideIndex, dismissHandler: nil) { slideIndex in
             slideIndex == slides.count - 1 || (slideIndex == slides.count - 2 && selectedSlideIndex == slides.count - 1)
         } bottomView: { _ in
             OnboardingBottomButtonsView(loginHandler: loginHandler, selection: $selectedSlideIndex, slideCount: slides.count)

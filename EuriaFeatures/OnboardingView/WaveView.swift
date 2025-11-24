@@ -29,6 +29,8 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
     let slides: [Slide]
     let headerImage: UIImage?
 
+    let dismissHandler: (() -> Void)?
+
     let shouldAnimateBottomViewForIndex: (Int) -> Bool
     @ViewBuilder var bottomView: (Int) -> BottomView
 
@@ -36,12 +38,14 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
         slides: [Slide],
         headerImage: UIImage? = EuriaResourcesAsset.Images.logoText.image,
         selectedSlide: Binding<Int>,
+        dismissHandler: (() -> Void)? = nil,
         shouldAnimateBottomViewForIndex: @escaping (Int) -> Bool = { _ in return false },
         @ViewBuilder bottomView: @escaping (Int) -> BottomView
     ) {
         self.slides = slides
         self.headerImage = headerImage
         _selectedSlide = selectedSlide
+        self.dismissHandler = dismissHandler
         self.shouldAnimateBottomViewForIndex = shouldAnimateBottomViewForIndex
         self.bottomView = bottomView
     }
@@ -52,7 +56,7 @@ struct WaveView<BottomView: View>: UIViewControllerRepresentable {
             slides: slides,
             pageIndicatorColor: UIColor.tintColor,
             isScrollEnabled: true,
-            dismissHandler: nil,
+            dismissHandler: dismissHandler,
             isPageIndicatorHidden: false
         )
 
