@@ -65,7 +65,7 @@ public struct MainView: View {
     public init(session: any UserSessionable) {
         self.session = session
         _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(
-            host: ApiEnvironment.current.euriaHost,
+            host: "local.euria.preprod.dev.infomaniak.ch",
             session: session
         ))
     }
@@ -74,7 +74,7 @@ public struct MainView: View {
         ZStack {
             if isShowingWebView {
                 WebView(
-                    url: URL(string: "https://\(ApiEnvironment.current.euriaHost)/")!,
+                    url: URL(string: "https://local.euria.preprod.dev.infomaniak.ch:5173/")!,
                     webConfiguration: webViewDelegate.webConfiguration,
                     webViewCoordinator: webViewDelegate
                 )
