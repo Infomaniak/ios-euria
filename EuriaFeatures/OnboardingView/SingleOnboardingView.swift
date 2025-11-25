@@ -21,7 +21,7 @@ import InfomaniakDI
 import InfomaniakOnboarding
 import SwiftUI
 
-struct SingleOnboardingView: View {
+public struct SingleOnboardingView: View {
     @InjectService private var orientationManager: OrientationManageable
 
     @Environment(\.dismiss) private var dismiss
@@ -30,7 +30,9 @@ struct SingleOnboardingView: View {
 
     private let slide = [Slide.onboardingSlides.last!]
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         WaveView(slides: slide, headerImage: nil, selectedSlide: .constant(0), dismissHandler: dismiss.callAsFunction) { _ in
             OnboardingBottomButtonsView(loginHandler: loginHandler, selection: .constant(0), slideCount: 1)
         }

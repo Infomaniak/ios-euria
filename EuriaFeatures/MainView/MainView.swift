@@ -19,6 +19,7 @@
 import AVFoundation
 import EuriaCore
 import EuriaCoreUI
+import EuriaOnboardingView
 import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
@@ -31,6 +32,7 @@ import SwiftUI
 import WebKit
 
 public struct MainView: View {
+    @InjectService var orientationManager: OrientationManageable
     @EnvironmentObject private var universalLinksState: UniversalLinksState
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
@@ -88,7 +90,6 @@ public struct MainView: View {
         .appBackground()
         .onAppear {
             networkMonitor.start()
-            @InjectService var orientationManager: OrientationManageable
             orientationManager.setOrientationLock(.all)
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
@@ -101,6 +102,14 @@ public struct MainView: View {
             webViewDelegate.enqueueNavigation(destination: navigationDestination.string)
             universalLinksState.linkedWebView = nil
         }
+        .fullScreenCover(isPresented: $webViewDelegate.isShowingLoginView, onDismiss: {
+            webViewDelegate.isShowingLoginView = false
+            orientationManager.setOrientationLock(.all)
+            UIApplication.shared.mainSceneKeyWindow?.rootViewController?
+                .setNeedsUpdateOfSupportedInterfaceOrientations()
+        }, content: {
+            SingleOnboardingView()
+        })
         .sceneLifecycle(willEnterForeground: willEnterForeground, didEnterBackground: didEnterBackground)
     }
 

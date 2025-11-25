@@ -29,6 +29,7 @@ import WebKit
 @MainActor
 final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject {
     @Published var isLoaded = false
+    @Published var isShowingLoginView = false
 
     @Published var isPresentingDocument: URL?
     @Published var error: ErrorDomain?

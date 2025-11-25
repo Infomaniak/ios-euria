@@ -30,6 +30,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
         case unauthenticated
         case keepDeviceAwake
         case ready
+        case login
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -46,6 +47,8 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
         case .ready:
             isReadyToReceiveEvents = true
             navigateIfPossible()
+        case .login:
+            loginUser()
         }
     }
 
@@ -68,6 +71,10 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
 
             await accountManager.removeTokenAndAccountFor(userId: userId)
         }
+    }
+
+    public func loginUser() {
+        isShowingLoginView = true
     }
 
     private func userTokenIsInvalid() {
