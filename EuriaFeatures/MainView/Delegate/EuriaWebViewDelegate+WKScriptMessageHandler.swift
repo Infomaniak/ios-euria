@@ -48,7 +48,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             isReadyToReceiveEvents = true
             navigateIfPossible()
         case .login:
-            loginUser()
+            isShowingLoginView = true
         }
     }
 
@@ -71,10 +71,6 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
 
             await accountManager.removeTokenAndAccountFor(userId: userId)
         }
-    }
-
-    public func loginUser() {
-        isShowingLoginView = true
     }
 
     private func userTokenIsInvalid() {
