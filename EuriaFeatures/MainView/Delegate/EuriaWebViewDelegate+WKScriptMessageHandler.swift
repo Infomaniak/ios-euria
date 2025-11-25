@@ -51,13 +51,17 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
 
     private func logoutUser() {
         Task {
+            @InjectService var accountManager: AccountManagerable
+            if await accountManager.currentSession?.isGuest == true {
+                return
+            }
+
             let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
             await webConfiguration.websiteDataStore.removeData(
                 ofTypes: dataTypes,
                 modifiedSince: Date(timeIntervalSinceReferenceDate: 0)
             )
 
-            @InjectService var accountManager: AccountManagerable
             guard let userId = await accountManager.currentSession?.userId else {
                 return
             }
