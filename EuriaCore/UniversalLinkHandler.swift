@@ -19,24 +19,19 @@
 import Foundation
 import InfomaniakCore
 
-public struct IdentifiableURL: Identifiable, Equatable {
-    public var id: String { return url.absoluteString }
-    public let url: URL
+public struct NavigationDestination: Identifiable, Equatable {
+    public var id: String { return string }
+    public let string: String
 
-    init(url: URL) {
-        self.url = url
-    }
-
-    init?(string: String) {
-        guard let url = URL(string: string) else { return nil }
-        self.init(url: url)
+    init(string: String) {
+        self.string = string
     }
 }
 
 public struct UniversalLinkHandler: Sendable {
     public init() {}
 
-    public func handlePossibleUniversalLink(_ url: URL) -> IdentifiableURL? {
+    public func handlePossibleUniversalLink(_ url: URL) -> NavigationDestination? {
         if let widgetLink = tryToHandleWidgetLink(url) {
             return widgetLink
         }
@@ -52,33 +47,33 @@ public struct UniversalLinkHandler: Sendable {
         return nil
     }
 
-    private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableURL? {
+    private func tryToHandleWidgetLink(_ url: URL) -> NavigationDestination? {
         switch url {
         case DeeplinkConstants.newChatURL:
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/")
+            return NavigationDestination(string: "/")
         case DeeplinkConstants.ephemeralURL:
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/?ephemeral=true")
+            return NavigationDestination(string: NavigationConstants.ephemeralRoute)
         case DeeplinkConstants.speechURL:
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)/?speech=true")
+            return NavigationDestination(string: NavigationConstants.speechRoute)
         default:
             return nil
         }
     }
 
-    private func tryToHandleEuriaUniversalLink(_ url: URL) -> IdentifiableURL? {
+    private func tryToHandleEuriaUniversalLink(_ url: URL) -> NavigationDestination? {
         guard url.host() == ApiEnvironment.current.euriaHost else { return nil }
-        return IdentifiableURL(url: url)
+        return NavigationDestination(string: url.path())
     }
 
-    private func tryToHandleKSuiteUniversalLink(_ url: URL) -> IdentifiableURL? {
+    private func tryToHandleKSuiteUniversalLink(_ url: URL) -> NavigationDestination? {
         let urlPath = url.path()
 
         if urlPath.starts(with: "/all"), let range = urlPath.range(of: "euria") {
             let remainingPath = String(urlPath[range.upperBound...])
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)\(remainingPath)")
+            return NavigationDestination(string: remainingPath)
         } else {
             let remainingPath = urlPath.replacingOccurrences(of: "/euria", with: "")
-            return IdentifiableURL(string: "https://\(ApiEnvironment.current.euriaHost)\(remainingPath)")
+            return NavigationDestination(string: remainingPath)
         }
     }
 }

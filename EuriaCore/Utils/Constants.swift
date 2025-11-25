@@ -34,3 +34,8 @@ public enum DeeplinkConstants {
     public static let ephemeralURL = URL(string: "euria://widget-ephemeral")!
     public static let speechURL = URL(string: "euria://widget-speech")!
 }
+
+public enum NavigationConstants {
+    public static let ephemeralRoute = "/?ephemeral=true"
+    public static let speechRoute = "/?speech=true"
+}

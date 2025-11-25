@@ -16,12 +16,8 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import EuriaCore
-import Foundation
-
-@MainActor
-public class UniversalLinksState: ObservableObject {
-    @Published public var linkedWebView: NavigationDestination?
-
-    public init() {}
+enum JSBridge {
+    static func goTo(_ destination: String) -> String {
+        return "goTo(\"\(destination)\")"
+    }
 }

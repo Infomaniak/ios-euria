@@ -27,7 +27,7 @@ import UIKit
 import WebKit
 
 @MainActor
-class EuriaWebViewDelegate: NSObject, ObservableObject {
+final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject {
     @Published var isLoaded = false
 
     @Published var isPresentingDocument: URL?
@@ -37,6 +37,11 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
     let webConfiguration: WKWebViewConfiguration
 
     var downloads = [WKDownload: URL]()
+
+    var isReadyToReceiveEvents = false
+    private var pendingDestination: String?
+
+    weak var webView: WKWebView?
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -123,6 +128,30 @@ class EuriaWebViewDelegate: NSObject, ObservableObject {
             try FileManager.default.removeItem(at: URL.temporaryDownloadsDirectory())
         } catch {
             Logger.general.error("Error while cleaning temporary folder: \(error)")
+        }
+    }
+
+    func enqueueNavigation(destination: String) {
+        pendingDestination = destination
+        navigateIfPossible()
+    }
+
+    func navigateIfPossible() {
+        guard isReadyToReceiveEvents, let destination = pendingDestination else {
+            return
+        }
+
+        pendingDestination = nil
+
+        Task {
+            // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
+            // which causes the user to be logged out.
+            // To avoid this situation, we wait a few milliseconds.
+            if destination == NavigationConstants.ephemeralRoute || destination == NavigationConstants.speechRoute {
+                try? await Task.sleep(for: .milliseconds(400))
+            }
+
+            try await webView?.evaluateJavaScript(JSBridge.goTo(destination))
         }
     }
 }
