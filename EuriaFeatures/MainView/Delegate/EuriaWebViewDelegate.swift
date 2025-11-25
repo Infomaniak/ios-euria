@@ -37,7 +37,6 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
     let webConfiguration: WKWebViewConfiguration
 
     var downloads = [WKDownload: URL]()
-    weak var weakWebView: WKWebView?
 
     var isReadyToReceiveEvents = false
     private var pendingDestination: String?
