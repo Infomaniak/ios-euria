@@ -143,6 +143,9 @@ final class EuriaWebViewDelegate: NSObject, ObservableObject {
             let nextDestination = pendingDestinations.removeFirst()
 
             Task {
+                if nextDestination.hasPrefix("/?") {
+                    try? await Task.sleep(for: .milliseconds(400))
+                }
                 webView.callAsyncJavaScript(JSBridge().goTo(nextDestination), in: nil, in: .page)
             }
         }

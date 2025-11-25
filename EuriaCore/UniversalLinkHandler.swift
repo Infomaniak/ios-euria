@@ -19,7 +19,7 @@
 import Foundation
 import InfomaniakCore
 
-public struct IdentifiableDestination: Identifiable, Equatable {
+public struct NavigationDestination: Identifiable, Equatable {
     public var id: String { return string }
     public let string: String
 
@@ -31,7 +31,7 @@ public struct IdentifiableDestination: Identifiable, Equatable {
 public struct UniversalLinkHandler: Sendable {
     public init() {}
 
-    public func handlePossibleUniversalLink(_ url: URL) -> IdentifiableDestination? {
+    public func handlePossibleUniversalLink(_ url: URL) -> NavigationDestination? {
         if let widgetLink = tryToHandleWidgetLink(url) {
             return widgetLink
         }
@@ -47,33 +47,33 @@ public struct UniversalLinkHandler: Sendable {
         return nil
     }
 
-    private func tryToHandleWidgetLink(_ url: URL) -> IdentifiableDestination? {
+    private func tryToHandleWidgetLink(_ url: URL) -> NavigationDestination? {
         switch url {
         case DeeplinkConstants.newChatURL:
-            return IdentifiableDestination(string: "/")
+            return NavigationDestination(string: "/")
         case DeeplinkConstants.ephemeralURL:
-            return IdentifiableDestination(string: "/?ephemeral=true")
+            return NavigationDestination(string: "/?ephemeral=true")
         case DeeplinkConstants.speechURL:
-            return IdentifiableDestination(string: "/?speech=true")
+            return NavigationDestination(string: "/?speech=true")
         default:
             return nil
         }
     }
 
-    private func tryToHandleEuriaUniversalLink(_ url: URL) -> IdentifiableDestination? {
+    private func tryToHandleEuriaUniversalLink(_ url: URL) -> NavigationDestination? {
         guard url.host() == ApiEnvironment.current.euriaHost else { return nil }
-        return IdentifiableDestination(string: url.path())
+        return NavigationDestination(string: url.path())
     }
 
-    private func tryToHandleKSuiteUniversalLink(_ url: URL) -> IdentifiableDestination? {
+    private func tryToHandleKSuiteUniversalLink(_ url: URL) -> NavigationDestination? {
         let urlPath = url.path()
 
         if urlPath.starts(with: "/all"), let range = urlPath.range(of: "euria") {
             let remainingPath = String(urlPath[range.upperBound...])
-            return IdentifiableDestination(string: remainingPath)
+            return NavigationDestination(string: remainingPath)
         } else {
             let remainingPath = urlPath.replacingOccurrences(of: "/euria", with: "")
-            return IdentifiableDestination(string: remainingPath)
+            return NavigationDestination(string: remainingPath)
         }
     }
 }

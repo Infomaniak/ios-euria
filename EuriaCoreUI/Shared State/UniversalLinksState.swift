@@ -21,7 +21,7 @@ import Foundation
 
 @MainActor
 public class UniversalLinksState: ObservableObject {
-    @Published public var linkedWebView: IdentifiableDestination?
+    @Published public var linkedWebView: NavigationDestination?
 
     public init() {}
 }
