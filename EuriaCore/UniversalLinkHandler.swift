@@ -52,9 +52,9 @@ public struct UniversalLinkHandler: Sendable {
         case DeeplinkConstants.newChatURL:
             return NavigationDestination(string: "/")
         case DeeplinkConstants.ephemeralURL:
-            return NavigationDestination(string: "/?ephemeral=true")
+            return NavigationDestination(string: NavigationConstants.ephemeralRoute)
         case DeeplinkConstants.speechURL:
-            return NavigationDestination(string: "/?speech=true")
+            return NavigationDestination(string: NavigationConstants.speechRoute)
         default:
             return nil
         }
