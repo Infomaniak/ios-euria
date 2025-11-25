@@ -1,9 +1,6 @@
 What’s new:
- - 2FA notifications (staff only)
+ - Replace the Camera/Flashlight button on the lock screen with Euria
 
-Bug hunt:
- - Improved onboarding on smaller screens
- - Fixed double loading of the page on first launch
-
-Known issues:
- - Sometimes the shortcut to open the microphone doesn’t work properly
+Improvements and fixes:
+ - The device no longer goes to sleep during an audio recording
+ - Improved navigation when using deeplinks
