@@ -1,9 +1,6 @@
 Quoi de neuf :
- - Notifications de 2FA (staff uniquement)
+ - Remplacez le bouton Camera/Lampe torche de l'écran vérouillé par Euria
 
-Chasse aux bugs :
- - Amélioration de l'onboarding pour les petits écrans
- - Double chargement de la page la première fois
-
-Problèmes connus :
- - Quelques fois le raccourci pour ouvrir le microphone ne fonctionne pas correctement
+Améliorations et corrections :
+ - L'appareil ne se met pas en veille pendant un enregistrement audio
+ - Amélioration de la navigation lors de deeplinks
