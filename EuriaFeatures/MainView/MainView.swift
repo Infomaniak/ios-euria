@@ -25,6 +25,7 @@ import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakCoreCommonUI
 import InfomaniakCoreUIResources
+import InfomaniakCreateAccount
 import InfomaniakDI
 import InfomaniakLogin
 import InfomaniakNotifications
@@ -41,6 +42,7 @@ public struct MainView: View {
     @State private var isShowingErrorAlert = false
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var loginHandler = LoginHandler()
 
     private let session: any UserSessionable
 
@@ -110,6 +112,12 @@ public struct MainView: View {
         }, content: {
             SingleOnboardingView()
         })
+        .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
+            RegisterView(registrationProcess: .mail) { viewController in
+                guard let viewController else { return }
+                loginHandler.loginAfterAccountCreation(from: viewController)
+            }
+        }
         .sceneLifecycle(willEnterForeground: willEnterForeground, didEnterBackground: didEnterBackground)
     }
 
