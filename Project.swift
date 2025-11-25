@@ -52,7 +52,10 @@ let project = Project(
             bundleId: Constants.baseIdentifier,
             deploymentTargets: Constants.deploymentTarget,
             infoPlist: "Euria/Resources/Info.plist",
-            sources: "Euria/Sources/**",
+            sources: [
+                "Euria/Sources/**",
+                "EuriaWidget/QuickActionsControlWidget/SharedIntent/**"
+            ],
             resources: [
                 "Euria/Resources/LaunchScreen.storyboard",
                 "Euria/Resources/Assets.xcassets", // Needed for AppIcon and LaunchScreen
@@ -136,7 +139,9 @@ let project = Project(
             deploymentTargets: Constants.deploymentTarget,
             infoPlist: "EuriaWidget/Resources/Info.plist",
             sources: "EuriaWidget/**",
-            resources: [],
+            resources: [
+                "EuriaWidget/Resources/Assets.xcassets"
+            ],
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),

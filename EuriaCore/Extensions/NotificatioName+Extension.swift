@@ -16,16 +16,9 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import SwiftUI
-import WidgetKit
+import Foundation
+import NotificationCenter
 
-@main
-struct widgetBundle: WidgetBundle {
-    var body: some Widget {
-        QuickActionsWidget()
-
-        if #available(iOS 18.0, *) {
-            OpenAppControl()
-        }
-    }
+public extension NSNotification.Name {
+    static let openURL = NSNotification.Name("openURL")
 }
