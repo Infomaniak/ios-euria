@@ -54,17 +54,17 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
     }
 
     func webView(
-            _ webView: WKWebView,
-            didReceive challenge: URLAuthenticationChallenge,
-            completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
-        ) {
-            let protectionSpace = challenge.protectionSpace
-            if protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-               let serverTrust = protectionSpace.serverTrust {
-                let credential = URLCredential(trust: serverTrust)
-                completionHandler(.useCredential, credential)
-            } else {
-                completionHandler(.performDefaultHandling, nil)
-            }
-        }	
+        _ webView: WKWebView,
+        didReceive challenge: URLAuthenticationChallenge,
+        completionHandler: @escaping @MainActor (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
+    ) {
+        let protectionSpace = challenge.protectionSpace
+        if protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let serverTrust = protectionSpace.serverTrust {
+            let credential = URLCredential(trust: serverTrust)
+            completionHandler(.useCredential, credential)
+        } else {
+            completionHandler(.performDefaultHandling, nil)
+        }
+    }
 }
