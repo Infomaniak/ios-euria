@@ -16,8 +16,8 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-struct JSBridge {
-    func goTo(_ destination: String) -> String {
+enum JSBridge {
+    static func goTo(_ destination: String) -> String {
         return "goTo(\"\(destination)\")"
     }
 }

@@ -45,7 +45,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             keepDeviceAwake(shouldKeepDeviceAwake)
         case .ready:
             isReadyToReceiveEvents = true
-            drainIfPossible()
+            navigateIfPossible()
         }
     }
 

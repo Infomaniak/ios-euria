@@ -21,13 +21,18 @@ import SwiftUI
 import UIKit
 import WebKit
 
+@MainActor
+public protocol WebViewCoordinator: AnyObject {
+    var webView: WKWebView? { get set }
+}
+
 final class EuriaWebView: WKWebView {
     override var inputAccessoryView: UIView? {
         return nil
     }
 }
 
-struct WebView<WebViewCoordinator>: UIViewRepresentable {
+struct WebView: UIViewRepresentable {
     let url: URL
     let webConfiguration: WKWebViewConfiguration
     var webViewCoordinator: WebViewCoordinator?
@@ -46,9 +51,7 @@ struct WebView<WebViewCoordinator>: UIViewRepresentable {
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
         setupWebView(webView, coordinator: webViewCoordinator)
 
-        if let euriaWebViewDelegate = webViewCoordinator as? EuriaWebViewDelegate {
-            euriaWebViewDelegate.weakWebView = webView
-        }
+        webViewCoordinator?.webView = webView
 
         let request = URLRequest(url: url)
         webView.load(request)

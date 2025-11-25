@@ -27,7 +27,7 @@ import UIKit
 import WebKit
 
 @MainActor
-final class EuriaWebViewDelegate: NSObject, ObservableObject {
+final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject {
     @Published var isLoaded = false
 
     @Published var isPresentingDocument: URL?
@@ -37,9 +37,11 @@ final class EuriaWebViewDelegate: NSObject, ObservableObject {
     let webConfiguration: WKWebViewConfiguration
 
     var downloads = [WKDownload: URL]()
+
     var isReadyToReceiveEvents = false
-    weak var weakWebView: WKWebView?
-    private var pendingDestinations = [String]()
+    private var pendingDestination: String?
+
+    weak var webView: WKWebView?
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -130,25 +132,26 @@ final class EuriaWebViewDelegate: NSObject, ObservableObject {
     }
 
     func enqueueNavigation(destination: String) {
-        pendingDestinations.append(destination)
-        drainIfPossible()
+        pendingDestination = destination
+        navigateIfPossible()
     }
 
-    func drainIfPossible() {
-        guard let webView = weakWebView, isReadyToReceiveEvents else {
+    func navigateIfPossible() {
+        guard isReadyToReceiveEvents, let destination = pendingDestination else {
             return
         }
 
-        while !pendingDestinations.isEmpty {
-            let nextDestination = pendingDestinations.removeFirst()
+        pendingDestination = nil
 
-            Task {
-                if nextDestination.hasPrefix(NavigationConstants.ephemeralRoute) ||
-                    nextDestination.hasPrefix(NavigationConstants.speechRoute) {
-                    try? await Task.sleep(for: .milliseconds(400))
-                }
-                webView.callAsyncJavaScript(JSBridge().goTo(nextDestination), in: nil, in: .page)
+        Task {
+            // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
+            // which causes the user to be logged out.
+            // To avoid this situation, we wait a few milliseconds.
+            if destination == NavigationConstants.ephemeralRoute || destination == NavigationConstants.speechRoute {
+                try? await Task.sleep(for: .milliseconds(400))
             }
+
+            try await webView?.evaluateJavaScript(JSBridge.goTo(destination))
         }
     }
 }
