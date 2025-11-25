@@ -54,7 +54,7 @@ let project = Project(
             infoPlist: "Euria/Resources/Info.plist",
             sources: [
                 "Euria/Sources/**",
-                "EuriaWidget/QuickActionsControlWidget/SharedIntent/**",
+                "EuriaWidget/QuickActionsControlWidget/SharedIntent/**"
             ],
             resources: [
                 "Euria/Resources/LaunchScreen.storyboard",

@@ -18,7 +18,6 @@
 
 import AppIntents
 import EuriaCore
-import EuriaCoreUI
 import EuriaResources
 import InfomaniakCore
 import WidgetKit
