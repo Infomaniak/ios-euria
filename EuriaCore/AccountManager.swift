@@ -37,6 +37,7 @@ public protocol AccountManagerable: Sendable {
 
     func createAndSetCurrentAccount(code: String, codeVerifier: String) async throws
     func createAccount(token: ApiToken) async throws -> (any UserSessionable)
+    func createGuestAccount() async -> (any UserSessionable)
     func removeTokenAndAccountFor(userId: Int) async
     func setCurrentSession(session: any UserSessionable) async
     func getUserSession(for userId: UserId) async -> (any UserSessionable)?
@@ -52,6 +53,8 @@ public extension AccountManager {
 }
 
 public actor AccountManager: AccountManagerable, ObservableObject {
+    static let guestUserId: UserId = -1
+
     @LazyInjectService var deviceManager: DeviceManagerable
     @LazyInjectService var tokenStore: TokenStore
     @LazyInjectService var networkLoginService: InfomaniakNetworkLoginable
@@ -116,6 +119,12 @@ public actor AccountManager: AccountManagerable, ObservableObject {
         return session
     }
 
+    public func createGuestAccount() -> (any UserSessionable) {
+        let guestSession = UserSession(userId: Self.guestUserId, apiFetcher: ApiFetcher())
+        setCurrentSession(session: guestSession)
+        return guestSession
+    }
+
     public func setCurrentSession(session: any UserSessionable) {
         currentSession = session
     }
@@ -164,6 +173,8 @@ public actor AccountManager: AccountManagerable, ObservableObject {
             let apiFetcher = getApiFetcher(for: userId, token: token.apiToken)
             sessions[userId] = UserSession(userId: userId, apiFetcher: apiFetcher)
             return sessions[userId]
+        } else if userId == Self.guestUserId {
+            return UserSession(userId: userId, apiFetcher: ApiFetcher())
         } else {
             return nil
         }
@@ -180,12 +191,16 @@ public actor AccountManager: AccountManagerable, ObservableObject {
     }
 
     public func getFirstSession() -> (any UserSessionable)? {
-        guard let firstToken = tokenStore.getAllTokens().values.first,
-              let session = getUserSession(for: firstToken.userId) else {
-            return nil
+        if let firstToken = tokenStore.getAllTokens().values.first,
+           let session = getUserSession(for: firstToken.userId) {
+            return session
         }
 
-        return session
+        if UserDefaults.shared.currentUserId == Self.guestUserId {
+            return getUserSession(for: Self.guestUserId)
+        }
+
+        return nil
     }
 
     public func getAccountIds() async -> [UserId] {

@@ -31,6 +31,12 @@ public protocol UserSessionable: Sendable {
     var apiFetcher: ApiFetcher { get }
 }
 
+public extension UserSessionable {
+    var isGuest: Bool {
+        userId == AccountManager.guestUserId
+    }
+}
+
 public extension ApiFetcher {
     convenience init(token: ApiToken, delegate: RefreshTokenDelegate) {
         let decoder = JSONDecoder()
