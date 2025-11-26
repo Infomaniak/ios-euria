@@ -75,12 +75,12 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
         }
     }
 
-    init(host: String, session: any UserSessionable) {
+    init(host: String, session: (any UserSessionable)?) {
         self.host = host
         webConfiguration = WKWebViewConfiguration()
 
         super.init()
-        setupWebViewConfiguration(token: session.apiFetcher.currentToken)
+        setupWebViewConfiguration(token: session?.apiFetcher.currentToken)
     }
 
     deinit {

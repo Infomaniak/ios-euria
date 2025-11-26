@@ -44,7 +44,7 @@ public struct MainView: View {
     @ObservedObject var networkMonitor = NetworkMonitor.shared
     @ObservedObject var loginHandler = LoginHandler()
 
-    private let session: any UserSessionable
+    private let session: (any UserSessionable)?
 
     private var isShowingOfflineView: Bool {
         return !networkMonitor.isConnected && !webViewDelegate.isLoaded
@@ -54,7 +54,7 @@ public struct MainView: View {
         return !webViewDelegate.isLoaded && !isShowingOfflineView
     }
 
-    public init(session: any UserSessionable) {
+    public init(session: (any UserSessionable)?) {
         self.session = session
         _webViewDelegate = StateObject(wrappedValue: EuriaWebViewDelegate(
             host: ApiEnvironment.current.euriaHost,
@@ -138,9 +138,11 @@ public struct MainView: View {
               granted else {
             return
         }
-
+        guard let apiFetcher = session?.apiFetcher else {
+            return
+        }
         @InjectService var notificationService: InfomaniakNotifications
-        await notificationService.updateTopicsIfNeeded([Topic.twoFAPushChallenge], userApiFetcher: session.apiFetcher)
+        await notificationService.updateTopicsIfNeeded([Topic.twoFAPushChallenge], userApiFetcher: apiFetcher)
     }
 
     private func checkTwoFAChallenges() async {

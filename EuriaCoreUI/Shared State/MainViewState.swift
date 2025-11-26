@@ -22,13 +22,17 @@ import SwiftUI
 
 @MainActor
 public final class MainViewState: ObservableObject, @MainActor Equatable {
-    public let userSession: any UserSessionable
+    public let userSession: (any UserSessionable)?
 
-    public init(userSession: any UserSessionable) {
+    public init(userSession: (any UserSessionable)?) {
         self.userSession = userSession
     }
 
     public static func == (lhs: MainViewState, rhs: MainViewState) -> Bool {
-        lhs.userSession.userId == rhs.userSession.userId
+        guard let lhsUserSession = lhs.userSession,
+              let rhsUserSession = rhs.userSession else {
+            return false
+        }
+        return lhsUserSession.userId == rhsUserSession.userId
     }
 }
