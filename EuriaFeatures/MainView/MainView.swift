@@ -156,7 +156,6 @@ public struct MainView: View {
     }
 
     private func checkTwoFAChallenges() async {
-        @InjectService var accountManager: AccountManagerable
         let sessions: [InAppTwoFactorAuthenticationSession] = await accountManager.accounts.asyncCompactMap { account in
             guard let user = await accountManager.userProfileStore.getUserProfile(id: account.userId) else {
                 return nil
