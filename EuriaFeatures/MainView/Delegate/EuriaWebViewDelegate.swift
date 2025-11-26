@@ -156,4 +156,11 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
             try await webView?.evaluateJavaScript(JSBridge.goTo(destination))
         }
     }
+
+    func updateSessionToken(_ session: (any UserSessionable)?) {
+        if let token = session?.apiFetcher.currentToken {
+            addCookies(token: token)
+            webView?.reload()
+        }
+    }
 }

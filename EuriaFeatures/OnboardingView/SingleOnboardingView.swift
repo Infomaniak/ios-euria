@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCore
 import InfomaniakCoreCommonUI
 import InfomaniakDI
 import InfomaniakOnboarding
@@ -23,6 +24,7 @@ import SwiftUI
 
 public struct SingleOnboardingView: View {
     @InjectService private var orientationManager: OrientationManageable
+    @InjectService private var accountManager: AccountManagerable
 
     @Environment(\.dismiss) private var dismiss
 
@@ -44,6 +46,9 @@ public struct SingleOnboardingView: View {
                 UIApplication.shared.mainSceneKeyWindow?.rootViewController?
                     .setNeedsUpdateOfSupportedInterfaceOrientations()
             }
+        }
+        .onReceive(accountManager.objectWillChange) { _ in
+            dismiss()
         }
     }
 }

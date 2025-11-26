@@ -34,6 +34,8 @@ import WebKit
 
 public struct MainView: View {
     @InjectService var orientationManager: OrientationManageable
+    @InjectService var accountManager: AccountManagerable
+
     @EnvironmentObject private var universalLinksState: UniversalLinksState
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
@@ -116,6 +118,14 @@ public struct MainView: View {
             RegisterView(registrationProcess: .mail) { viewController in
                 guard let viewController else { return }
                 loginHandler.loginAfterAccountCreation(from: viewController)
+            }
+        }
+        .onReceive(accountManager.objectWillChange) { _ in
+            Task {
+                guard let session = await accountManager.currentSession else {
+                    return
+                }
+                webViewDelegate.updateSessionToken(session)
             }
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground, didEnterBackground: didEnterBackground)
