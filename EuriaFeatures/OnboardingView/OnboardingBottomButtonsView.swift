@@ -19,6 +19,7 @@
 import AuthenticationServices
 import DesignSystem
 import EuriaCore
+import EuriaCoreUI
 import EuriaResources
 import InfomaniakCoreUIResources
 import InfomaniakCreateAccount
@@ -28,14 +29,21 @@ import InterAppLogin
 import SwiftUI
 
 struct OnboardingBottomButtonsView: View {
+    @InjectService var accountManager: AccountManagerable
+    @InjectService var connectedAccountsManager: ConnectedAccountManagerable
+
+    @EnvironmentObject private var rootViewState: RootViewState
+
     @ObservedObject var loginHandler = LoginHandler()
 
     @State private var excludedUserIds: [AccountManagerable.UserId] = []
     @State private var isPresentingCreateAccount = false
+    @State private var isPresentingInterAppLogin = false
 
     @Binding var selection: Int
 
     let slideCount: Int
+    var showButtonStartOnly = false
 
     private var isLastSlide: Bool {
         return selection == slideCount - 1
@@ -43,16 +51,21 @@ struct OnboardingBottomButtonsView: View {
 
     var body: some View {
         VStack(spacing: IKPadding.mini) {
-            ContinueWithAccountView(
-                isLoading: loginHandler.isLoading,
-                excludingUserIds: excludedUserIds,
-                allowsMultipleSelection: false
-            ) {
-                loginPressed()
-            } onLoginWithAccountsPressed: { accounts in
-                loginWithAccountsPressed(accounts: accounts)
-            } onCreateAccountPressed: {
-                isPresentingCreateAccount = true
+            if showButtonStartOnly && !isPresentingInterAppLogin {
+                Button(EuriaResourcesStrings.buttonStart, action: openGuestSession)
+                    .buttonStyle(.ikBorderedProminent)
+            } else {
+                ContinueWithAccountView(
+                    isLoading: loginHandler.isLoading,
+                    excludingUserIds: excludedUserIds,
+                    allowsMultipleSelection: false
+                ) {
+                    loginPressed()
+                } onLoginWithAccountsPressed: { accounts in
+                    loginWithAccountsPressed(accounts: accounts)
+                } onCreateAccountPressed: {
+                    isPresentingCreateAccount = true
+                }
             }
         }
         .ikButtonFullWidth(true)
@@ -81,14 +94,24 @@ struct OnboardingBottomButtonsView: View {
             }
         }
         .task {
-            @InjectService var accountManager: AccountManagerable
             excludedUserIds = await accountManager.getAccountIds()
+            let accounts = await connectedAccountsManager.listAllLocalAccounts()
+            if !accounts.isEmpty {
+                isPresentingInterAppLogin = true
+            }
         }
     }
 
     private func loginPressed() {
         Task {
             await loginHandler.login()
+        }
+    }
+
+    private func openGuestSession() {
+        Task {
+            let currentSession = await accountManager.createGuestAccount()
+            rootViewState.transition(toState: .mainView(MainViewState(userSession: currentSession)))
         }
     }
 
