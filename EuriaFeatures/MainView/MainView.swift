@@ -106,14 +106,6 @@ public struct MainView: View {
             webViewDelegate.enqueueNavigation(destination: navigationDestination.string)
             universalLinksState.linkedWebView = nil
         }
-        .fullScreenCover(isPresented: $webViewDelegate.isShowingLoginView, onDismiss: {
-            webViewDelegate.isShowingLoginView = false
-            orientationManager.setOrientationLock(.all)
-            UIApplication.shared.mainSceneKeyWindow?.rootViewController?
-                .setNeedsUpdateOfSupportedInterfaceOrientations()
-        }, content: {
-            SingleOnboardingView()
-        })
         .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
             RegisterView(registrationProcess: .mail) { viewController in
                 guard let viewController else { return }

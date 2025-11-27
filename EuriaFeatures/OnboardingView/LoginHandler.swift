@@ -90,7 +90,7 @@ public final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
         loginService.webviewLoginFrom(viewController: viewController, hideCreateAccountButton: true, delegate: self)
     }
 
-    func login() async {
+    public func login() async {
         isLoading = true
         defer { isLoading = false }
 

@@ -17,6 +17,7 @@
  */
 
 import EuriaCore
+import EuriaOnboardingView
 import InfomaniakCore
 import InfomaniakDI
 import InfomaniakLogin
@@ -29,11 +30,11 @@ import WebKit
 @MainActor
 final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject {
     @Published var isLoaded = false
-    @Published var isShowingLoginView = false
     @Published var isShowingRegisterView = false
 
     @Published var isPresentingDocument: URL?
     @Published var error: ErrorDomain?
+    @ObservedObject var loginHandler = LoginHandler()
 
     let host: String
     let webConfiguration: WKWebViewConfiguration

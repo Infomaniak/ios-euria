@@ -49,7 +49,9 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
             isReadyToReceiveEvents = true
             navigateIfPossible()
         case .logIn:
-            isShowingLoginView = true
+            Task {
+                await loginHandler.login()
+            }
         case .signUp:
             isShowingRegisterView = true
         }
