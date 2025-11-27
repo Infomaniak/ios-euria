@@ -161,7 +161,13 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
     func updateSessionToken(_ session: any UserSessionable) {
         if let token = session.apiFetcher.currentToken {
             addCookies(token: token)
-            webView?.reload()
+            reloadWebView()
         }
+    }
+
+    func reloadWebView() {
+        isLoaded = false
+        isReadyToReceiveEvents = false
+        webView?.reload()
     }
 }
