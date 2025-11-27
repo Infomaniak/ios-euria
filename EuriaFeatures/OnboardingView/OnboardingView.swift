@@ -37,7 +37,8 @@ public struct OnboardingView: View {
         WaveView(slides: slides, selectedSlide: $selectedSlideIndex) { slideIndex in
             slideIndex == slides.count - 1 || (slideIndex == slides.count - 2 && selectedSlideIndex == slides.count - 1)
         } bottomView: { _ in
-            OnboardingBottomButtonsView(loginHandler: loginHandler, selection: $selectedSlideIndex, slideCount: slides.count)
+            OnboardingBottomButtonsView(loginHandler: loginHandler, selection: $selectedSlideIndex,
+                                        slideCount: slides.count)
         }
         .appBackground()
         .ignoresSafeArea()

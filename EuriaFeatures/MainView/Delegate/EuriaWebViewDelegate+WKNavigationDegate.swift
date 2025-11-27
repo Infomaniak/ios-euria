@@ -50,9 +50,6 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        isLoaded = false
-        isReadyToReceiveEvents = false
-
-        webView.reload()
+        reloadWebView()
     }
 }

@@ -3,8 +3,8 @@
  * Project: Euria
  * Locale: it, Italian
  * Tagged: ios
- * Exported by: Valentin Perignon
- * Exported at: Tue, 11 Nov 2025 13:46:09 +0100
+ * Exported by: Baptiste Griva
+ * Exported at: Wed, 26 Nov 2025 15:27:09 +0100
  */
 
 /* loco:68ff77d06bd131d99b010d73 */
@@ -12,6 +12,9 @@
 
 /* loco:68ff4981634f6375880c8ba2 */
 "buttonLogin" = "Accesso";
+
+/* loco:69270bbbe4fa8bf1fe0d5ee5 */
+"buttonStart" = "Inizia";
 
 /* loco:68ff7cb3182d19eb830448e3 */
 "connectionError" = "Problema di connessione a Internet";

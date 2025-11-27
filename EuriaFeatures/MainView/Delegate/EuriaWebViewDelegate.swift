@@ -17,6 +17,7 @@
  */
 
 import EuriaCore
+import EuriaOnboardingView
 import InfomaniakCore
 import InfomaniakDI
 import InfomaniakLogin
@@ -29,9 +30,11 @@ import WebKit
 @MainActor
 final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject {
     @Published var isLoaded = false
+    @Published var isShowingRegisterView = false
 
     @Published var isPresentingDocument: URL?
     @Published var error: ErrorDomain?
+    let loginHandler = LoginHandler()
 
     let host: String
     let webConfiguration: WKWebViewConfiguration
@@ -153,5 +156,18 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
 
             try await webView?.evaluateJavaScript(JSBridge.goTo(destination))
         }
+    }
+
+    func updateSessionToken(_ session: any UserSessionable) {
+        if let token = session.apiFetcher.currentToken {
+            addCookies(token: token)
+            reloadWebView()
+        }
+    }
+
+    func reloadWebView() {
+        isLoaded = false
+        isReadyToReceiveEvents = false
+        webView?.reload()
     }
 }

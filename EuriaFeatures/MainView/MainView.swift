@@ -19,11 +19,13 @@
 import AVFoundation
 import EuriaCore
 import EuriaCoreUI
+import EuriaOnboardingView
 import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakCoreCommonUI
 import InfomaniakCoreUIResources
+import InfomaniakCreateAccount
 import InfomaniakDI
 import InfomaniakLogin
 import InfomaniakNotifications
@@ -31,6 +33,9 @@ import SwiftUI
 import WebKit
 
 public struct MainView: View {
+    @InjectService var orientationManager: OrientationManageable
+    @InjectService var accountManager: AccountManagerable
+
     @EnvironmentObject private var universalLinksState: UniversalLinksState
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
@@ -39,6 +44,7 @@ public struct MainView: View {
     @State private var isShowingErrorAlert = false
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
+    @ObservedObject var loginHandler = LoginHandler()
 
     private let session: any UserSessionable
 
@@ -88,7 +94,6 @@ public struct MainView: View {
         .appBackground()
         .onAppear {
             networkMonitor.start()
-            @InjectService var orientationManager: OrientationManageable
             orientationManager.setOrientationLock(.all)
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
@@ -100,6 +105,20 @@ public struct MainView: View {
 
             webViewDelegate.enqueueNavigation(destination: navigationDestination.string)
             universalLinksState.linkedWebView = nil
+        }
+        .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
+            RegisterView(registrationProcess: .mail) { viewController in
+                guard let viewController else { return }
+                loginHandler.loginAfterAccountCreation(from: viewController)
+            }
+        }
+        .onReceive(accountManager.objectWillChange) { _ in
+            Task {
+                guard let session = await accountManager.currentSession else {
+                    return
+                }
+                webViewDelegate.updateSessionToken(session)
+            }
         }
         .sceneLifecycle(willEnterForeground: willEnterForeground, didEnterBackground: didEnterBackground)
     }
@@ -127,7 +146,6 @@ public struct MainView: View {
     }
 
     private func checkTwoFAChallenges() async {
-        @InjectService var accountManager: AccountManagerable
         let sessions: [InAppTwoFactorAuthenticationSession] = await accountManager.accounts.asyncCompactMap { account in
             guard let user = await accountManager.userProfileStore.getUserProfile(id: account.userId) else {
                 return nil

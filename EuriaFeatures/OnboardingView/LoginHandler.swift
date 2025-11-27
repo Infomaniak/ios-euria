@@ -30,13 +30,15 @@ import InterAppLogin
 import SwiftUI
 
 @MainActor
-final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
+public final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
     @LazyInjectService private var loginService: InfomaniakLoginable
     @LazyInjectService private var tokenService: InfomaniakNetworkLoginable
     @LazyInjectService private var accountManager: AccountManagerable
 
     @Published var isLoading = false
     @Published var error: ErrorDomain?
+
+    public init() {}
 
     enum ErrorDomain: Error, LocalizedError, Equatable {
         case loginFailed(error: Error)
@@ -63,17 +65,17 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
         }
     }
 
-    func didCompleteLoginWith(code: String, verifier: String) {
+    public func didCompleteLoginWith(code: String, verifier: String) {
         Task {
             try await loginSuccessful(code: code, codeVerifier: verifier)
         }
     }
 
-    func didFailLoginWith(error: any Error) {
+    public func didFailLoginWith(error: any Error) {
         loginFailed(error: error)
     }
 
-    func loginAfterAccountCreation(from viewController: UIViewController) {
+    public func loginAfterAccountCreation(from viewController: UIViewController) {
         isLoading = true
         defer { isLoading = false }
 
@@ -88,7 +90,7 @@ final class LoginHandler: InfomaniakLoginDelegate, ObservableObject {
         loginService.webviewLoginFrom(viewController: viewController, hideCreateAccountButton: true, delegate: self)
     }
 
-    func login() async {
+    public func login() async {
         isLoading = true
         defer { isLoading = false }
 

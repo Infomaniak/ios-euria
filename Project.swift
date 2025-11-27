@@ -10,15 +10,6 @@ let preloadingView = Feature(name: "PreloadingView", additionalDependencies: [
     TargetDependency.external(name: "InfomaniakDI")
 ])
 
-let mainView = Feature(
-    name: "MainView",
-    additionalDependencies: [
-        TargetDependency.external(name: "InfomaniakCoreUIResources"),
-        TargetDependency.external(name: "InfomaniakNotifications"),
-        TargetDependency.external(name: "VersionChecker")
-    ]
-)
-
 let onboardingView = Feature(name: "OnboardingView", additionalDependencies: [
     TargetDependency.external(name: "InfomaniakConcurrency"),
     TargetDependency.external(name: "InfomaniakCore"),
@@ -29,6 +20,16 @@ let onboardingView = Feature(name: "OnboardingView", additionalDependencies: [
     TargetDependency.external(name: "InterAppLogin"),
     TargetDependency.external(name: "Lottie")
 ])
+
+let mainView = Feature(
+    name: "MainView",
+    dependencies: [onboardingView],
+    additionalDependencies: [
+        TargetDependency.external(name: "InfomaniakCoreUIResources"),
+        TargetDependency.external(name: "InfomaniakNotifications"),
+        TargetDependency.external(name: "VersionChecker")
+    ]
+)
 
 let rootView = Feature(
     name: "RootView",

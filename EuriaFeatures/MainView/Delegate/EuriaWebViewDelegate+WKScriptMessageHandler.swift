@@ -30,6 +30,8 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
         case unauthenticated
         case keepDeviceAwake
         case ready
+        case logIn
+        case signUp
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -46,6 +48,12 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler {
         case .ready:
             isReadyToReceiveEvents = true
             navigateIfPossible()
+        case .logIn:
+            Task {
+                await loginHandler.login()
+            }
+        case .signUp:
+            isShowingRegisterView = true
         }
     }
 
