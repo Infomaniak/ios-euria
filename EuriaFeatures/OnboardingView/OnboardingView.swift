@@ -38,7 +38,7 @@ public struct OnboardingView: View {
             slideIndex == slides.count - 1 || (slideIndex == slides.count - 2 && selectedSlideIndex == slides.count - 1)
         } bottomView: { _ in
             OnboardingBottomButtonsView(loginHandler: loginHandler, selection: $selectedSlideIndex,
-                                        slideCount: slides.count, showButtonStartOnly: true)
+                                        slideCount: slides.count)
         }
         .appBackground()
         .ignoresSafeArea()

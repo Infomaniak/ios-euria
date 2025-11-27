@@ -34,7 +34,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
 
     @Published var isPresentingDocument: URL?
     @Published var error: ErrorDomain?
-    @ObservedObject var loginHandler = LoginHandler()
+    let loginHandler = LoginHandler()
 
     let host: String
     let webConfiguration: WKWebViewConfiguration

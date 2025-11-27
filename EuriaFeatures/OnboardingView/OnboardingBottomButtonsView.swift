@@ -43,7 +43,6 @@ struct OnboardingBottomButtonsView: View {
     @Binding var selection: Int
 
     let slideCount: Int
-    var showButtonStartOnly = false
 
     private var isLastSlide: Bool {
         return selection == slideCount - 1
@@ -51,7 +50,7 @@ struct OnboardingBottomButtonsView: View {
 
     var body: some View {
         VStack(spacing: IKPadding.mini) {
-            if showButtonStartOnly && !isPresentingInterAppLogin {
+            if !isPresentingInterAppLogin {
                 Button(EuriaResourcesStrings.buttonStart, action: openGuestSession)
                     .buttonStyle(.ikBorderedProminent)
             } else {
