@@ -1,6 +1,5 @@
 What’s new:
- - Replace the Camera/Flashlight button on the lock screen with Euria
+ - Euria is now accessible without an account
 
 Improvements and fixes:
- - The device no longer goes to sleep during an audio recording
- - Improved navigation when using deeplinks
+ - Improved navigation to microphone from the widget

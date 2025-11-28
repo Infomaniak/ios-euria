@@ -1,6 +1,5 @@
 Quoi de neuf :
- - Remplacez le bouton Camera/Lampe torche de l'écran vérouillé par Euria
+ - Euria est maintenant accessible sans compte
 
 Améliorations et corrections :
- - L'appareil ne se met pas en veille pendant un enregistrement audio
- - Amélioration de la navigation lors de deeplinks
+ - Amélioration de la navigation vers le microphone depuis le widget
