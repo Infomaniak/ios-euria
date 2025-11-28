@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-create-account",
       "state" : {
-        "revision" : "3f47d23b24211f8c9b8deb1663fdb04dd9f1eb5a",
-        "version" : "23.1.0"
+        "revision" : "13b6c51c7e62f5f6d5b677a2735eb98efde9b425",
+        "version" : "23.1.1"
       }
     },
     {
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-onboarding",
       "state" : {
-        "revision" : "a4591b91d977c33a5e2dd361dca2799a8815ce82",
-        "version" : "1.4.3"
+        "revision" : "ca793dc5613ae4fd67b209e3f5f0222e00a6da4d",
+        "version" : "1.4.4"
       }
     },
     {

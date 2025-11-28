@@ -22,11 +22,20 @@ import SwiftUI
 
 extension Slide {
     static var onboardingSlides: [Slide] {
+        let euriaBase: SlideContent = .animation(.init(
+            id: 1,
+            filename: "EURIA_STATE_BASE",
+            bundle: EuriaResourcesResources.bundle,
+            animationType: .dotLottie,
+            loopMode: .autoReverse,
+            loopFrameStart: 0,
+            loopFrameEnd: 125
+        ))
         return [
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
                 backgroundImageTintColor: nil,
-                content: .illustration(EuriaResourcesAsset.Images.onboardingEuria.image),
+                content: euriaBase,
                 bottomView: OnboardingTextView(text: .euria)
             ),
             Slide(
@@ -38,7 +47,15 @@ extension Slide {
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
                 backgroundImageTintColor: nil,
-                content: .illustration(EuriaResourcesAsset.Images.onboardingGhostEuria.image),
+                content: .animation(.init(
+                    id: 2,
+                    filename: "EURIA_STATE_BASE_GHOST",
+                    bundle: EuriaResourcesResources.bundle,
+                    animationType: .dotLottie,
+                    loopMode: .autoReverse,
+                    loopFrameStart: 0,
+                    loopFrameEnd: 125
+                )),
                 bottomView: OnboardingTextView(text: .ephemeral)
             ),
             Slide(
@@ -50,7 +67,7 @@ extension Slide {
             Slide(
                 backgroundImage: EuriaResourcesAsset.Images.onboardingBlurRight.image,
                 backgroundImageTintColor: nil,
-                content: .illustration(EuriaResourcesAsset.Images.onboardingEuria.image),
+                content: euriaBase,
                 bottomView: OnboardingTextView(text: .login)
             )
         ]
