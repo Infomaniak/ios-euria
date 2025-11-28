@@ -150,8 +150,8 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
             // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
             // which causes the user to be logged out.
             // To avoid this situation, we wait a few milliseconds.
-            if destination == NavigationConstants.ephemeralRoute || destination == NavigationConstants.speechRoute {
-                try? await Task.sleep(for: .milliseconds(400))
+            if destination == NavigationConstants.speechRoute {
+                try? await Task.sleep(for: .milliseconds(200))
             }
 
             try await webView?.evaluateJavaScript(JSBridge.goTo(destination))

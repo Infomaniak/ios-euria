@@ -95,6 +95,9 @@ public struct MainView: View {
         .onAppear {
             networkMonitor.start()
             orientationManager.setOrientationLock(.all)
+            if let navigationDestination = universalLinksState.linkedWebView {
+                navigateTo(navigationDestination.string)
+            }
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
             guard !webViewDelegate.isLoaded else { return }
@@ -102,9 +105,7 @@ public struct MainView: View {
         }
         .onChange(of: universalLinksState.linkedWebView) { navigationDestination in
             guard let navigationDestination else { return }
-
-            webViewDelegate.enqueueNavigation(destination: navigationDestination.string)
-            universalLinksState.linkedWebView = nil
+            navigateTo(navigationDestination.string)
         }
         .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
             RegisterView(registrationProcess: .euria) { viewController in
@@ -158,6 +159,11 @@ public struct MainView: View {
 
         @InjectService var inAppTwoFactorAuthenticationManager: InAppTwoFactorAuthenticationManagerable
         inAppTwoFactorAuthenticationManager.checkConnectionAttempts(using: sessions)
+    }
+
+    private func navigateTo(_ destination: String) {
+        webViewDelegate.enqueueNavigation(destination: destination)
+        universalLinksState.linkedWebView = nil
     }
 }
 
