@@ -107,7 +107,7 @@ public struct MainView: View {
             universalLinksState.linkedWebView = nil
         }
         .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
-            RegisterView(registrationProcess: .mail) { viewController in
+            RegisterView(registrationProcess: .euria) { viewController in
                 guard let viewController else { return }
                 loginHandler.loginAfterAccountCreation(from: viewController)
             }
