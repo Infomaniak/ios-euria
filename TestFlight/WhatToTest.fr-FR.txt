@@ -1,5 +1,5 @@
 Quoi de neuf :
- - Euria est maintenant accessible sans compte
+ - Nouvelle icône pour le ControlWidget
 
 Améliorations et corrections :
- - Amélioration de la navigation vers le microphone depuis le widget
+ - Possibilité de choisir entre kSuite et mykSuite à la création de compte
