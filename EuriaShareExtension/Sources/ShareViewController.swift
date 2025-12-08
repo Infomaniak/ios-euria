@@ -17,8 +17,45 @@
  */
 
 import EuriaCore
+import InfomaniakCore
+import OSLog
 import UIKit
 import UniformTypeIdentifiers
+
+extension NSItemProvider: @unchecked @retroactive Sendable {
+    enum ErrorDomain: Error {
+        /// Not matching an UTI
+        case UTINotFound
+
+        /// The type needs dedicated handling
+        case unsupportedUnderlyingType
+
+        /// The item cannot be saved to a file
+        case notWritableItem
+    }
+
+    public func importItem() async throws -> URL {
+        switch underlyingType {
+        case .isURL:
+            let getURL = try ItemProviderURLRepresentation(from: self)
+            let result = try await getURL.result.get()
+            return result.url
+
+        case .isText:
+            let getText = try ItemProviderTextRepresentation(from: self)
+            let resultURL = try await getText.result.get()
+            return resultURL
+
+        case .isImageData, .isCompressedData, .isMiscellaneous:
+            let getFile = try ItemProviderFileRepresentation(from: self)
+            let result = try await getFile.result.get()
+            return result.url
+        // Keep it for forward compatibility
+        default:
+            throw ErrorDomain.unsupportedUnderlyingType
+        }
+    }
+}
 
 final class ShareViewController: UIViewController {
     private lazy var progressContainerView: UIView = {
@@ -36,6 +73,10 @@ final class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupProgressContainerView()
+
+        Task {
+            await handleSharedItems()
+        }
     }
 
     private func setupProgressContainerView() {
@@ -58,19 +99,7 @@ final class ShareViewController: UIViewController {
         progressView.startAnimating()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        openMainApp()
-    }
-
-    private func openMainApp() {
-        guard let url = URL(string: "euria://import-image") else { return }
-        handleShare()
-        openURL(url)
-        close()
-    }
-
-    func openURL(_ url: URL) {
+    private func openURL(_ url: URL) {
         var responder: UIResponder? = self
         while responder != nil {
             if let application = responder as? UIApplication {
@@ -80,16 +109,50 @@ final class ShareViewController: UIViewController {
         }
     }
 
-    private func handleShare() {
-        guard let item = (extensionContext?.inputItems.first as? NSExtensionItem),
-              let container = FileManager.default
-              .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier)
-        else {
+    private func handleSharedItems() async {
+        guard let extensionItems: [NSExtensionItem] = extensionContext?.inputItems.compactMap({ $0 as? NSExtensionItem }),
+              !extensionItems.isEmpty else {
             close()
             return
         }
 
-       
+        let itemProviders: [NSItemProvider] = extensionItems.filteredItemProviders
+        guard !itemProviders.isEmpty else {
+            close()
+            return
+        }
+
+        guard let containerURL = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier) else {
+            close()
+            return
+        }
+
+        let possibleURLs: [URL?] = await itemProviders.asyncMap { itemProvider in
+            do {
+                let url = try await itemProvider.importItem()
+                return url
+            } catch {
+                return nil
+            }
+        }
+
+        let urls = possibleURLs.compactMap { $0 }
+        guard !urls.isEmpty else {
+            close()
+            return
+        }
+
+        do {
+            let importHelper = ImportHelper(baseURL: containerURL)
+
+            try await importHelper.moveURLsToImportDirectory(urls)
+
+            openURL(DeeplinkConstants.importURLFor(uuid: importHelper.importUUID))
+        } catch {
+            Logger.general.error("Failed to import URLs: \(error)")
+        }
+        close()
     }
 
     private func close() {
