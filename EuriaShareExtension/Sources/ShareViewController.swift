@@ -21,6 +21,43 @@ import UIKit
 import UniformTypeIdentifiers
 
 final class ShareViewController: UIViewController {
+    private lazy var progressContainerView: UIView = {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        return containerView
+    }()
+
+    private lazy var progressView: UIActivityIndicatorView = {
+        let progressView = UIActivityIndicatorView(style: .large)
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        return progressView
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupProgressContainerView()
+    }
+
+    private func setupProgressContainerView() {
+        view.addSubview(progressContainerView)
+
+        NSLayoutConstraint.activate([
+            progressContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            progressContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            progressContainerView.heightAnchor.constraint(equalToConstant: 300),
+            progressContainerView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+
+        progressContainerView.addSubview(progressView)
+
+        NSLayoutConstraint.activate([
+            progressView.centerXAnchor.constraint(equalTo: progressContainerView.centerXAnchor),
+            progressView.centerYAnchor.constraint(equalTo: progressContainerView.centerYAnchor)
+        ])
+
+        progressView.startAnimating()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         openMainApp()
@@ -30,10 +67,10 @@ final class ShareViewController: UIViewController {
         guard let url = URL(string: "euria://import-image") else { return }
         handleShare()
         openURL(url)
-        extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+        close()
     }
 
-    @objc func openURL(_ url: URL) {
+    func openURL(_ url: URL) {
         var responder: UIResponder? = self
         while responder != nil {
             if let application = responder as? UIApplication {
@@ -45,8 +82,6 @@ final class ShareViewController: UIViewController {
 
     private func handleShare() {
         guard let item = (extensionContext?.inputItems.first as? NSExtensionItem),
-              let attachment = item.attachments?
-              .first(where: { $0.hasItemConformingToTypeIdentifier(UTType.image.identifier) }),
               let container = FileManager.default
               .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier)
         else {
@@ -54,23 +89,7 @@ final class ShareViewController: UIViewController {
             return
         }
 
-        let sharedDirectory = container.appendingPathComponent("SharedData", isDirectory: true)
-        try? FileManager.default.createDirectory(at: sharedDirectory, withIntermediateDirectories: true)
-
-        attachment.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { url, error in
-            if let url {
-                let destinationURL = sharedDirectory.appendingPathComponent(url.lastPathComponent)
-                try? FileManager.default.removeItem(at: destinationURL)
-                do {
-                    try FileManager.default.copyItem(at: url, to: destinationURL)
-                    if let sharedDefaults = UserDefaults(suiteName: Constants.appGroupIdentifier) {
-                        sharedDefaults.set(destinationURL.path, forKey: "sharedImagePath")
-                    }
-                } catch {
-                    print("Error copying file: \(error.localizedDescription)")
-                }
-            }
-        }
+       
     }
 
     private func close() {
