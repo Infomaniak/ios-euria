@@ -28,7 +28,7 @@ import UIKit
 import WebKit
 
 @MainActor
-final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject {
+final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, ObservableObject {
     @Published var isLoaded = false
     @Published var isShowingRegisterView = false
 
@@ -154,7 +154,17 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, ObservableObject
                 try? await Task.sleep(for: .milliseconds(200))
             }
 
-            try await webView?.evaluateJavaScript(JSBridge.goTo(destination))
+            await sendMessage(GoToDestinationMessage(destination: destination))
+        }
+    }
+
+    func sendMessage<M: JSMessage>(_ message: M) async -> M.Result? {
+        guard let webView else { return nil }
+        do {
+            return try await webView.evaluateJavaScript(message.message) as? M.Result
+        } catch {
+            Logger.general.error("Error while sending message to webview: \(error)")
+            return nil
         }
     }
 
