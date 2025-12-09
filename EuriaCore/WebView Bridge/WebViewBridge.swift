@@ -16,8 +16,24 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-enum JSBridge {
-    static func goTo(_ destination: String) -> String {
-        return "goTo(\"\(destination)\")"
+import Foundation
+
+public protocol JSMessage<Result> {
+    associatedtype Result
+    var message: String { get }
+}
+
+public protocol WebViewBridge: AnyObject {
+    @discardableResult
+    func sendMessage<M: JSMessage>(_ message: M) async -> M.Result?
+}
+
+public struct GoToDestinationMessage: JSMessage {
+    public typealias Result = Void
+
+    public let message: String
+
+    public init(destination: String) {
+        message = "goTo(\"\(destination)\")"
     }
 }
