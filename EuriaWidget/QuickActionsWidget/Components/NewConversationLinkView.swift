@@ -56,5 +56,6 @@ struct NewConversationLinkView: View {
                     .fill(Color.buttonColor(in: widgetRenderingMode))
             }
         }
+        .accessibilityLabel(EuriaResourcesStrings.contentDescriptionChat)
     }
 }

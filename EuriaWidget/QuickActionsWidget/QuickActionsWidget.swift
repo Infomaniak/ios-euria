@@ -52,11 +52,13 @@ struct QuickActionsWidgetView: View {
             HStack(spacing: 0) {
                 CircleIconLinkView(
                     image: EuriaResourcesAsset.Images.clockDashed.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionEphemeralChat,
                     url: DeeplinkConstants.ephemeralURL
                 )
                 Spacer(minLength: IKPadding.mini)
                 CircleIconLinkView(
                     image: EuriaResourcesAsset.Images.microphone.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionMicrophone,
                     url: DeeplinkConstants.speechURL
                 )
             }

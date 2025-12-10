@@ -25,6 +25,7 @@ struct CircleIconLinkView: View {
     @Environment(\.widgetRenderingMode) private var widgetRenderingMode
 
     let image: Image
+    let label: String
     let url: URL
 
     var body: some View {
@@ -37,5 +38,6 @@ struct CircleIconLinkView: View {
                         .iconSize(.large)
                 }
         }
+        .accessibilityLabel(label)
     }
 }
