@@ -1,5 +1,2 @@
-Quoi de neuf :
- - Nouvelle icône pour le ControlWidget
-
 Améliorations et corrections :
- - Possibilité de choisir entre kSuite et mykSuite à la création de compte
+ - Améliorations de traductions allemandes

@@ -1,5 +1,2 @@
-What’s new:
- - New icon for the ControlWidget
-
 Improvements and fixes:
- - You can now choose between kSuite and mykSuite when creating an account
+ - Improvements of German translations
