@@ -35,7 +35,7 @@ public enum DeeplinkConstants {
     public static let speechURL = URL(string: "euria://widget-speech")!
 
     public static func importURLFor(uuid: String) -> URL {
-        return URL(string: "euria://shareextension-import/\(uuid)")!
+        return URL(string: "euria://shareextension-import?session_uuid=\(uuid)")!
     }
 }
 
