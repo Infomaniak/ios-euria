@@ -1,5 +1,5 @@
 {
-  "originHash" : "826eaf860cd1716395ddefe250d19f014064235a41301e39f57fb94377e2b99f",
+  "originHash" : "d95366b19a60358d5bc74fb7eee731a7235a2603bd2b6527ec4cc92572d8bcc8",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-create-account",
       "state" : {
-        "revision" : "81050853a4576ddbb02138d5994cb25c85337b9c",
-        "version" : "23.1.2"
+        "revision" : "433480fee3ccf22a766078bf288efb6e85d2d881",
+        "version" : "23.2.0"
       }
     },
     {
