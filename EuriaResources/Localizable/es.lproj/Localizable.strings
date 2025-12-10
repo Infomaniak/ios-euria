@@ -3,8 +3,8 @@
  * Project: Euria
  * Locale: es, Spanish
  * Tagged: ios
- * Exported by: Baptiste Griva
- * Exported at: Wed, 26 Nov 2025 15:27:09 +0100
+ * Exported by: Valentin Perignon
+ * Exported at: Wed, 10 Dec 2025 08:32:38 +0100
  */
 
 /* loco:68ff77d06bd131d99b010d73 */
@@ -18,6 +18,15 @@
 
 /* loco:68ff7cb3182d19eb830448e3 */
 "connectionError" = "Problema de conexión a Internet";
+
+/* loco:691c8f906fa8174eb50e1a52 */
+"contentDescriptionChat" = "Chatear con Euria";
+
+/* loco:691c8f57b8a4b272960f7d62 */
+"contentDescriptionEphemeralChat" = "Chat efímero";
+
+/* loco:691c8feb42338df306011e62 */
+"contentDescriptionMicrophone" = "Chat de voz";
 
 /* loco:69036475604798d6e00235e2 */
 "iosOnboardingDatacenterDescription" = "La energía de la IA se revaloriza al 100%%.";
