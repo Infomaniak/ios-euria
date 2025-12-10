@@ -75,6 +75,7 @@ public struct UniversalLinkHandler: Sendable {
     }
 
     private func tryToHandleKSuiteUniversalLink(_ url: URL) -> NavigationDestination? {
+        guard url.scheme == "https://" else { return nil }
         let urlPath = url.path()
 
         if urlPath.starts(with: "/all"), let range = urlPath.range(of: "euria") {
