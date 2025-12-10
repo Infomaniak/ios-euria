@@ -3,8 +3,8 @@
  * Project: Euria
  * Locale: de, German
  * Tagged: ios
- * Exported by: Baptiste Griva
- * Exported at: Wed, 26 Nov 2025 15:27:09 +0100
+ * Exported by: Valentin Perignon
+ * Exported at: Wed, 10 Dec 2025 08:32:38 +0100
  */
 
 /* loco:68ff77d06bd131d99b010d73 */
@@ -19,8 +19,17 @@
 /* loco:68ff7cb3182d19eb830448e3 */
 "connectionError" = "Problem mit der Internetverbindung";
 
+/* loco:691c8f906fa8174eb50e1a52 */
+"contentDescriptionChat" = "Mit Euria chatten";
+
+/* loco:691c8f57b8a4b272960f7d62 */
+"contentDescriptionEphemeralChat" = "Kurzfristiger Chat";
+
+/* loco:691c8feb42338df306011e62 */
+"contentDescriptionMicrophone" = "Sprach-Chat";
+
 /* loco:69036475604798d6e00235e2 */
-"iosOnboardingDatacenterDescription" = "AI-Energie wird zu 100%% aufgewertet.";
+"iosOnboardingDatacenterDescription" = "AI-Energie wird zu 100%% wiederverwertet.";
 
 /* loco:68ff78eecc69b71eaf0c9713 */
 "noNetworkDescription" = "Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut, um Ihr Unterhaltung fortzusetzen";
@@ -32,7 +41,7 @@
 "onboardingDatacenterTitle" = "Euria heizt Häuser.";
 
 /* loco:68ff778f862219a3260cee52 */
-"onboardingEphemeralDescriptionTemplate" = "%@ Ihrer Vermittlungen.";
+"onboardingEphemeralDescriptionTemplate" = "%@ Ihrer Unterhaltungen.";
 
 /* loco:68ff1a4275f0868be50057e3 */
 "onboardingEphemeralTitle" = "Mit dem ephemeren Modus,";
