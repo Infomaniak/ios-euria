@@ -21,20 +21,48 @@
         {
           "blend-mode-specializations" : [
             {
-              "value" : "normal"
+              "value" : "multiply"
             },
             {
               "appearance" : "dark",
-              "value" : "normal"
+              "value" : "multiply"
             },
             {
               "appearance" : "tinted",
-              "value" : "normal"
+              "value" : "overlay"
             }
           ],
           "fill-specializations" : [
             {
-              "value" : "automatic"
+              "value" : "none"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : "none"
+            }
+          ],
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "4 – Layer.png",
+          "name" : "dark-blue"
+        },
+        {
+          "blend-mode-specializations" : [
+            {
+              "value" : "lighten"
+            },
+            {
+              "appearance" : "dark",
+              "value" : "plus-lighter"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : "lighten"
+            }
+          ],
+          "fill-specializations" : [
+            {
+              "value" : "none"
             },
             {
               "appearance" : "tinted",
@@ -45,43 +73,15 @@
           ],
           "glass" : false,
           "hidden" : false,
-          "image-name" : "1.png",
-          "name" : "1",
-          "position" : {
-            "scale" : 1.72,
-            "translation-in-points" : [
-              53.93421018985998,
-              -24.06246483550035
-            ]
-          }
+          "image-name" : "4 – Layer.png",
+          "name" : "light-blue"
         },
         {
-          "hidden" : false,
-          "image-name" : "11.png",
-          "name" : "11",
-          "position" : {
-            "scale" : 1.72,
-            "translation-in-points" : [
-              0.5421606490763224,
-              -2.9120360209060436
-            ]
-          }
+          "image-name" : "fond.svg",
+          "name" : "background"
         }
       ],
-      "shadow" : {
-        "kind" : "neutral",
-        "opacity" : 0.5
-      },
-      "translucency" : {
-        "enabled" : true,
-        "value" : 0.5
-      }
-    },
-    {
-      "hidden" : true,
-      "layers" : [
-
-      ],
+      "name" : "Group",
       "shadow" : {
         "kind" : "neutral",
         "opacity" : 0.5
