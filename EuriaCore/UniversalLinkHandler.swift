@@ -47,6 +47,15 @@ public struct UniversalLinkHandler: Sendable {
         return nil
     }
 
+    public func handlePossibleImportSession(_ url: URL) -> ImportHelper.ImportSessionUUID? {
+        let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        guard let sessionUUID = urlComponents?.queryItems?.first(where: { $0.name == "session_uuid" })?.value else {
+            return nil
+        }
+
+        return sessionUUID
+    }
+
     private func tryToHandleWidgetLink(_ url: URL) -> NavigationDestination? {
         switch url {
         case DeeplinkConstants.newChatURL:

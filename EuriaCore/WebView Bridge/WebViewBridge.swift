@@ -37,3 +37,20 @@ public struct GoToDestinationMessage: JSMessage {
         message = "goTo(\"\(destination)\")"
     }
 }
+
+public struct PrepareFilesForUploadMessage: JSMessage {
+    public typealias Result = [String]
+
+    public let message: String
+
+    init(files: [ImportedFile]) {
+        let jsonEncoder = JSONEncoder()
+        guard let jsonData = try? jsonEncoder.encode(files),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            message = "prepareFilesForUpload([])"
+            return
+        }
+
+        message = "prepareFilesForUpload(\(jsonString))"
+    }
+}

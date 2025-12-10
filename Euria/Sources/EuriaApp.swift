@@ -32,12 +32,14 @@ struct EuriaApp: App {
 
     @StateObject private var rootViewState = RootViewState()
     @StateObject private var universalLinksState = UniversalLinksState()
+    @StateObject private var uploadManager = UploadManager()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(rootViewState)
                 .environmentObject(universalLinksState)
+                .environmentObject(uploadManager)
                 .ikButtonTheme(.euria)
                 .onOpenURL(perform: handleURL)
                 .onReceive(NotificationCenter.default.publisher(for: .openURL).receive(on: DispatchQueue.main)) { notification in
@@ -50,10 +52,14 @@ struct EuriaApp: App {
 
     private func handleURL(_ url: URL) {
         let linkHandler = UniversalLinkHandler()
-        guard let universalLink = linkHandler.handlePossibleUniversalLink(url) else {
+        if let universalLink = linkHandler.handlePossibleUniversalLink(url) {
+            universalLinksState.linkedWebView = universalLink
             return
         }
 
-        universalLinksState.linkedWebView = universalLink
+        if let importSessionUUID = linkHandler.handlePossibleImportSession(url) {
+            uploadManager.handleImportSession(uuid: importSessionUUID)
+            return
+        }
     }
 }

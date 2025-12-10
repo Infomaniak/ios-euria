@@ -37,6 +37,7 @@ public struct MainView: View {
     @InjectService var accountManager: AccountManagerable
 
     @EnvironmentObject private var universalLinksState: UniversalLinksState
+    @EnvironmentObject private var uploadManager: UploadManager
 
     @StateObject private var webViewDelegate: EuriaWebViewDelegate
 
@@ -95,6 +96,7 @@ public struct MainView: View {
         .onAppear {
             networkMonitor.start()
             orientationManager.setOrientationLock(.all)
+            uploadManager.bridge = webViewDelegate
             if let navigationDestination = universalLinksState.linkedWebView {
                 navigateTo(navigationDestination.string)
             }
