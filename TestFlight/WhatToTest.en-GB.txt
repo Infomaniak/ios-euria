@@ -1,2 +1,2 @@
-Improvements and fixes:
- - Improvements of German translations
+What's new:
+ - Our app icon has never looked this good
