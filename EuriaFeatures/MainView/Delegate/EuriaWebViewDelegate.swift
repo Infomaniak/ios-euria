@@ -45,6 +45,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     private var pendingDestination: String?
 
     weak var webView: WKWebView?
+    var subscribers: [JSMessageTopic: any WebViewMessageSubscriber] = [:]
 
     enum Cookie: String {
         case userToken = "USER-TOKEN"
@@ -92,7 +93,12 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
 
     private func setupWebViewConfiguration(token: ApiToken?) {
         addCookies(token: token)
-        addUserContentControllers()
+        addSubscriber(self, topic: .keepDeviceAwake)
+        addSubscriber(self, topic: .logIn)
+        addSubscriber(self, topic: .logout)
+        addSubscriber(self, topic: .ready)
+        addSubscriber(self, topic: .signUp)
+        addSubscriber(self, topic: .unauthenticated)
     }
 
     private func addCookies(token: ApiToken?) {
@@ -105,12 +111,6 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
         let language = Locale.current.language.languageCode?.identifier ?? "en"
         if let languageCookie = createCookie(cookie: .userLanguage, value: language) {
             cookieStore.setCookie(languageCookie)
-        }
-    }
-
-    private func addUserContentControllers() {
-        for topic in EuriaWebViewDelegate.MessageTopic.allCases {
-            webConfiguration.userContentController.add(self, name: topic.rawValue)
         }
     }
 
@@ -166,6 +166,11 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
             Logger.general.error("Error while sending message to webview: \(error)")
             return nil
         }
+    }
+
+    func addSubscriber(_ subscriber: any WebViewMessageSubscriber, topic: JSMessageTopic) {
+        subscribers[topic] = subscriber
+        webConfiguration.userContentController.add(self, name: topic.rawValue)
     }
 
     func updateSessionToken(_ session: any UserSessionable) {
