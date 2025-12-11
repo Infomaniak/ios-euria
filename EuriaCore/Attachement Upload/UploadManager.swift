@@ -61,9 +61,10 @@ public class UploadManager: ObservableObject {
                     name: result.name,
                     mimeType: result.mimeType
                 ))
+            } catch UploadApiFetcher.DomainError.apiError(let rawJson) {
+                await bridge?.sendMessage(FileUploadError(ref: importedFile.ref, error: rawJson))
             } catch {
-                // TODO: Report error
-                print(error)
+                await bridge?.sendMessage(FileUploadError(ref: importedFile.ref, error: ""))
             }
         }
     }

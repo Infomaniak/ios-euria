@@ -82,3 +82,19 @@ public struct FileUploadDone: JSMessage {
         message = "fileUploadDone(\(jsonString))"
     }
 }
+
+public struct FileUploadError: JSMessage {
+    public typealias Result = Void
+
+    public let message: String
+
+    public init(ref: String, error: String) {
+        let jsonEncoder = JSONEncoder()
+        guard let jsonData = try? jsonEncoder.encode(FileUploadErrorJsResponse(ref: ref, error: error)),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            message = "fileUploadError({})"
+            return
+        }
+        message = "fileUploadError(\(jsonString))"
+    }
+}

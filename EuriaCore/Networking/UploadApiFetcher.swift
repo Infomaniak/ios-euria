@@ -28,11 +28,6 @@ struct UploadApiFetcher {
         case noData
     }
 
-    init(apiFetcher: ApiFetcher, organizationId: Int) {
-        self.apiFetcher = apiFetcher
-        self.organizationId = organizationId
-    }
-
     func uploadFile(importedFile: ImportedFile) async throws -> FileUploadResult {
         let uploadRequest = apiFetcher.authenticatedRequest(.uploadFile(organizationId: organizationId), method: .post)
         return try await withCheckedThrowingContinuation { continuation in
