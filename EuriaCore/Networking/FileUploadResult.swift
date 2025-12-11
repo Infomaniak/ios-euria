@@ -17,24 +17,9 @@
  */
 
 import Foundation
-import InfomaniakCore
 
-public extension ApiEnvironment {
-    var euriaHost: String {
-        return "euria.\(host)"
-    }
-}
-
-extension Endpoint {
-    private static var euriaHost: Endpoint {
-        return Endpoint(hostKeypath: \.euriaHost, path: "")
-    }
-
-    private static var base: Endpoint {
-        return .euriaHost.appending(path: "/api/1")
-    }
-
-    static func uploadFile(organizationId: Int) -> Endpoint {
-        return base.appending(path: "/accounts/\(organizationId)/files")
-    }
+struct FileUploadResult: Decodable, Sendable {
+    let id: String
+    let name: String
+    let mimeType: String
 }

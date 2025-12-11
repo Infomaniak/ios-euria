@@ -57,8 +57,9 @@ struct EuriaApp: App {
             return
         }
 
-        if let importSessionUUID = linkHandler.handlePossibleImportSession(url) {
-            uploadManager.handleImportSession(uuid: importSessionUUID)
+        if let importSessionUUID = linkHandler.handlePossibleImportSession(url),
+           case .mainView(let mainViewState) = rootViewState.state {
+            uploadManager.handleImportSession(uuid: importSessionUUID, userSession: mainViewState.userSession)
             return
         }
     }
