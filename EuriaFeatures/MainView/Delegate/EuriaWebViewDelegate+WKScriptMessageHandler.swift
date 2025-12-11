@@ -24,26 +24,21 @@ import WebKit
 
 // MARK: - WKScriptMessageHandler
 
-extension EuriaWebViewDelegate: WKScriptMessageHandler {
-    enum MessageTopic: String, CaseIterable {
-        case logout
-        case unauthenticated
-        case keepDeviceAwake
-        case ready
-        case logIn
-        case signUp
+extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let topic = JSMessageTopic(rawValue: message.name) else { return }
+
+        subscribers[topic]?.handleMessage(topic: topic, body: message.body)
     }
 
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let topic = MessageTopic(rawValue: message.name) else { return }
-
+    func handleMessage(topic: JSMessageTopic, body: Any) {
         switch topic {
         case .logout:
             logoutUser()
         case .unauthenticated:
             userTokenIsInvalid()
         case .keepDeviceAwake:
-            guard let shouldKeepDeviceAwake = message.body as? Bool else { return }
+            guard let shouldKeepDeviceAwake = body as? Bool else { return }
             keepDeviceAwake(shouldKeepDeviceAwake)
         case .ready:
             isReadyToReceiveEvents = true
