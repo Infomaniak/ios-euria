@@ -20,38 +20,78 @@ import Foundation
 
 @MainActor
 public class UploadManager: ObservableObject {
+    enum DomainError: Error {
+        case containerUnavailable
+        case noValidFiles
+        case invalidOrganizationId
+        case bridgeCommunicationFailed
+    }
+
     public weak var bridge: WebViewBridge?
 
     public init() {}
 
-    public func handleImportSession(uuid: String) {
+    public func handleImportSession(uuid: String, userSession: any UserSessionable) {
+        guard !userSession.isGuest else { return }
+
         Task {
-            await handleImportSession(uuid: uuid)
+            try await handleImportSession(uuid: uuid, userSession: userSession)
         }
     }
 
-    func handleImportSession(uuid: ImportHelper.ImportSessionUUID) async {
+    func handleImportSession(uuid: ImportHelper.ImportSessionUUID, userSession: any UserSessionable) async throws {
         guard let containerURL = FileManager.default
             .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier) else {
-            return
+            throw DomainError.containerUnavailable
         }
 
         let importHelper = ImportHelper(baseURL: containerURL, importUUID: uuid)
-        await prepareUploadSessionWith(importHelper: importHelper)
+        let validImportedFiles = try await prepareUploadSessionWith(importHelper: importHelper)
+
+        let organizationId = try await getOrganizationId()
+
+        let uploadApiFetcher = UploadApiFetcher(apiFetcher: userSession.apiFetcher, organizationId: organizationId)
+
+        for importedFile in validImportedFiles {
+            do {
+                let result = try await uploadApiFetcher.uploadFile(importedFile: importedFile)
+                await bridge?.sendMessage(FileUploadDone(
+                    ref: importedFile.ref,
+                    remoteId: result.id,
+                    name: result.name,
+                    mimeType: result.mimeType
+                ))
+            } catch UploadApiFetcher.DomainError.apiError(let rawJson) {
+                await bridge?.sendMessage(FileUploadError(ref: importedFile.ref, error: rawJson))
+            } catch {
+                await bridge?.sendMessage(FileUploadError(ref: importedFile.ref, error: ""))
+            }
+        }
     }
 
-    func prepareUploadSessionWith(importHelper: ImportHelper) async {
+    func prepareUploadSessionWith(importHelper: ImportHelper) async throws -> [ImportedFile] {
         let importedFileURLs = importHelper.importedFileURLs
         let importedFiles: [ImportedFile] = importedFileURLs.map { ImportedFile(fileURL: $0) }
 
         guard let validFileUUIDs = await bridge?.sendMessage(PrepareFilesForUploadMessage(files: importedFiles)) else {
-            return
+            throw DomainError.bridgeCommunicationFailed
         }
 
         let validFiles = importedFiles.filter { validFileUUIDs.contains($0.ref) }
 
         guard !validFiles.isEmpty else {
-            return
+            throw DomainError.noValidFiles
         }
+
+        return validFiles
+    }
+
+    func getOrganizationId() async throws -> Int {
+        guard let organizationId = await bridge?.sendMessage(GetCurrentOrganizationId()),
+              organizationId > 0 else {
+            throw DomainError.invalidOrganizationId
+        }
+
+        return organizationId
     }
 }

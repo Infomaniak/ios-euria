@@ -54,3 +54,47 @@ public struct PrepareFilesForUploadMessage: JSMessage {
         message = "prepareFilesForUpload(\(jsonString))"
     }
 }
+
+public struct GetCurrentOrganizationId: JSMessage {
+    public typealias Result = Int
+
+    public let message = "getCurrentOrganizationId()"
+}
+
+public struct FileUploadDone: JSMessage {
+    public typealias Result = Void
+
+    public let message: String
+
+    public init(ref: String, remoteId: String, name: String, mimeType: String) {
+        let jsonEncoder = JSONEncoder()
+        guard let jsonData = try? jsonEncoder.encode(
+            FileUploadSucceedJsResponse(
+                ref: ref,
+                id: remoteId,
+                name: name,
+                mimeType: mimeType
+            )),
+            let jsonString = String(data: jsonData, encoding: .utf8) else {
+            message = "fileUploadDone({})"
+            return
+        }
+        message = "fileUploadDone(\(jsonString))"
+    }
+}
+
+public struct FileUploadError: JSMessage {
+    public typealias Result = Void
+
+    public let message: String
+
+    public init(ref: String, error: String) {
+        let jsonEncoder = JSONEncoder()
+        guard let jsonData = try? jsonEncoder.encode(FileUploadErrorJsResponse(ref: ref, error: error)),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            message = "fileUploadError({})"
+            return
+        }
+        message = "fileUploadError(\(jsonString))"
+    }
+}
