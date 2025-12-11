@@ -53,7 +53,5 @@ public class UploadManager: ObservableObject {
         guard !validFiles.isEmpty else {
             return
         }
-
-
     }
 }
