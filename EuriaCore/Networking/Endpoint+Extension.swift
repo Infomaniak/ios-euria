@@ -36,6 +36,5 @@ extension Endpoint {
 
     static func uploadFile(organizationId: String) -> Endpoint {
         return base.appending(path: "/accounts/\(organizationId)/files")
-
     }
 }
