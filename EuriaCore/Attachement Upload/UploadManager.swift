@@ -55,16 +55,16 @@ public class UploadManager: ObservableObject {
         for importedFile in validImportedFiles {
             do {
                 let result = try await uploadApiFetcher.uploadFile(importedFile: importedFile)
-                await bridge?.sendMessage(FileUploadDone(
+                await bridge?.callFunction(FileUploadDone(
                     ref: importedFile.ref,
                     remoteId: result.id,
                     name: result.name,
                     mimeType: result.mimeType
                 ))
             } catch UploadApiFetcher.DomainError.apiError(let rawJson) {
-                await bridge?.sendMessage(FileUploadError(ref: importedFile.ref, error: rawJson))
+                await bridge?.callFunction(FileUploadError(ref: importedFile.ref, error: rawJson))
             } catch {
-                await bridge?.sendMessage(FileUploadError(ref: importedFile.ref, error: ""))
+                await bridge?.callFunction(FileUploadError(ref: importedFile.ref, error: ""))
             }
         }
     }
@@ -73,7 +73,7 @@ public class UploadManager: ObservableObject {
         let importedFileURLs = importHelper.importedFileURLs
         let importedFiles: [ImportedFile] = importedFileURLs.map { ImportedFile(fileURL: $0) }
 
-        guard let validFileUUIDs = await bridge?.sendMessage(PrepareFilesForUploadMessage(files: importedFiles)) else {
+        guard let validFileUUIDs = await bridge?.callFunction(PrepareFilesForUpload(files: importedFiles)) else {
             throw DomainError.bridgeCommunicationFailed
         }
 
@@ -87,7 +87,7 @@ public class UploadManager: ObservableObject {
     }
 
     func getOrganizationId() async throws -> Int {
-        guard let organizationId = await bridge?.sendMessage(GetCurrentOrganizationId()),
+        guard let organizationId = await bridge?.callFunction(GetCurrentOrganizationId()),
               organizationId > 0 else {
             throw DomainError.invalidOrganizationId
         }
