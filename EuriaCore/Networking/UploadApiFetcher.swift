@@ -16,8 +16,22 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import Alamofire
 import Foundation
-import InfomaniakCore
+@preconcurrency import InfomaniakCore
+
+actor UploadRequestAccessor {
+    private var uploadRequest: UploadRequest?
+
+    func setUploadRequest(_ request: UploadRequest?) {
+        uploadRequest = request
+    }
+
+    func cancelUpload() {
+        uploadRequest?.cancel()
+        uploadRequest = nil
+    }
+}
 
 struct UploadApiFetcher {
     let apiFetcher: ApiFetcher
@@ -30,32 +44,49 @@ struct UploadApiFetcher {
 
     func uploadFile(importedFile: ImportedFile) async throws -> FileUploadResult {
         let uploadRequest = apiFetcher.authenticatedRequest(.uploadFile(organizationId: organizationId), method: .post)
-        return try await withCheckedThrowingContinuation { continuation in
-            apiFetcher.authenticatedSession.upload(multipartFormData: { formData in
-                                                       formData.append(importedFile.fileURL, withName: "file")
-                                                   },
-                                                   with: uploadRequest.convertible)
-                .validate()
-                .responseDecodable(of: ApiResponse<FileUploadResult>.self, decoder: apiFetcher.decoder) { response in
-                    switch response.result {
-                    case .success(let apiResponse):
-                        if let result = apiResponse.data {
-                            continuation.resume(returning: result)
-                        } else if let rawJsonData = response.data,
-                                  let rawJson = String(data: rawJsonData, encoding: .utf8) {
-                            continuation.resume(throwing: DomainError.apiError(rawJson: rawJson))
-                        } else {
-                            continuation.resume(throwing: DomainError.noData)
+        let uploadRequestAccessor = UploadRequestAccessor()
+        return try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { continuation in
+                let uploadTask = apiFetcher.authenticatedSession.upload(multipartFormData: { formData in
+                                                                            formData.append(
+                                                                                importedFile.fileURL,
+                                                                                withName: "file"
+                                                                            )
+                                                                        },
+                                                                        with: uploadRequest.convertible)
+                    .validate()
+                    .responseDecodable(of: ApiResponse<FileUploadResult>.self, decoder: apiFetcher.decoder) { response in
+                        Task {
+                            await uploadRequestAccessor.setUploadRequest(nil)
                         }
-                    case .failure(let error):
-                        if let rawJsonData = response.data,
-                           let rawJson = String(data: rawJsonData, encoding: .utf8) {
-                            continuation.resume(throwing: DomainError.apiError(rawJson: rawJson))
-                        } else {
-                            continuation.resume(throwing: error)
+                        switch response.result {
+                        case .success(let apiResponse):
+                            if let result = apiResponse.data {
+                                continuation.resume(returning: result)
+                            } else if let rawJsonData = response.data,
+                                      let rawJson = String(data: rawJsonData, encoding: .utf8) {
+                                continuation.resume(throwing: DomainError.apiError(rawJson: rawJson))
+                            } else {
+                                continuation.resume(throwing: DomainError.noData)
+                            }
+                        case .failure(let error):
+                            if let rawJsonData = response.data,
+                               let rawJson = String(data: rawJsonData, encoding: .utf8) {
+                                continuation.resume(throwing: DomainError.apiError(rawJson: rawJson))
+                            } else {
+                                continuation.resume(throwing: error)
+                            }
                         }
                     }
+
+                Task {
+                    await uploadRequestAccessor.setUploadRequest(uploadTask)
                 }
+            }
+        } onCancel: {
+            Task {
+                await uploadRequestAccessor.cancelUpload()
+            }
         }
     }
 }
