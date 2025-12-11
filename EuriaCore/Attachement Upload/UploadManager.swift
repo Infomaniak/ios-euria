@@ -80,7 +80,7 @@ public class UploadManager: ObservableObject {
         let validFiles = importedFiles.filter { validFileUUIDs.contains($0.ref) }
 
         guard !validFiles.isEmpty else {
-            throw DomainError.containerUnavailable
+            throw DomainError.noValidFiles
         }
 
         return validFiles
