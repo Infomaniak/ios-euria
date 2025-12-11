@@ -154,14 +154,14 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
                 try? await Task.sleep(for: .milliseconds(200))
             }
 
-            await sendMessage(GoToDestinationMessage(destination: destination))
+            await callFunction(GoToDestination(destination: destination))
         }
     }
 
-    func sendMessage<M: JSMessage>(_ message: M) async -> M.Result? {
+    func callFunction<M: JSFunction>(_ function: M) async -> M.Result? {
         guard let webView else { return nil }
         do {
-            return try await webView.evaluateJavaScript(message.message) as? M.Result
+            return try await webView.evaluateJavaScript(function.declaration) as? M.Result
         } catch {
             Logger.general.error("Error while sending message to webview: \(error)")
             return nil
