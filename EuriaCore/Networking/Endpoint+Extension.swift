@@ -24,3 +24,17 @@ public extension ApiEnvironment {
         return "euria.\(host)"
     }
 }
+
+extension Endpoint {
+    private static var euriaHost: Endpoint {
+        return Endpoint(hostKeypath: \.euriaHost, path: "")
+    }
+
+    private static var base: Endpoint {
+        return .euriaHost.appending(path: "/api/1")
+    }
+
+    static func uploadFile(organizationId: String) -> Endpoint {
+        return base.appending(path: "/accounts/\(organizationId)/files")
+    }
+}

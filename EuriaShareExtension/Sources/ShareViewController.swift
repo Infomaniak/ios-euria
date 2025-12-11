@@ -50,6 +50,7 @@ extension NSItemProvider: @unchecked @retroactive Sendable {
             let getFile = try ItemProviderFileRepresentation(from: self)
             let result = try await getFile.result.get()
             return result.url
+
         // Keep it for forward compatibility
         default:
             throw ErrorDomain.unsupportedUnderlyingType

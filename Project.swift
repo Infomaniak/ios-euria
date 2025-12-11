@@ -73,7 +73,7 @@ let project = Project(
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
                 .target(name: "EuriaWidget"),
-				.target(name: "EuriaShareExtension"),
+                .target(name: "EuriaShareExtension"),
                 .external(name: "InfomaniakCoreCommonUI"),
                 .external(name: "InfomaniakDI"),
                 .external(name: "InfomaniakNotifications"),
@@ -177,6 +177,7 @@ let project = Project(
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
+                .external(name: "InfomaniakCore")
             ],
             settings: .settings(base: Constants.baseSettings),
             environmentVariables: [
