@@ -51,6 +51,8 @@ public class UploadManager: ObservableObject, WebViewMessageSubscriber {
             throw DomainError.containerUnavailable
         }
 
+        cleanupOrphanUploadContainers(baseContainerURL: containerURL, currentImportUUID: uuid)
+
         let importHelper = ImportHelper(baseURL: containerURL, importUUID: uuid)
         let validImportedFiles = try await prepareUploadSessionWith(importHelper: importHelper)
 
@@ -79,6 +81,8 @@ public class UploadManager: ObservableObject, WebViewMessageSubscriber {
             await uploadTask.value
             currentUploadTasks[importedFile.ref] = nil
         }
+
+        cleanupOrphanUploadContainers(baseContainerURL: containerURL, currentImportUUID: nil)
     }
 
     func prepareUploadSessionWith(importHelper: ImportHelper) async throws -> [ImportedFile] {
@@ -105,6 +109,19 @@ public class UploadManager: ObservableObject, WebViewMessageSubscriber {
         }
 
         return organizationId
+    }
+
+    func cleanupOrphanUploadContainers(baseContainerURL: URL, currentImportUUID: String?) {
+        let fileManager = FileManager.default
+        guard let containerContents = try? fileManager.contentsOfDirectory(at: baseContainerURL.importsDirectoryURL,
+                                                                           includingPropertiesForKeys: nil,
+                                                                           options: .skipsHiddenFiles) else {
+            return
+        }
+
+        for containerURL in containerContents where containerURL.lastPathComponent != currentImportUUID {
+            try? fileManager.removeItem(at: containerURL)
+        }
     }
 
     public func handleMessage(topic: JSMessageTopic, body: Any) {

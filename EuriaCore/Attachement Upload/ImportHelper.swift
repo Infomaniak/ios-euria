@@ -18,6 +18,12 @@
 
 import Foundation
 
+extension URL {
+    var importsDirectoryURL: URL {
+        appending(path: "imports", directoryHint: .isDirectory)
+    }
+}
+
 public struct ImportHelper {
     public typealias ImportSessionUUID = String
     public let importUUID: ImportSessionUUID
@@ -42,7 +48,7 @@ public struct ImportHelper {
     public init(baseURL: URL, importUUID: ImportSessionUUID) {
         self.importUUID = importUUID
         importURL = baseURL
-            .appending(path: "imports", directoryHint: .isDirectory)
+            .importsDirectoryURL
             .appending(path: importUUID, directoryHint: .isDirectory)
     }
 
