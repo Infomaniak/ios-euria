@@ -24,14 +24,8 @@ import UniformTypeIdentifiers
 
 extension NSItemProvider: @unchecked @retroactive Sendable {
     enum ErrorDomain: Error {
-        /// Not matching an UTI
-        case UTINotFound
-
         /// The type needs dedicated handling
         case unsupportedUnderlyingType
-
-        /// The item cannot be saved to a file
-        case notWritableItem
     }
 
     public func importItem() async throws -> URL {
@@ -58,6 +52,7 @@ extension NSItemProvider: @unchecked @retroactive Sendable {
     }
 }
 
+// periphery:ignore - ShareViewController is triggered by the system.
 final class ShareViewController: UIViewController {
     private lazy var progressContainerView: UIView = {
         let containerView = UIView()
