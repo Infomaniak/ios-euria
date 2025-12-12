@@ -84,6 +84,16 @@ public struct MainView: View {
                         webViewDelegate.error = nil
                     }
                 }
+                .alert(
+                    Text(CoreUILocalizable.reviewAlertTitle(Constants.appName)),
+                    isPresented: $webViewDelegate.isShowingReviewAlert
+                ) {
+                    Button(CoreUILocalizable.buttonYes) {
+                        @InjectService var reviewManager: ReviewManageable
+                        reviewManager.requestReview()
+                    }
+                    Button(CoreUILocalizable.buttonNo, role: .cancel) {}
+                }
             }
 
             if isShowingOfflineView {

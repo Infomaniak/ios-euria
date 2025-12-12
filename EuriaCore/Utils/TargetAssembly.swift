@@ -102,6 +102,9 @@ open class TargetAssembly {
             },
             Factory(type: InfomaniakNotifications.self) { _, _ in
                 InfomaniakNotifications(appGroup: Constants.appGroupIdentifier)
+            },
+            Factory(type: ReviewManageable.self) { _, _ in
+                ReviewManager(userDefaults: UserDefaults.shared)
             }
         ]
     }
