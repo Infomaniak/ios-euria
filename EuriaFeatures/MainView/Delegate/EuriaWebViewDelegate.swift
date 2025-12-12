@@ -31,6 +31,7 @@ import WebKit
 final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, ObservableObject {
     @Published var isLoaded = false
     @Published var isShowingRegisterView = false
+    @Published var isShowingReviewAlert = false
 
     @Published var isPresentingDocument: URL?
     @Published var error: ErrorDomain?
@@ -99,6 +100,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
         addSubscriber(self, topic: .ready)
         addSubscriber(self, topic: .signUp)
         addSubscriber(self, topic: .unauthenticated)
+        addSubscriber(self, topic: .openReview)
     }
 
     private func addCookies(token: ApiToken?) {
