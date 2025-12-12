@@ -18,25 +18,9 @@
 
 import Foundation
 
-public enum JSMessageTopic: String, CaseIterable {
-    case logout
-    case unauthenticated
-    case keepDeviceAwake
-    case ready
-    case logIn
-    case signUp
-    case cancelFileUpload
-}
-
-public protocol WebViewBridge: AnyObject {
-    var subscribers: [JSMessageTopic: WebViewMessageSubscriber] { get }
-
-    @discardableResult
-    func callFunction<M: JSFunction>(_ function: M) async -> M.Result?
-
-    func addSubscriber(_ subscriber: WebViewMessageSubscriber, topic: JSMessageTopic)
-}
-
-public protocol WebViewMessageSubscriber: AnyObject {
-    func handleMessage(topic: JSMessageTopic, body: Any)
+struct FileUploadSucceedJsResponse: Encodable, Sendable {
+    let ref: String
+    let id: String
+    let name: String
+    let mimeType: String
 }

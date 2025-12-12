@@ -73,6 +73,7 @@ let project = Project(
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
                 .target(name: "EuriaWidget"),
+                .target(name: "EuriaShareExtension"),
                 .external(name: "InfomaniakCoreCommonUI"),
                 .external(name: "InfomaniakDI"),
                 .external(name: "InfomaniakNotifications"),
@@ -150,6 +151,38 @@ let project = Project(
                 .external(name: "InfomaniakCoreSwiftUI")
             ],
             settings: .settings(base: Constants.baseSettings)
+        ),
+        .target(
+            name: "EuriaShareExtension",
+            destinations: Set<Destination>([.iPhone, .iPad]),
+            product: .appExtension,
+            bundleId: "\(Constants.baseIdentifier).ShareExtension",
+            deploymentTargets: Constants.deploymentTarget,
+            infoPlist: .extendingDefault(with: [
+                "CFBundleName": "$(PRODUCT_NAME)",
+                "CFBundleShortVersionString": "$(MARKETING_VERSION)",
+                "AppIdentifierPrefix": "$(AppIdentifierPrefix)",
+                "CFBundleDisplayName": "$(PRODUCT_NAME)",
+                "NSExtension": [
+                    "NSExtensionPointIdentifier": "com.apple.share-services",
+                    "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).ShareViewController",
+                    "NSExtensionAttributes": [
+                        "NSExtensionActivationRule": "SUBQUERY (extensionItems, $extensionItem, SUBQUERY ($extensionItem.attachments, $attachment, (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.data\")).@count == $extensionItem.attachments.@count ).@count > 0"
+                    ]
+                ]
+            ]),
+            sources: "EuriaShareExtension/Sources/**",
+            resources: [],
+            entitlements: "EuriaShareExtension/Resources/Euria.entitlements",
+            dependencies: [
+                .target(name: "EuriaCore"),
+                .target(name: "EuriaCoreUI"),
+                .external(name: "InfomaniakCore")
+            ],
+            settings: .settings(base: Constants.baseSettings),
+            environmentVariables: [
+                "hostname": .environmentVariable(value: "\(ProcessInfo.processInfo.hostName).", isEnabled: true)
+            ]
         )
     ],
     fileHeaderTemplate: .file("file-header-template.txt")
