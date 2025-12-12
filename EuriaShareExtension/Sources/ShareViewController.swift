@@ -100,6 +100,7 @@ final class ShareViewController: UIViewController {
         while responder != nil {
             if let application = responder as? UIApplication {
                 application.open(url)
+                return
             }
             responder = responder?.next
         }
