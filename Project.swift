@@ -167,7 +167,7 @@ let project = Project(
                     "NSExtensionPointIdentifier": "com.apple.share-services",
                     "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).ShareViewController",
                     "NSExtensionAttributes": [
-                        "NSExtensionActivationRule": "TRUEPREDICATE"
+                        "NSExtensionActivationRule": "SUBQUERY (extensionItems, $extensionItem, SUBQUERY ($extensionItem.attachments, $attachment, (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO \"public.data\")).@count == $extensionItem.attachments.@count ).@count > 0"
                     ]
                 ]
             ]),
