@@ -19,7 +19,7 @@
 import Foundation
 
 @MainActor
-public class UploadManager: ObservableObject {
+public class UploadManager: ObservableObject, WebViewMessageSubscriber {
     enum DomainError: Error {
         case containerUnavailable
         case noValidFiles
@@ -27,7 +27,13 @@ public class UploadManager: ObservableObject {
         case bridgeCommunicationFailed
     }
 
-    public weak var bridge: WebViewBridge?
+    public weak var bridge: WebViewBridge? {
+        didSet {
+            bridge?.addSubscriber(self, topic: .cancelFileUpload)
+        }
+    }
+
+    private var currentUploadTasks: [String: Task<Void, Never>] = [:]
 
     public init() {}
 
@@ -45,6 +51,8 @@ public class UploadManager: ObservableObject {
             throw DomainError.containerUnavailable
         }
 
+        cleanupOrphanUploadContainers(baseContainerURL: containerURL, currentImportUUID: uuid)
+
         let importHelper = ImportHelper(baseURL: containerURL, importUUID: uuid)
         let validImportedFiles = try await prepareUploadSessionWith(importHelper: importHelper)
 
@@ -52,21 +60,29 @@ public class UploadManager: ObservableObject {
 
         let uploadApiFetcher = UploadApiFetcher(apiFetcher: userSession.apiFetcher, organizationId: organizationId)
 
-        for importedFile in validImportedFiles {
-            do {
-                let result = try await uploadApiFetcher.uploadFile(importedFile: importedFile)
-                await bridge?.callFunction(FileUploadDone(
-                    ref: importedFile.ref,
-                    remoteId: result.id,
-                    name: result.name,
-                    mimeType: result.mimeType
-                ))
-            } catch UploadApiFetcher.DomainError.apiError(let rawJson) {
-                await bridge?.callFunction(FileUploadError(ref: importedFile.ref, error: rawJson))
-            } catch {
-                await bridge?.callFunction(FileUploadError(ref: importedFile.ref, error: ""))
+        await validImportedFiles.asyncForEach { importedFile in
+            let uploadTask = Task {
+                do {
+                    let result = try await uploadApiFetcher.uploadFile(importedFile: importedFile)
+                    await bridge?.callFunction(FileUploadDone(
+                        ref: importedFile.ref,
+                        remoteId: result.id,
+                        name: result.name,
+                        mimeType: result.mimeType
+                    ))
+                } catch UploadApiFetcher.DomainError.apiError(let rawJson) {
+                    await bridge?.callFunction(FileUploadError(ref: importedFile.ref, error: rawJson))
+                } catch {
+                    await bridge?.callFunction(FileUploadError(ref: importedFile.ref, error: ""))
+                }
             }
+
+            currentUploadTasks[importedFile.ref] = uploadTask
+            await uploadTask.value
+            currentUploadTasks[importedFile.ref] = nil
         }
+
+        cleanupOrphanUploadContainers(baseContainerURL: containerURL, currentImportUUID: nil)
     }
 
     func prepareUploadSessionWith(importHelper: ImportHelper) async throws -> [ImportedFile] {
@@ -93,5 +109,24 @@ public class UploadManager: ObservableObject {
         }
 
         return organizationId
+    }
+
+    func cleanupOrphanUploadContainers(baseContainerURL: URL, currentImportUUID: String?) {
+        let fileManager = FileManager.default
+        guard let containerContents = try? fileManager.contentsOfDirectory(at: baseContainerURL.importsDirectoryURL,
+                                                                           includingPropertiesForKeys: nil,
+                                                                           options: .skipsHiddenFiles) else {
+            return
+        }
+
+        for containerURL in containerContents where containerURL.lastPathComponent != currentImportUUID {
+            try? fileManager.removeItem(at: containerURL)
+        }
+    }
+
+    public func handleMessage(topic: JSMessageTopic, body: Any) {
+        guard topic == .cancelFileUpload,
+              let ref = body as? String else { return }
+        currentUploadTasks[ref]?.cancel()
     }
 }
