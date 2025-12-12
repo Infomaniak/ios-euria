@@ -84,18 +84,15 @@ public struct MainView: View {
                         webViewDelegate.error = nil
                     }
                 }
-                .alert(isPresented: $webViewDelegate.isShowingReviewAlert) {
-                    @InjectService var reviewManager: ReviewManageable
-                    let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
-                    return Alert(
-                        title: Text(CoreUILocalizable.reviewAlertTitle(appName)),
-                        primaryButton: .cancel(Text(CoreUILocalizable.buttonNo)),
-                        secondaryButton: .default(
-                            Text(CoreUILocalizable.buttonYes)
-                        ) {
-                            reviewManager.requestReview()
-                        }
-                    )
+                .alert(
+                    Text(CoreUILocalizable.reviewAlertTitle(Constants.appName)),
+                    isPresented: $webViewDelegate.isShowingReviewAlert) {
+                    Button(CoreUILocalizable.buttonYes) {
+                        @InjectService var reviewManager: ReviewManageable
+                        reviewManager.requestReview()
+                    }
+                    Button(CoreUILocalizable.buttonNo, role: .cancel) {}
+
                 }
             }
 
