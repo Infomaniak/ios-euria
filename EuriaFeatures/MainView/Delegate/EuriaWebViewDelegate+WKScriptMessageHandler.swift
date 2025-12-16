@@ -51,6 +51,8 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
             isShowingRegisterView = true
         case .openReview:
             isShowingReviewAlert = true
+        case .upgrade:
+            isShowingUpgradeView = true
         default:
             break
         }

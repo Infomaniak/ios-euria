@@ -27,6 +27,7 @@ public enum JSMessageTopic: String, CaseIterable {
     case signUp
     case cancelFileUpload
     case openReview
+    case upgrade
 }
 
 public protocol WebViewBridge: AnyObject {
