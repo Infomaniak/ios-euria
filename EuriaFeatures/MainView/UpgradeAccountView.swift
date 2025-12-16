@@ -23,12 +23,57 @@ import WebKit
 struct UpgradeAccountView: UIViewRepresentable {
     let accessToken: ApiToken
 
-    func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+    class Coordinator: NSObject, WKNavigationDelegate {
+        let initialRequest: URLRequest?
 
+        init(initialRequest: URLRequest?) {
+            self.initialRequest = initialRequest
+        }
+
+        func webView(
+            _ webView: WKWebView,
+            decidePolicyFor navigationAction: WKNavigationAction,
+            decisionHandler: @MainActor (WKNavigationActionPolicy) -> Void
+        ) {
+            guard let url = navigationAction.request.url else {
+                decisionHandler(.cancel)
+                return
+            }
+
+            guard url.scheme == "https",
+                  url.host == "manager.infomaniak.com" ||
+                  url.host == "welcome.infomaniak.com" else {
+                decisionHandler(.cancel)
+                return
+            }
+
+            if navigationAction.targetFrame == nil {
+                decisionHandler(.cancel)
+                return
+            }
+
+            decisionHandler(.allow)
+        }
+    }
+
+    func makeCoordinator() -> Coordinator {
+        let initialRequest: URLRequest?
         if let url = Constants.autologinUrl(to: "https://welcome.infomaniak.com/signup/euria") {
             var request = URLRequest(url: url)
             request.setValue("Bearer \(accessToken.accessToken)", forHTTPHeaderField: "Authorization")
+            initialRequest = request
+        } else {
+            initialRequest = nil
+        }
+        return Coordinator(initialRequest: initialRequest)
+    }
+
+    func makeUIView(context: Context) -> WKWebView {
+        let configuration = WKWebViewConfiguration()
+        let webView = WKWebView(frame: .zero, configuration: configuration)
+        webView.navigationDelegate = context.coordinator
+
+        if let request = context.coordinator.initialRequest {
             webView.load(request)
         }
 
