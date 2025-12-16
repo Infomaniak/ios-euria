@@ -171,8 +171,10 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     }
 
     func addSubscriber(_ subscriber: any WebViewMessageSubscriber, topic: JSMessageTopic) {
+        if subscribers[topic] == nil {
+            webConfiguration.userContentController.add(self, name: topic.rawValue)
+        }
         subscribers[topic] = subscriber
-        webConfiguration.userContentController.add(self, name: topic.rawValue)
     }
 
     func updateSessionToken(_ session: any UserSessionable) {
