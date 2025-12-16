@@ -102,7 +102,7 @@ struct QuickActionsMediumView: View {
                 OvalIconLinkView(
                     image: Image(systemName: "camera"),
                     label: EuriaResourcesStrings.contentDescriptionMicrophone,
-                    url: DeeplinkConstants.speechURL
+                    url: DeeplinkConstants.cameraURL
                 )
             }
         }

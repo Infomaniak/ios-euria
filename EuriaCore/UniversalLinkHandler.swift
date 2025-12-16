@@ -64,6 +64,8 @@ public struct UniversalLinkHandler: Sendable {
             return NavigationDestination(string: NavigationConstants.ephemeralRoute)
         case DeeplinkConstants.speechURL:
             return NavigationDestination(string: NavigationConstants.speechRoute)
+        case DeeplinkConstants.cameraURL:
+            return NavigationDestination(string: NavigationConstants.cameraRoute)
         default:
             return nil
         }
