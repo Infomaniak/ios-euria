@@ -100,8 +100,8 @@ struct QuickActionsMediumView: View {
                 )
                 Spacer(minLength: IKPadding.mini)
                 OvalIconLinkView(
-                    image: Image(systemName: "camera"),
-                    label: EuriaResourcesStrings.contentDescriptionMicrophone,
+                    image: EuriaResourcesAsset.Images.camera.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionCamera,
                     url: DeeplinkConstants.cameraURL
                 )
             }
