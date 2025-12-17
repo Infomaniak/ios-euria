@@ -23,15 +23,9 @@ import WebKit
 struct UpgradeAccountView: UIViewRepresentable {
     let accessToken: ApiToken
     static let welcomeRoute = URL(string: "https://welcome.infomaniak.com/signup/euria")!
-    static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)
+    static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)!
 
     class Coordinator: NSObject, WKNavigationDelegate {
-        let initialRequest: URLRequest?
-
-        init(initialRequest: URLRequest?) {
-            self.initialRequest = initialRequest
-        }
-
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction,
@@ -42,14 +36,8 @@ struct UpgradeAccountView: UIViewRepresentable {
                 return
             }
 
-            guard url.scheme == "https",
-                  url.host == managerRoute?.host() ||
-                  url.host == welcomeRoute.host() else {
-                decisionHandler(.cancel)
-                return
-            }
-
-            if navigationAction.targetFrame == nil {
+            guard url.host == managerRoute.host() ||
+                url.host == welcomeRoute.host() else {
                 decisionHandler(.cancel)
                 return
             }
@@ -59,15 +47,7 @@ struct UpgradeAccountView: UIViewRepresentable {
     }
 
     func makeCoordinator() -> Coordinator {
-        let initialRequest: URLRequest?
-        if let url = UpgradeAccountView.managerRoute {
-            var request = URLRequest(url: url)
-            request.setValue("Bearer \(accessToken.accessToken)", forHTTPHeaderField: "Authorization")
-            initialRequest = request
-        } else {
-            initialRequest = nil
-        }
-        return Coordinator(initialRequest: initialRequest)
+        return Coordinator()
     }
 
     func makeUIView(context: Context) -> WKWebView {
@@ -75,9 +55,9 @@ struct UpgradeAccountView: UIViewRepresentable {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
 
-        if let request = context.coordinator.initialRequest {
-            webView.load(request)
-        }
+        var request = URLRequest(url: UpgradeAccountView.managerRoute)
+        request.setValue("Bearer \(accessToken.accessToken)", forHTTPHeaderField: "Authorization")
+        webView.load(request)
 
         return webView
     }

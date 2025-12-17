@@ -32,6 +32,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
     }
 
     func handleMessage(topic: JSMessageTopic, body: Any) {
+        @InjectService var accountManager: AccountManagerable
         switch topic {
         case .logout:
             logoutUser()
@@ -52,7 +53,14 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
         case .openReview:
             isShowingReviewAlert = true
         case .upgrade:
-            isShowingUpgradeView = true
+            Task {
+                let session = await accountManager.currentSession
+                guard let token = session?.apiFetcher.currentToken else {
+                    upgradeViewToken = nil
+                    return
+                }
+                upgradeViewToken = UpgradeTokenItem(token: token)
+            }
         default:
             break
         }

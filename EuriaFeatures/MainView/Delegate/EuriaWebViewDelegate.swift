@@ -32,7 +32,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     @Published var isLoaded = false
     @Published var isShowingRegisterView = false
     @Published var isShowingReviewAlert = false
-    @Published var isShowingUpgradeView = false
+    @Published var upgradeViewToken: UpgradeTokenItem?
 
     @Published var isPresentingDocument: URL?
     @Published var error: ErrorDomain?
@@ -213,4 +213,9 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
             }
         }
     }
+}
+
+struct UpgradeTokenItem: Identifiable {
+    var id: String { return token.accessToken }
+    let token: ApiToken
 }

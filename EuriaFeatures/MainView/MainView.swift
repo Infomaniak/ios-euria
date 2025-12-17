@@ -130,10 +130,8 @@ public struct MainView: View {
                 loginHandler.loginAfterAccountCreation(from: viewController)
             }
         }
-        .sheet(isPresented: $webViewDelegate.isShowingUpgradeView) {
-            if let accessToken = session.apiFetcher.currentToken {
-                UpgradeAccountView(accessToken: accessToken)
-            }
+        .sheet(item: $webViewDelegate.upgradeViewToken) { accessToken in
+            UpgradeAccountView(accessToken: accessToken.token)
         }
         .onReceive(accountManager.objectWillChange) { _ in
             Task {
