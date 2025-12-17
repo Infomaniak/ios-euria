@@ -64,9 +64,9 @@ struct QuickActionsSmallView: View {
 
             HStack(spacing: 0) {
                 CircleIconLinkView(
-                    image: EuriaResourcesAsset.Images.clockDashed.swiftUIImage,
-                    label: EuriaResourcesStrings.contentDescriptionEphemeralChat,
-                    url: DeeplinkConstants.ephemeralURL
+                    image: EuriaResourcesAsset.Images.camera.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionCamera,
+                    url: DeeplinkConstants.cameraURL
                 )
                 Spacer(minLength: IKPadding.mini)
                 CircleIconLinkView(
@@ -94,15 +94,15 @@ struct QuickActionsMediumView: View {
                 )
                 Spacer(minLength: IKPadding.mini)
                 OvalIconLinkView(
-                    image: EuriaResourcesAsset.Images.microphone.swiftUIImage,
-                    label: EuriaResourcesStrings.contentDescriptionMicrophone,
-                    url: DeeplinkConstants.speechURL
-                )
-                Spacer(minLength: IKPadding.mini)
-                OvalIconLinkView(
                     image: EuriaResourcesAsset.Images.camera.swiftUIImage,
                     label: EuriaResourcesStrings.contentDescriptionCamera,
                     url: DeeplinkConstants.cameraURL
+                )
+                Spacer(minLength: IKPadding.mini)
+                OvalIconLinkView(
+                    image: EuriaResourcesAsset.Images.microphone.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionMicrophone,
+                    url: DeeplinkConstants.speechURL
                 )
             }
         }
