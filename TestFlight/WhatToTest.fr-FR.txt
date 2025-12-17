@@ -1,2 +1,3 @@
 Quoi de neuf :
- - Partagez vos documents (photos, audio…) depuis votre app préférée vers Euria
+ - Une nouvelle taille de widget vient d'apparaître ! Le widget Euria est maintenant disponible en medium et large !
+ - Mettez en avant vos talents de photographes et activez l'appareil photo directement depuis le widget
