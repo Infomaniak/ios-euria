@@ -18,6 +18,8 @@
 
 import Foundation
 import InfomaniakCore
+import InfomaniakCoreCommonUI
+import InfomaniakDI
 
 public struct NavigationDestination: Identifiable, Equatable {
     public var id: String { return string }
@@ -57,14 +59,20 @@ public struct UniversalLinkHandler: Sendable {
     }
 
     private func tryToHandleWidgetLink(_ url: URL) -> NavigationDestination? {
+        @InjectService var matomoUtils: MatomoUtils
+
         switch url {
         case DeeplinkConstants.newChatURL:
+            matomoUtils.track(eventWithCategory: .widget, name: "newChat")
             return NavigationDestination(string: "/")
         case DeeplinkConstants.ephemeralURL:
+            matomoUtils.track(eventWithCategory: .widget, name: "ephemeralMode")
             return NavigationDestination(string: NavigationConstants.ephemeralRoute)
         case DeeplinkConstants.speechURL:
+            matomoUtils.track(eventWithCategory: .widget, name: "enableMicrophone")
             return NavigationDestination(string: NavigationConstants.speechRoute)
         case DeeplinkConstants.cameraURL:
+            matomoUtils.track(eventWithCategory: .widget, name: "openCamera")
             return NavigationDestination(string: NavigationConstants.cameraRoute)
         default:
             return nil
