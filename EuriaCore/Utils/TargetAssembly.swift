@@ -105,6 +105,13 @@ open class TargetAssembly {
             },
             Factory(type: ReviewManageable.self) { _, _ in
                 ReviewManager(userDefaults: UserDefaults.shared)
+            },
+            Factory(type: MatomoUtils.self) { _, _ in
+                let matomo = MatomoUtils(siteId: MatomoUtils.euriaSiteID, baseURL: MatomoUtils.siteURL)
+                #if DEBUG
+                matomo.optOut(true)
+                #endif
+                return matomo
             }
         ]
     }
