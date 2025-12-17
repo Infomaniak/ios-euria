@@ -192,6 +192,7 @@ public struct MainView: View {
     private func navigateTo(_ destination: String) {
         if destination == NavigationConstants.cameraRoute {
             isShowingCamera = true
+            universalLinksState.linkedWebView = nil
             return
         }
 
