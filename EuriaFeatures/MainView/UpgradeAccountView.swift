@@ -16,16 +16,30 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import InfomaniakCore
+import InfomaniakCreateAccount
 import InfomaniakLogin
 import SwiftUI
 import WebKit
 
 struct UpgradeAccountView: UIViewRepresentable {
+    @Environment(\.dismiss) private var dismiss
+
     let accessToken: ApiToken
+    let onUpgradeCompleted: (() -> Void)?
+
     static let welcomeRoute = URL(string: "https://welcome.infomaniak.com/signup/euria")!
     static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)!
 
     class Coordinator: NSObject, WKNavigationDelegate {
+        let dismissAction: () -> Void
+        let onUpgradeCompleted: (() -> Void)?
+
+        init(dismissAction: @escaping () -> Void, onUpgradeCompleted: (() -> Void)?) {
+            self.dismissAction = dismissAction
+            self.onUpgradeCompleted = onUpgradeCompleted
+        }
+
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction,
@@ -36,18 +50,26 @@ struct UpgradeAccountView: UIViewRepresentable {
                 return
             }
 
-            guard url.host == managerRoute.host() ||
-                url.host == welcomeRoute.host() else {
+            if url.host == ApiEnvironment.current.euriaHost {
                 decisionHandler(.cancel)
-                return
+                onUpgradeCompleted?()
+                dismissAction()
+            } else {
+                guard url.host == managerRoute.host() ||
+                    url.host == welcomeRoute.host() else {
+                    decisionHandler(.cancel)
+                    return
+                }
+                decisionHandler(.allow)
             }
-
-            decisionHandler(.allow)
         }
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator()
+        Coordinator(
+            dismissAction: { dismiss() },
+            onUpgradeCompleted: onUpgradeCompleted
+        )
     }
 
     func makeUIView(context: Context) -> WKWebView {

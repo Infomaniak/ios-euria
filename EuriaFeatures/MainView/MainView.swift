@@ -131,7 +131,9 @@ public struct MainView: View {
             }
         }
         .sheet(item: $webViewDelegate.upgradeViewToken) { accessToken in
-            UpgradeAccountView(accessToken: accessToken.token)
+            UpgradeAccountView(accessToken: accessToken.token) {
+                webViewDelegate.reloadWebView()
+            }
         }
         .onReceive(accountManager.objectWillChange) { _ in
             Task {
