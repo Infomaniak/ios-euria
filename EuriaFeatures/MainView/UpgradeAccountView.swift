@@ -22,6 +22,8 @@ import WebKit
 
 struct UpgradeAccountView: UIViewRepresentable {
     let accessToken: ApiToken
+    static let welcomeRoute = URL(string: "https://welcome.infomaniak.com/signup/euria")!
+    static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)
 
     class Coordinator: NSObject, WKNavigationDelegate {
         let initialRequest: URLRequest?
@@ -41,8 +43,8 @@ struct UpgradeAccountView: UIViewRepresentable {
             }
 
             guard url.scheme == "https",
-                  url.host == "manager.infomaniak.com" ||
-                  url.host == "welcome.infomaniak.com" else {
+                  url.host == managerRoute?.host() ||
+                  url.host == welcomeRoute.host() else {
                 decisionHandler(.cancel)
                 return
             }
@@ -58,7 +60,7 @@ struct UpgradeAccountView: UIViewRepresentable {
 
     func makeCoordinator() -> Coordinator {
         let initialRequest: URLRequest?
-        if let url = Constants.autologinUrl(to: "https://welcome.infomaniak.com/signup/euria") {
+        if let url = UpgradeAccountView.managerRoute {
             var request = URLRequest(url: url)
             request.setValue("Bearer \(accessToken.accessToken)", forHTTPHeaderField: "Authorization")
             initialRequest = request
