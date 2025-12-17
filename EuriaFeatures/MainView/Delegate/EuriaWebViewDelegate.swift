@@ -189,4 +189,26 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
         isReadyToReceiveEvents = false
         webView?.reload()
     }
+
+    func uploadCameraImage(image: UIImage, session: UserSessionable, uploadManager: UploadManager) {
+        Task {
+            guard let data = image.jpegData(compressionQuality: 0.9),
+                  let containerURL = FileManager.default
+                  .containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupIdentifier) else {
+                return
+            }
+
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent("camera-\(UUID().uuidString).jpg")
+
+            do {
+                try data.write(to: tempURL)
+
+                let importHelper = ImportHelper(baseURL: containerURL)
+                try await importHelper.moveURLsToImportDirectory([tempURL])
+
+                uploadManager.handleImportSession(uuid: importHelper.importUUID, userSession: session)
+            }
+        }
+    }
 }

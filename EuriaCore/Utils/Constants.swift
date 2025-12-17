@@ -33,6 +33,7 @@ public enum DeeplinkConstants {
     public static let newChatURL = URL(string: "euria://widget-new-chat")!
     public static let ephemeralURL = URL(string: "euria://widget-ephemeral")!
     public static let speechURL = URL(string: "euria://widget-speech")!
+    public static let cameraURL = URL(string: "euria://widget-camera")!
 
     public static func importURLFor(uuid: String) -> URL {
         return URL(string: "euria://shareextension-import?session_uuid=\(uuid)")!
@@ -42,4 +43,5 @@ public enum DeeplinkConstants {
 public enum NavigationConstants {
     public static let ephemeralRoute = "/?ephemeral=true"
     public static let speechRoute = "/?speech=true"
+    public static let cameraRoute = "/?camera=true"
 }

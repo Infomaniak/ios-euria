@@ -24,12 +24,14 @@ import InAppTwoFactorAuthentication
 import InfomaniakConcurrency
 import InfomaniakCore
 import InfomaniakCoreCommonUI
+import InfomaniakCoreSwiftUI
 import InfomaniakCoreUIResources
 import InfomaniakCreateAccount
 import InfomaniakDI
 import InfomaniakLogin
 import InfomaniakNotifications
 import SwiftUI
+import UIKit
 import WebKit
 
 public struct MainView: View {
@@ -43,6 +45,9 @@ public struct MainView: View {
 
     @State private var isShowingWebView = true
     @State private var isShowingErrorAlert = false
+
+    @State private var isShowingCamera = false
+    @State private var selectedCameraImage: UIImage?
 
     @ObservedObject var networkMonitor = NetworkMonitor.shared
     @ObservedObject var loginHandler = LoginHandler()
@@ -133,6 +138,17 @@ public struct MainView: View {
                 webViewDelegate.updateSessionToken(session)
             }
         }
+        .fullScreenCover(isPresented: $isShowingCamera) {
+            CameraPickerView(selectedImage: $selectedCameraImage)
+                .ignoresSafeArea()
+        }
+        .onChange(of: selectedCameraImage) { image in
+            isShowingCamera = false
+            if let image {
+                webViewDelegate.uploadCameraImage(image: image, session: session, uploadManager: uploadManager)
+            }
+            selectedCameraImage = nil
+        }
         .sceneLifecycle(willEnterForeground: willEnterForeground, didEnterBackground: didEnterBackground)
     }
 
@@ -174,6 +190,12 @@ public struct MainView: View {
     }
 
     private func navigateTo(_ destination: String) {
+        if destination == NavigationConstants.cameraRoute {
+            isShowingCamera = true
+            universalLinksState.linkedWebView = nil
+            return
+        }
+
         webViewDelegate.enqueueNavigation(destination: destination)
         universalLinksState.linkedWebView = nil
     }

@@ -43,6 +43,19 @@ extension View {
 }
 
 struct QuickActionsWidgetView: View {
+    @Environment(\.widgetFamily) private var widgetFamily
+
+    var body: some View {
+        switch widgetFamily {
+        case .systemMedium:
+            QuickActionsMediumView()
+        default:
+            QuickActionsSmallView()
+        }
+    }
+}
+
+struct QuickActionsSmallView: View {
     var body: some View {
         VStack(spacing: 0) {
             NewConversationLinkView(url: DeeplinkConstants.newChatURL)
@@ -51,12 +64,42 @@ struct QuickActionsWidgetView: View {
 
             HStack(spacing: 0) {
                 CircleIconLinkView(
+                    image: EuriaResourcesAsset.Images.camera.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionCamera,
+                    url: DeeplinkConstants.cameraURL
+                )
+                Spacer(minLength: IKPadding.mini)
+                CircleIconLinkView(
+                    image: EuriaResourcesAsset.Images.microphone.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionMicrophone,
+                    url: DeeplinkConstants.speechURL
+                )
+            }
+        }
+    }
+}
+
+struct QuickActionsMediumView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            NewConversationLinkView(url: DeeplinkConstants.newChatURL)
+
+            Spacer(minLength: IKPadding.mini)
+
+            HStack(spacing: 0) {
+                OvalIconLinkView(
                     image: EuriaResourcesAsset.Images.clockDashed.swiftUIImage,
                     label: EuriaResourcesStrings.contentDescriptionEphemeralChat,
                     url: DeeplinkConstants.ephemeralURL
                 )
                 Spacer(minLength: IKPadding.mini)
-                CircleIconLinkView(
+                OvalIconLinkView(
+                    image: EuriaResourcesAsset.Images.camera.swiftUIImage,
+                    label: EuriaResourcesStrings.contentDescriptionCamera,
+                    url: DeeplinkConstants.cameraURL
+                )
+                Spacer(minLength: IKPadding.mini)
+                OvalIconLinkView(
                     image: EuriaResourcesAsset.Images.microphone.swiftUIImage,
                     label: EuriaResourcesStrings.contentDescriptionMicrophone,
                     url: DeeplinkConstants.speechURL
@@ -76,12 +119,19 @@ struct QuickActionsWidget: Widget {
         }
         .configurationDisplayName(EuriaResourcesStrings.widgetQuickActionsTitle)
         .description(EuriaResourcesStrings.widgetQuickActionsDescription)
-        .supportedFamilies([.systemSmall])
+        .supportedFamilies([.systemSmall, .systemMedium])
     }
 }
 
 @available(iOSApplicationExtension 17.0, *)
 #Preview("System Small", as: .systemSmall) {
+    QuickActionsWidget()
+} timeline: {
+    QuickActionsEntry(date: .now)
+}
+
+@available(iOSApplicationExtension 17.0, *)
+#Preview("System Medium", as: .systemMedium) {
     QuickActionsWidget()
 } timeline: {
     QuickActionsEntry(date: .now)
