@@ -130,6 +130,11 @@ public struct MainView: View {
                 loginHandler.loginAfterAccountCreation(from: viewController)
             }
         }
+        .sheet(item: $webViewDelegate.upgradeViewToken) { accessToken in
+            UpgradeAccountView(accessToken: accessToken.token) {
+                webViewDelegate.reloadWebView()
+            }
+        }
         .onReceive(accountManager.objectWillChange) { _ in
             Task {
                 guard let session = await accountManager.currentSession else {

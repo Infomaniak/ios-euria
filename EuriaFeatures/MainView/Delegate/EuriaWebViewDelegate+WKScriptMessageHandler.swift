@@ -51,6 +51,8 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
             isShowingRegisterView = true
         case .openReview:
             isShowingReviewAlert = true
+        case .upgrade:
+            upgradeUserOffer()
         default:
             break
         }
@@ -86,5 +88,16 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
 
     private func keepDeviceAwake(_ shouldKeepDeviceAwake: Bool) {
         UIApplication.shared.isIdleTimerDisabled = shouldKeepDeviceAwake
+    }
+
+    private func upgradeUserOffer() {
+        Task {
+            @InjectService var accountManager: AccountManagerable
+            guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
+                return
+            }
+
+            upgradeViewToken = UpgradeTokenItem(token: token)
+        }
     }
 }
