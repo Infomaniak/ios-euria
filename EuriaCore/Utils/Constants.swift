@@ -41,6 +41,7 @@ public enum DeeplinkConstants {
 }
 
 public enum NavigationConstants {
+    public static let newChatRoute = "/"
     public static let ephemeralRoute = "/?ephemeral=true"
     public static let speechRoute = "/?speech=true"
     public static let cameraRoute = "/?camera=true"

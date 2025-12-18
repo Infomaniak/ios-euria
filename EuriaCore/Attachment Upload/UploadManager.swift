@@ -41,6 +41,7 @@ public class UploadManager: ObservableObject, WebViewMessageSubscriber {
         guard !userSession.isGuest else { return }
 
         Task {
+            await bridge?.callFunction(GoToDestination(destination: NavigationConstants.newChatRoute))
             try await handleImportSession(uuid: uuid, userSession: userSession)
         }
     }
