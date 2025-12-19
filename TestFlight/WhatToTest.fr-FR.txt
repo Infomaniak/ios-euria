@@ -1,3 +1,3 @@
 Quoi de neuf :
- - Une nouvelle taille de widget vient d'apparaître ! Le widget Euria est maintenant disponible en medium et large !
- - Mettez en avant vos talents de photographes et activez l'appareil photo directement depuis le widget
+ - Nous avons nettoyé le moindre recoin.
+ - Il restait quelques bouts tranchants dans le code, on les a limé pour vous ! 
