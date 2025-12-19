@@ -64,7 +64,7 @@ public struct UniversalLinkHandler: Sendable {
         switch url {
         case DeeplinkConstants.newChatURL:
             matomoUtils.track(eventWithCategory: .widget, name: "newChat")
-            return NavigationDestination(string: "/")
+            return NavigationDestination(string: NavigationConstants.newChatRoute)
         case DeeplinkConstants.ephemeralURL:
             matomoUtils.track(eventWithCategory: .widget, name: "ephemeralMode")
             return NavigationDestination(string: NavigationConstants.ephemeralRoute)
