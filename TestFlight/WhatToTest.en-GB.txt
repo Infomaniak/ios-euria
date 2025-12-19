@@ -1,3 +1,3 @@
 What’s new:
-- A brand-new widget size has appeared! The Euria widget is now available in medium and large.
-- Show off your photography skills and launch the camera directly from the widget.
+- We cleaned up every nook and cranny.
+- There were still a few sharp edges left in the code, we filed them down for you!
