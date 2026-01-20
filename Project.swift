@@ -45,6 +45,7 @@ let mainiOSAppFeatures = [
 
 let project = Project(
     name: "Euria",
+    options: .options(developmentRegion: "en"),
     targets: mainiOSAppFeatures.asTargets + [
         .target(
             name: "Euria",
