@@ -16,12 +16,18 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCore
 import Foundation
+import InfomaniakCore
 import WebKit
 
 // MARK: - WKNavigationDelegate
 
 extension EuriaWebViewDelegate: WKNavigationDelegate {
+    private var authorizedHosts: Set<String> {
+        return [host, ApiEnvironment.current.driveHost, ApiEnvironment.current.kDriveHost]
+    }
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
         guard !navigationAction.shouldPerformDownload else {
             return .download
@@ -31,7 +37,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
             return .allow
         }
 
-        if navigationHost == host {
+        if authorizedHosts.contains(navigationHost) {
             return .allow
         }
 
