@@ -1,8 +1,6 @@
 name: CI workflow
 
-on:
-  pull_request:
-    branches: [ main, protected/* ]
+on: pull_request
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -14,12 +12,9 @@ jobs:
     runs-on: [ self-hosted, iOS ]
 
     steps:
-      - uses: jdx/mise-action@v2
-        with:
-          cache: false
-          experimental: true
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+      - uses: jdx/mise-action@6d1e696aa24c1aa1bcc1adea0212707c71ab78a8
       - name: Generate
         run: tuist install && tuist generate
       - name: Check implicit imports
