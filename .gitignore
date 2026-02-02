@@ -66,3 +66,6 @@ DerivedData/
 ### Tuist ###
 Derived/
 release/
+
+### Import Loco ###
+.import_loco_api
