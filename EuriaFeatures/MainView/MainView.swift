@@ -112,8 +112,12 @@ public struct MainView: View {
             networkMonitor.start()
             orientationManager.setOrientationLock(.all)
             uploadManager.bridge = webViewDelegate
+            webViewDelegate.setUploadManager(uploadManager)
             if let navigationDestination = universalLinksState.linkedWebView {
                 navigateTo(navigationDestination.string)
+            }
+            if let importSession = universalLinksState.importSessionUUID {
+                webViewDelegate.enqueueUpload(importSession: importSession)
             }
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
@@ -123,6 +127,10 @@ public struct MainView: View {
         .onChange(of: universalLinksState.linkedWebView) { navigationDestination in
             guard let navigationDestination else { return }
             navigateTo(navigationDestination.string)
+        }
+        .onChange(of: universalLinksState.importSessionUUID) { importSessionUUID in
+            guard let importSessionUUID else { return }
+            webViewDelegate.enqueueUpload(importSession: importSessionUUID)
         }
         .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
             RegisterView(registrationProcess: .euria) { viewController in

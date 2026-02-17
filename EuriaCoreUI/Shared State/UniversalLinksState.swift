@@ -22,6 +22,7 @@ import Foundation
 @MainActor
 public class UniversalLinksState: ObservableObject {
     @Published public var linkedWebView: NavigationDestination?
+    @Published public var importSessionUUID: String?
 
     public init() {}
 }

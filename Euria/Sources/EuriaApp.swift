@@ -58,8 +58,8 @@ struct EuriaApp: App {
         }
 
         if let importSessionUUID = linkHandler.handlePossibleImportSession(url),
-           case .mainView(let mainViewState) = rootViewState.state {
-            uploadManager.handleImportSession(uuid: importSessionUUID, userSession: mainViewState.userSession)
+           case .mainView = rootViewState.state {
+            universalLinksState.importSessionUUID = importSessionUUID
             return
         }
     }
