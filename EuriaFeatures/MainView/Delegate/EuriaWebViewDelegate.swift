@@ -17,6 +17,7 @@
  */
 
 import EuriaCore
+import EuriaCoreUI
 import EuriaOnboardingView
 import InfomaniakCore
 import InfomaniakDI
@@ -46,8 +47,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     var downloads = [WKDownload: URL]()
 
     var isReadyToReceiveEvents = false
-    private var pendingDestination: String?
-    private var pendingUploadSession: String?
+    var pendingAction: UniversalLinksState.UniversalLinkAction?
 
     weak var webView: WKWebView?
     var subscribers: [JSMessageTopic: any WebViewMessageSubscriber] = [:]
@@ -145,42 +145,36 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
         }
     }
 
-    func enqueueNavigation(destination: String) {
-        pendingDestination = destination
-        navigateIfPossible()
-    }
-
-    func enqueueUpload(importSession: String) {
-        pendingUploadSession = importSession
+    func enqueueAction(action: UniversalLinksState.UniversalLinkAction) {
+        pendingAction = action
         navigateIfPossible()
     }
 
     func navigateIfPossible() {
-        guard isReadyToReceiveEvents else {
+        guard isReadyToReceiveEvents, let action = pendingAction else {
             return
         }
 
-        if let pendingUploadSession {
+        pendingAction = nil
+
+        switch action {
+        case .goTo(let destination):
+            Task {
+                // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
+                // which causes the user to be logged out.
+                // To avoid this situation, we wait a few milliseconds.
+                try? await Task.sleep(for: .milliseconds(200))
+                await callFunction(GoToDestination(destination: destination.string))
+            }
+        case .startUpload(let uploadSessionUuid):
             @InjectService var accountManager: AccountManagerable
 
             Task {
                 if let session = await accountManager.currentSession,
                    let uploadManager {
                     try? await Task.sleep(for: .milliseconds(200))
-                    uploadManager.handleImportSession(uuid: pendingUploadSession, userSession: session)
+                    uploadManager.handleImportSession(uuid: uploadSessionUuid, userSession: session)
                 }
-            }
-        }
-
-        if let destination = pendingDestination {
-            pendingDestination = nil
-
-            Task {
-                // Sometimes, when navigating from a universal link, Euria can’t access the local storage right away,
-                // which causes the user to be logged out.
-                // To avoid this situation, we wait a few milliseconds.
-                try? await Task.sleep(for: .milliseconds(200))
-                await callFunction(GoToDestination(destination: destination))
             }
         }
     }

@@ -113,24 +113,17 @@ public struct MainView: View {
             orientationManager.setOrientationLock(.all)
             uploadManager.bridge = webViewDelegate
             webViewDelegate.setUploadManager(uploadManager)
-            if let navigationDestination = universalLinksState.linkedWebView {
-                navigateTo(navigationDestination.string)
-            }
-            if let importSession = universalLinksState.importSessionUUID {
-                webViewDelegate.enqueueUpload(importSession: importSession)
+            if let pendingAction = universalLinksState.pendingAction {
+                consume(pendingAction)
             }
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
             guard !webViewDelegate.isLoaded else { return }
             isShowingWebView = isConnected
         }
-        .onChange(of: universalLinksState.linkedWebView) { navigationDestination in
-            guard let navigationDestination else { return }
-            navigateTo(navigationDestination.string)
-        }
-        .onChange(of: universalLinksState.importSessionUUID) { importSessionUUID in
-            guard let importSessionUUID else { return }
-            webViewDelegate.enqueueUpload(importSession: importSessionUUID)
+        .onChange(of: universalLinksState.pendingAction) { pendingAction in
+            guard let pendingAction else { return }
+            consume(pendingAction)
         }
         .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
             RegisterView(registrationProcess: .euria) { viewController in
@@ -202,15 +195,17 @@ public struct MainView: View {
         inAppTwoFactorAuthenticationManager.checkConnectionAttempts(using: sessions)
     }
 
-    private func navigateTo(_ destination: String) {
-        if destination == NavigationConstants.cameraRoute {
-            isShowingCamera = true
-            universalLinksState.linkedWebView = nil
-            return
+    private func consume(_ action: UniversalLinksState.UniversalLinkAction) {
+        if case .goTo(let destination) = action {
+            if destination.string == NavigationConstants.cameraRoute {
+                isShowingCamera = true
+                universalLinksState.pendingAction = nil
+                return
+            }
         }
 
-        webViewDelegate.enqueueNavigation(destination: destination)
-        universalLinksState.linkedWebView = nil
+        webViewDelegate.enqueueAction(action: action)
+        universalLinksState.pendingAction = nil
     }
 }
 
