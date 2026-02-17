@@ -112,17 +112,18 @@ public struct MainView: View {
             networkMonitor.start()
             orientationManager.setOrientationLock(.all)
             uploadManager.bridge = webViewDelegate
-            if let navigationDestination = universalLinksState.linkedWebView {
-                navigateTo(navigationDestination.string)
+            webViewDelegate.setUploadManager(uploadManager)
+            if let pendingAction = universalLinksState.pendingAction {
+                consume(pendingAction)
             }
         }
         .onChange(of: networkMonitor.isConnected) { isConnected in
             guard !webViewDelegate.isLoaded else { return }
             isShowingWebView = isConnected
         }
-        .onChange(of: universalLinksState.linkedWebView) { navigationDestination in
-            guard let navigationDestination else { return }
-            navigateTo(navigationDestination.string)
+        .onChange(of: universalLinksState.pendingAction) { pendingAction in
+            guard let pendingAction else { return }
+            consume(pendingAction)
         }
         .sheet(isPresented: $webViewDelegate.isShowingRegisterView) {
             RegisterView(registrationProcess: .euria) { viewController in
@@ -194,15 +195,16 @@ public struct MainView: View {
         inAppTwoFactorAuthenticationManager.checkConnectionAttempts(using: sessions)
     }
 
-    private func navigateTo(_ destination: String) {
-        if destination == NavigationConstants.cameraRoute {
+    private func consume(_ action: UniversalLinksState.UniversalLinkAction) {
+        if case .goTo(let destination) = action,
+           destination.string == NavigationConstants.cameraRoute {
             isShowingCamera = true
-            universalLinksState.linkedWebView = nil
+            universalLinksState.pendingAction = nil
             return
         }
 
-        webViewDelegate.enqueueNavigation(destination: destination)
-        universalLinksState.linkedWebView = nil
+        webViewDelegate.enqueueAction(action: action)
+        universalLinksState.pendingAction = nil
     }
 }
 

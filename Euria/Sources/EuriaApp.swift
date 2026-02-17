@@ -53,13 +53,13 @@ struct EuriaApp: App {
     private func handleURL(_ url: URL) {
         let linkHandler = UniversalLinkHandler()
         if let universalLink = linkHandler.handlePossibleUniversalLink(url) {
-            universalLinksState.linkedWebView = universalLink
+            universalLinksState.pendingAction = .goTo(universalLink)
             return
         }
 
         if let importSessionUUID = linkHandler.handlePossibleImportSession(url),
-           case .mainView(let mainViewState) = rootViewState.state {
-            uploadManager.handleImportSession(uuid: importSessionUUID, userSession: mainViewState.userSession)
+           case .mainView = rootViewState.state {
+            universalLinksState.pendingAction = .startUpload(importSessionUUID)
             return
         }
     }

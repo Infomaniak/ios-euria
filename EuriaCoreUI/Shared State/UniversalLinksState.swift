@@ -20,8 +20,13 @@ import EuriaCore
 import Foundation
 
 @MainActor
-public class UniversalLinksState: ObservableObject {
-    @Published public var linkedWebView: NavigationDestination?
+public final class UniversalLinksState: ObservableObject {
+    public enum UniversalLinkAction: Equatable {
+        case goTo(NavigationDestination)
+        case startUpload(String)
+    }
+
+    @Published public var pendingAction: UniversalLinkAction?
 
     public init() {}
 }
