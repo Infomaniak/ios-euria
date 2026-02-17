@@ -196,12 +196,11 @@ public struct MainView: View {
     }
 
     private func consume(_ action: UniversalLinksState.UniversalLinkAction) {
-        if case .goTo(let destination) = action {
-            if destination.string == NavigationConstants.cameraRoute {
-                isShowingCamera = true
-                universalLinksState.pendingAction = nil
-                return
-            }
+        if case .goTo(let destination) = action,
+           destination.string == NavigationConstants.cameraRoute {
+            isShowingCamera = true
+            universalLinksState.pendingAction = nil
+            return
         }
 
         webViewDelegate.enqueueAction(action: action)
