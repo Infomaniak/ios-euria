@@ -1,3 +1,2 @@
 What’s new:
-- We cleaned up every nook and cranny.
-- There were still a few sharp edges left in the code, we filed them down for you!
+- Document sharing is more reliable than ever, even on first launch

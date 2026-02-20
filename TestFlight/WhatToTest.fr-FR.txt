@@ -1,3 +1,2 @@
 Quoi de neuf :
- - Nous avons nettoyé le moindre recoin.
- - Il restait quelques bouts tranchants dans le code, on les a limé pour vous ! 
+ - Le partage de documents est encore plus fiable, même au premier lancement
