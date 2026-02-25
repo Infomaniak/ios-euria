@@ -104,7 +104,7 @@ open class TargetAssembly {
                 InfomaniakNotifications(appGroup: Constants.appGroupIdentifier)
             },
             Factory(type: ReviewManageable.self) { _, _ in
-                ReviewManager(userDefaults: UserDefaults.shared)
+                ReviewManager(userDefaults: UserDefaults.shared, actionBeforeFirstReview: 50)
             },
             Factory(type: MatomoUtils.self) { _, _ in
                 let matomo = MatomoUtils(siteId: MatomoUtils.euriaSiteID, baseURL: MatomoUtils.siteURL)
