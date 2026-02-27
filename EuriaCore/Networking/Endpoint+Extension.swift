@@ -25,6 +25,17 @@ public extension ApiEnvironment {
     }
 }
 
+// Authorized hosts for navigation in WKWebView
+public extension ApiEnvironment {
+    var driveHost: String {
+        return "drive.\(host)"
+    }
+
+    var kDriveHost: String {
+        return "kdrive.\(host)"
+    }
+}
+
 extension Endpoint {
     private static var euriaHost: Endpoint {
         return Endpoint(hostKeypath: \.euriaHost, path: "")
