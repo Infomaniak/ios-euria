@@ -1,2 +1,2 @@
 What’s new:
-- We’ve made things a bit more secure behind the scenes
+- We’ve made things a bit more secure behind the scenes.
