@@ -1,2 +1,2 @@
 Quoi de neuf :
- - Le partage de documents est encore plus fiable, même au premier lancement
+ - Nous avons rendu les choses un peu plus sécurisées en arrière-plan
