@@ -132,7 +132,9 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
                 .value: value,
                 .path: "/",
                 .domain: host,
-                .maximumAge: TimeInterval.sixMonths
+                .maximumAge: TimeInterval.sixMonths,
+                .secure: true,
+                .sameSitePolicy: HTTPCookieStringPolicy.sameSiteStrict
             ]
         )
     }
