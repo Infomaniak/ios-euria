@@ -1,2 +1,2 @@
 Quoi de neuf :
- - Nous avons rendu les choses un peu plus sécurisées en arrière-plan.
+ - Nous avons ajouté le support de langages additionnels
