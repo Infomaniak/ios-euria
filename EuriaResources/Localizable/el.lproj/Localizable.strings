@@ -1,0 +1,83 @@
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: el, Greek
+ * Tagged: ios
+ * Exported by: Baptiste Griva
+ * Exported at: Tue, 31 Mar 2026 13:00:27 +0200
+ */
+
+/* loco:68ff4981634f6375880c8ba2 */
+"buttonLogin" = "Σύνδεση";
+
+/* loco:69270bbbe4fa8bf1fe0d5ee5 */
+"buttonStart" = "Έναρξη";
+
+/* loco:693994ee2d26573e3404a862 */
+"contentDescriptionCamera" = "Εκκίνηση της κάμερας για να τραβήξετε μια φωτογραφία";
+
+/* loco:691c8f906fa8174eb50e1a52 */
+"contentDescriptionChat" = "Συνομιλία με το Euria";
+
+/* loco:691c8f57b8a4b272960f7d62 */
+"contentDescriptionEphemeralChat" = "Παροδική συνομιλία";
+
+/* loco:691c8feb42338df306011e62 */
+"contentDescriptionMicrophone" = "Φωνητική συνομιλία";
+
+/* loco:69036475604798d6e00235e2 */
+"iosOnboardingDatacenterDescription" = "Η ενέργεια της ΤΝ αξιοποιείται κατά 100%%.";
+
+/* loco:68ff78eecc69b71eaf0c9713 */
+"noNetworkDescription" = "Ελέγξτε τη σύνδεσή σας στο Internet και προσπαθήστε ξανά για να συνεχίσετε τη συνομιλία σας";
+
+/* loco:68ff78b957d8570aa903afe3 */
+"noNetworkTitle" = "Χωρίς πρόσβαση στο Internet";
+
+/* loco:690210b2297064b77306d174 */
+"onboardingDatacenterTitle" = "Το Euria θερμαίνει σπίτια.";
+
+/* loco:69cb71598cdbf240f40e5cc2 */
+"onboardingEphemeralDescriptionArguments" = "Το Euria δεν διατηρεί ίχνη";
+
+/* loco:68ff778f862219a3260cee52 */
+"onboardingEphemeralDescriptionTemplate" = "%@ των ανταλλαγών σας.";
+
+/* loco:68ff1a4275f0868be50057e3 */
+"onboardingEphemeralTitle" = "Με την παροδική λειτουργία,";
+
+/* loco:68ff15ef184733f2080e3484 */
+"onboardingEuriaDescription" = "Κυρίαρχη ΤΝ που σέβεται τα δεδομένα σας και τον πλανήτη.";
+
+/* loco:68ff154bb297799a18033994 */
+"onboardingEuriaTitle" = "Καλώς ήρθατε στο Euria";
+
+/* loco:68ff7942dc8cdafd0704f1d3 */
+"onboardingLoginArguments" = "Συνομίλησε τώρα";
+
+/* loco:68ff458ed23e12776a0209c2 */
+"onboardingLoginTemplate" = "%@ με το Euria.";
+
+/* loco:68ff44d0c7acdcfd0806acb3 */
+"onboardingLoginTitle" = "Έτοιμοι να ξεκινήσετε;";
+
+/* loco:68ff18295557e819550517a2 */
+"onboardingPrivacyDescription" = "Τίποτα δεν συλλέγεται, τα δεδομένα σας σας ανήκουν.";
+
+/* loco:68ff1702d6e8ef51560e41e2 */
+"onboardingPrivacyTitle" = "Το Euria φιλοξενείται στην Ελβετία.";
+
+/* loco:69132de4951e208fa10324a2 */
+"openAppControlDescription" = "Ανοίξτε το Euria και ξεκινήστε μια νέα συνομιλία";
+
+/* loco:69132e13d18e10b67d0b2036 */
+"openAppControlLabel" = "Νέα συνομιλία με το Euria";
+
+/* loco:690c7a374c68a94f4a0d60c2 */
+"openAppControlTitle" = "Άνοιγμα Euria";
+
+/* loco:690c58164a2b5c9988009442 */
+"widgetQuickActionsDescription" = "Γρήγορη πρόσβαση στις λειτουργίες του Euria";
+
+/* loco:690c57686d4ac8795e0d91a5 */
+"widgetQuickActionsTitle" = "Γρήγορες ενέργειες Euria";

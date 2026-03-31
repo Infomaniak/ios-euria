@@ -1,0 +1,83 @@
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: pt, Portuguese
+ * Tagged: ios
+ * Exported by: Baptiste Griva
+ * Exported at: Tue, 31 Mar 2026 13:00:27 +0200
+ */
+
+/* loco:68ff4981634f6375880c8ba2 */
+"buttonLogin" = "Iniciar sessão";
+
+/* loco:69270bbbe4fa8bf1fe0d5ee5 */
+"buttonStart" = "Começar";
+
+/* loco:693994ee2d26573e3404a862 */
+"contentDescriptionCamera" = "Iniciar a câmara para tirar uma foto";
+
+/* loco:691c8f906fa8174eb50e1a52 */
+"contentDescriptionChat" = "Conversar com o Euria";
+
+/* loco:691c8f57b8a4b272960f7d62 */
+"contentDescriptionEphemeralChat" = "Chat efémero";
+
+/* loco:691c8feb42338df306011e62 */
+"contentDescriptionMicrophone" = "Chat de voz";
+
+/* loco:69036475604798d6e00235e2 */
+"iosOnboardingDatacenterDescription" = "A energia da IA é 100%% revalorizada.";
+
+/* loco:68ff78eecc69b71eaf0c9713 */
+"noNetworkDescription" = "Verifique a sua ligação à Internet e tente novamente para retomar a conversa";
+
+/* loco:68ff78b957d8570aa903afe3 */
+"noNetworkTitle" = "Sem acesso à Internet";
+
+/* loco:690210b2297064b77306d174 */
+"onboardingDatacenterTitle" = "O Euria aquece habitações.";
+
+/* loco:69cb71598cdbf240f40e5cc2 */
+"onboardingEphemeralDescriptionArguments" = "O Euria não guarda registo";
+
+/* loco:68ff778f862219a3260cee52 */
+"onboardingEphemeralDescriptionTemplate" = "%@ das suas trocas.";
+
+/* loco:68ff1a4275f0868be50057e3 */
+"onboardingEphemeralTitle" = "Com o modo efémero,";
+
+/* loco:68ff15ef184733f2080e3484 */
+"onboardingEuriaDescription" = "IA soberana que respeita os seus dados e o planeta.";
+
+/* loco:68ff154bb297799a18033994 */
+"onboardingEuriaTitle" = "Bem-vindo ao Euria";
+
+/* loco:68ff7942dc8cdafd0704f1d3 */
+"onboardingLoginArguments" = "Converse agora";
+
+/* loco:68ff458ed23e12776a0209c2 */
+"onboardingLoginTemplate" = "%@ com o Euria.";
+
+/* loco:68ff44d0c7acdcfd0806acb3 */
+"onboardingLoginTitle" = "Pronto para começar?";
+
+/* loco:68ff18295557e819550517a2 */
+"onboardingPrivacyDescription" = "Nada é recolhido, os seus dados são seus.";
+
+/* loco:68ff1702d6e8ef51560e41e2 */
+"onboardingPrivacyTitle" = "O Euria está alojado na Suíça.";
+
+/* loco:69132de4951e208fa10324a2 */
+"openAppControlDescription" = "Abra o Euria e inicie uma nova conversa";
+
+/* loco:69132e13d18e10b67d0b2036 */
+"openAppControlLabel" = "Nova conversa com o Euria";
+
+/* loco:690c7a374c68a94f4a0d60c2 */
+"openAppControlTitle" = "Abrir Euria";
+
+/* loco:690c58164a2b5c9988009442 */
+"widgetQuickActionsDescription" = "Acesso rápido às funcionalidades do Euria";
+
+/* loco:690c57686d4ac8795e0d91a5 */
+"widgetQuickActionsTitle" = "Ações rápidas Euria";
