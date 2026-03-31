@@ -1,0 +1,83 @@
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: fi, Finnish
+ * Tagged: ios
+ * Exported by: Baptiste Griva
+ * Exported at: Tue, 31 Mar 2026 13:00:27 +0200
+ */
+
+/* loco:68ff4981634f6375880c8ba2 */
+"buttonLogin" = "Kirjaudu";
+
+/* loco:69270bbbe4fa8bf1fe0d5ee5 */
+"buttonStart" = "Aloita";
+
+/* loco:693994ee2d26573e3404a862 */
+"contentDescriptionCamera" = "Käynnistä kamera ottaaksesi kuvan";
+
+/* loco:691c8f906fa8174eb50e1a52 */
+"contentDescriptionChat" = "Keskustele Euriassa";
+
+/* loco:691c8f57b8a4b272960f7d62 */
+"contentDescriptionEphemeralChat" = "Häviävä keskustelu";
+
+/* loco:691c8feb42338df306011e62 */
+"contentDescriptionMicrophone" = "Äänikeskustelu";
+
+/* loco:69036475604798d6e00235e2 */
+"iosOnboardingDatacenterDescription" = "Tekoälyn energia hyödynnetään 100%%:sti.";
+
+/* loco:68ff78eecc69b71eaf0c9713 */
+"noNetworkDescription" = "Tarkista Internet-yhteytesi ja yritä uudelleen jatkaaksesi keskustelua";
+
+/* loco:68ff78b957d8570aa903afe3 */
+"noNetworkTitle" = "Ei Internet-yhteyttä";
+
+/* loco:690210b2297064b77306d174 */
+"onboardingDatacenterTitle" = "Euria lämmittää koteja.";
+
+/* loco:69cb71598cdbf240f40e5cc2 */
+"onboardingEphemeralDescriptionArguments" = "Euria ei säilytä jälkiä";
+
+/* loco:68ff778f862219a3260cee52 */
+"onboardingEphemeralDescriptionTemplate" = "%@ vaihtojasi.";
+
+/* loco:68ff1a4275f0868be50057e3 */
+"onboardingEphemeralTitle" = "Häviävässä tilassa,";
+
+/* loco:68ff15ef184733f2080e3484 */
+"onboardingEuriaDescription" = "Itsenäinen tekoäly, joka kunnioittaa tietojasi ja planeettaa.";
+
+/* loco:68ff154bb297799a18033994 */
+"onboardingEuriaTitle" = "Tervetuloa Euriin";
+
+/* loco:68ff7942dc8cdafd0704f1d3 */
+"onboardingLoginArguments" = "Keskustele nyt";
+
+/* loco:68ff458ed23e12776a0209c2 */
+"onboardingLoginTemplate" = "%@ Eurialla.";
+
+/* loco:68ff44d0c7acdcfd0806acb3 */
+"onboardingLoginTitle" = "Valmis aloittamaan?";
+
+/* loco:68ff18295557e819550517a2 */
+"onboardingPrivacyDescription" = "Mitään ei kerätä, tietosi kuuluvat sinulle.";
+
+/* loco:68ff1702d6e8ef51560e41e2 */
+"onboardingPrivacyTitle" = "Euria isännöidään Sveitsissä.";
+
+/* loco:69132de4951e208fa10324a2 */
+"openAppControlDescription" = "Avaa Euria ja aloita uusi keskustelu";
+
+/* loco:69132e13d18e10b67d0b2036 */
+"openAppControlLabel" = "Uusi keskustelu Eurialla";
+
+/* loco:690c7a374c68a94f4a0d60c2 */
+"openAppControlTitle" = "Avaa Euria";
+
+/* loco:690c58164a2b5c9988009442 */
+"widgetQuickActionsDescription" = "Nopea pääsy Euria-ominaisuuksiin";
+
+/* loco:690c57686d4ac8795e0d91a5 */
+"widgetQuickActionsTitle" = "Euria pikatoiminnot";

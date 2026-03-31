@@ -1,0 +1,83 @@
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: da, Danish
+ * Tagged: ios
+ * Exported by: Baptiste Griva
+ * Exported at: Tue, 31 Mar 2026 13:00:27 +0200
+ */
+
+/* loco:68ff4981634f6375880c8ba2 */
+"buttonLogin" = "Log ind";
+
+/* loco:69270bbbe4fa8bf1fe0d5ee5 */
+"buttonStart" = "Start";
+
+/* loco:693994ee2d26573e3404a862 */
+"contentDescriptionCamera" = "Start kameraet for at tage et billede";
+
+/* loco:691c8f906fa8174eb50e1a52 */
+"contentDescriptionChat" = "Chat med Euria";
+
+/* loco:691c8f57b8a4b272960f7d62 */
+"contentDescriptionEphemeralChat" = "Forbigående chat";
+
+/* loco:691c8feb42338df306011e62 */
+"contentDescriptionMicrophone" = "Stemmechat";
+
+/* loco:69036475604798d6e00235e2 */
+"iosOnboardingDatacenterDescription" = "AI-energi genanvendes 100%%.";
+
+/* loco:68ff78eecc69b71eaf0c9713 */
+"noNetworkDescription" = "Tjek din internetforbindelse og prøv igen for at genoptage din samtale";
+
+/* loco:68ff78b957d8570aa903afe3 */
+"noNetworkTitle" = "Ingen internetadgang";
+
+/* loco:690210b2297064b77306d174 */
+"onboardingDatacenterTitle" = "Euria opvarmer hjem.";
+
+/* loco:69cb71598cdbf240f40e5cc2 */
+"onboardingEphemeralDescriptionArguments" = "Euria gemmer ingen spor";
+
+/* loco:68ff778f862219a3260cee52 */
+"onboardingEphemeralDescriptionTemplate" = "%@ af dine udvekslinger.";
+
+/* loco:68ff1a4275f0868be50057e3 */
+"onboardingEphemeralTitle" = "Med forbigående tilstand,";
+
+/* loco:68ff15ef184733f2080e3484 */
+"onboardingEuriaDescription" = "Suveræn AI, der respekterer dine data og planeten.";
+
+/* loco:68ff154bb297799a18033994 */
+"onboardingEuriaTitle" = "Velkommen til Euria";
+
+/* loco:68ff7942dc8cdafd0704f1d3 */
+"onboardingLoginArguments" = "Chat nu";
+
+/* loco:68ff458ed23e12776a0209c2 */
+"onboardingLoginTemplate" = "%@ med Euria.";
+
+/* loco:68ff44d0c7acdcfd0806acb3 */
+"onboardingLoginTitle" = "Klar til at starte?";
+
+/* loco:68ff18295557e819550517a2 */
+"onboardingPrivacyDescription" = "Der indsamles intet, dine data tilhører dig.";
+
+/* loco:68ff1702d6e8ef51560e41e2 */
+"onboardingPrivacyTitle" = "Euria hostes i Schweiz.";
+
+/* loco:69132de4951e208fa10324a2 */
+"openAppControlDescription" = "Åbn Euria og start en ny samtale";
+
+/* loco:69132e13d18e10b67d0b2036 */
+"openAppControlLabel" = "Ny samtale med Euria";
+
+/* loco:690c7a374c68a94f4a0d60c2 */
+"openAppControlTitle" = "Åbn Euria";
+
+/* loco:690c58164a2b5c9988009442 */
+"widgetQuickActionsDescription" = "Hurtig adgang til Euria-funktioner";
+
+/* loco:690c57686d4ac8795e0d91a5 */
+"widgetQuickActionsTitle" = "Euria Hurtige Handlinger";

@@ -1,0 +1,17 @@
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: el, Greek
+ * Tagged: ios-info-plist
+ * Exported by: Baptiste Griva
+ * Exported at: Tue, 31 Mar 2026 13:00:27 +0200
+ */
+
+/* loco:6900b72c8560b6a5f6071243 */
+"NSCameraUsageLibrary" = "Θα μπορείτε να επισυνάψετε φωτογραφίες και βίντεο που τραβήχτηκαν με την κάμερά σας στη συνομιλία με το Euria.";
+
+/* loco:6900b9000c2674fb910f41a2 */
+"NSMicrophoneUsageDescription" = "Θα μπορείτε να χρησιμοποιήσετε το μικρόφωνό σας για να μετατρέψετε την ομιλία σε κείμενο";
+
+/* loco:6900b74eda7614e4c506b9d2 */
+"NSPhotoLibraryAddUsageDescription" = "Θα μπορείτε να αποθηκεύετε φωτογραφίες και βίντεο στη βιβλιοθήκη φωτογραφιών σας.";

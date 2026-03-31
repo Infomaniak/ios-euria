@@ -1,0 +1,17 @@
+/*
+ * Loco ios export: Xcode Strings (legacy)
+ * Project: Euria
+ * Locale: sv, Swedish
+ * Tagged: ios-info-plist
+ * Exported by: Baptiste Griva
+ * Exported at: Tue, 31 Mar 2026 13:00:27 +0200
+ */
+
+/* loco:6900b72c8560b6a5f6071243 */
+"NSCameraUsageLibrary" = "Du kan bifoga foton och videor tagna med din kamera till konversationen med Euria.";
+
+/* loco:6900b9000c2674fb910f41a2 */
+"NSMicrophoneUsageDescription" = "Du kan använda din mikrofon för att transkribera tal till text";
+
+/* loco:6900b74eda7614e4c506b9d2 */
+"NSPhotoLibraryAddUsageDescription" = "Du kan spara foton och videor i ditt fotobibliotek.";
