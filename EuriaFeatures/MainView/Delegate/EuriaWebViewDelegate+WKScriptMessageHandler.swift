@@ -52,7 +52,13 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
         case .openReview:
             isShowingReviewAlert = true
         case .upgrade:
-            upgradeUserOffer()
+            // Opening Webview
+            let bodyString = "https://welcome.infomaniak.com/signup/euria"
+            // Opening safari
+//            let bodyString = "https://infomaniak.com"
+            upgradeUserOffer(body: bodyString)
+//        case .upgradeWithLink:
+//            upgradeUserOffer(body)
         default:
             break
         }
@@ -90,14 +96,20 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
         UIApplication.shared.isIdleTimerDisabled = shouldKeepDeviceAwake
     }
 
-    private func upgradeUserOffer() {
-        Task {
-            @InjectService var accountManager: AccountManagerable
-            guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
-                return
-            }
+    private func upgradeUserOffer(body: Any) {
+        if let url = URL(string: body as! String) {
+            if url == UpgradeAccountView.welcomeRoute {
+                Task {
+                    @InjectService var accountManager: AccountManagerable
+                    guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
+                        return
+                    }
 
-            upgradeViewToken = UpgradeTokenItem(token: token)
+                    upgradeViewToken = UpgradeTokenItem(token: token)
+                }
+            } else {
+                UIApplication.shared.open(url)
+            }
         }
     }
 }
