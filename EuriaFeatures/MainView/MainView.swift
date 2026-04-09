@@ -131,8 +131,8 @@ public struct MainView: View {
                 loginHandler.loginAfterAccountCreation(from: viewController)
             }
         }
-        .sheet(item: $webViewDelegate.upgradeViewToken) { accessToken in
-            UpgradeAccountView(accessToken: accessToken.token) {
+        .sheet(item: $webViewDelegate.upgradeViewEndpoint) { endpoint in
+            UpgradeAccountView(accessToken: endpoint.token, url: endpoint.url) {
                 webViewDelegate.reloadWebView()
             }
         }

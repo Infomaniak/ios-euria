@@ -18,6 +18,7 @@
 
 import EuriaCore
 import Foundation
+import InfomaniakCore
 import InfomaniakDI
 import Sentry
 import WebKit
@@ -53,7 +54,8 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
             isShowingReviewAlert = true
         case .upgrade:
             // Opening Webview
-            let bodyString = "https://welcome.infomaniak.com/signup/euria"
+            let bodyString = "https://welcome.infomaniak.com/"
+
             // Opening safari
 //            let bodyString = "https://infomaniak.com"
             upgradeUserOffer(body: bodyString)
@@ -97,19 +99,19 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
     }
 
     private func upgradeUserOffer(body: Any) {
-        if let url = URL(string: body as! String) {
-            if url == UpgradeAccountView.welcomeRoute {
-                Task {
-                    @InjectService var accountManager: AccountManagerable
-                    guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
-                        return
-                    }
-
-                    upgradeViewToken = UpgradeTokenItem(token: token)
+        guard let urlString = body as? String else { return }
+        guard let url = URL(string: urlString) else { return }
+        if url.host() == "welcome.\(ApiEnvironment.current.host)" {
+            Task {
+                @InjectService var accountManager: AccountManagerable
+                guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
+                    return
                 }
-            } else {
-                UIApplication.shared.open(url)
+
+                upgradeViewEndpoint = UpgradeEndpointItem(token: token, url: url)
             }
+        } else {
+            UIApplication.shared.open(url)
         }
     }
 }
