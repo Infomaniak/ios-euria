@@ -29,7 +29,7 @@ struct UpgradeAccountView: UIViewRepresentable {
     let url: URL
     let onUpgradeCompleted: (() -> Void)?
 
-    static let welcomeRoute = URL(string: "https://welcome.infomaniak.com/signup/euria")!
+    static let welcomeRoute = URL(string: "https://welcome.\(ApiEnvironment.current.host)/signup/euria")!
     static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)!
 
     class Coordinator: NSObject, WKNavigationDelegate {
