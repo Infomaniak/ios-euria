@@ -53,14 +53,9 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
         case .openReview:
             isShowingReviewAlert = true
         case .upgrade:
-            // Opening Webview
-            let bodyString = "https://welcome.infomaniak.com/"
-
-            // Opening safari
-//            let bodyString = "https://infomaniak.com"
-            upgradeUserOffer(body: bodyString)
-//        case .upgradeWithLink:
-//            upgradeUserOffer(body)
+            upgradeUserOffer(body: body)
+        case .upgradeWithLink:
+            upgradeUserOffer(body: body)
         default:
             break
         }

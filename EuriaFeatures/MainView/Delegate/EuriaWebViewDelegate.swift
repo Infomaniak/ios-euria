@@ -110,6 +110,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
         addSubscriber(self, topic: .unauthenticated)
         addSubscriber(self, topic: .openReview)
         addSubscriber(self, topic: .upgrade)
+        addSubscriber(self, topic: .upgradeWithLink)
     }
 
     private func addCookies(token: ApiToken?) {
