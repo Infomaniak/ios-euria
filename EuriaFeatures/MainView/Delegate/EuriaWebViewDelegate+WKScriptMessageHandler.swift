@@ -18,6 +18,7 @@
 
 import EuriaCore
 import Foundation
+import InfomaniakCore
 import InfomaniakDI
 import Sentry
 import WebKit
@@ -51,8 +52,9 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
             isShowingRegisterView = true
         case .openReview:
             isShowingReviewAlert = true
-        case .upgrade:
-            upgradeUserOffer()
+        case .upgradeWithLink:
+            guard let path = body as? String, let url = URL(string: path) else { return }
+            upgradeUserOffer(url: url)
         default:
             break
         }
@@ -90,14 +92,19 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
         UIApplication.shared.isIdleTimerDisabled = shouldKeepDeviceAwake
     }
 
-    private func upgradeUserOffer() {
+    private func upgradeUserOffer(url: URL) {
+        guard url.host() == UpgradeAccountView.welcomeRoute.host() else {
+            UIApplication.shared.open(url)
+            return
+        }
+
         Task {
             @InjectService var accountManager: AccountManagerable
             guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
                 return
             }
 
-            upgradeViewToken = UpgradeTokenItem(token: token)
+            upgradeViewEndpoint = UpgradeEndpointItem(token: token, url: url)
         }
     }
 }

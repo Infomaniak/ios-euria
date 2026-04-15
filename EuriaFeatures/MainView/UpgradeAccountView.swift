@@ -26,9 +26,10 @@ struct UpgradeAccountView: UIViewRepresentable {
     @Environment(\.dismiss) private var dismiss
 
     let accessToken: ApiToken
+    let url: URL
     let onUpgradeCompleted: (() -> Void)?
 
-    static let welcomeRoute = URL(string: "https://welcome.infomaniak.com/signup/euria")!
+    static let welcomeRoute = URL(string: "https://welcome.\(ApiEnvironment.current.host)")!
     static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)!
 
     class Coordinator: NSObject, WKNavigationDelegate {
@@ -55,8 +56,7 @@ struct UpgradeAccountView: UIViewRepresentable {
                 onUpgradeCompleted?()
                 dismissAction()
             } else {
-                guard url.host == managerRoute.host() ||
-                    url.host == welcomeRoute.host() else {
+                guard url.host == managerRoute.host() || url.host == welcomeRoute.host() else {
                     decisionHandler(.cancel)
                     return
                 }
@@ -77,7 +77,7 @@ struct UpgradeAccountView: UIViewRepresentable {
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = context.coordinator
 
-        var request = URLRequest(url: UpgradeAccountView.managerRoute)
+        var request = URLRequest(url: url)
         request.setValue("Bearer \(accessToken.accessToken)", forHTTPHeaderField: "Authorization")
         webView.load(request)
 
