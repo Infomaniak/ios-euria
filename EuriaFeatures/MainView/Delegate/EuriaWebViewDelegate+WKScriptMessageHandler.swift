@@ -52,10 +52,9 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
             isShowingRegisterView = true
         case .openReview:
             isShowingReviewAlert = true
-        case .upgrade:
-            upgradeUserOffer(body: body)
         case .upgradeWithLink:
-            upgradeUserOffer(body: body)
+            guard let path = body as? String, let url = URL(string: path) else { return }
+            upgradeUserOffer(url: url)
         default:
             break
         }
@@ -93,20 +92,19 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
         UIApplication.shared.isIdleTimerDisabled = shouldKeepDeviceAwake
     }
 
-    private func upgradeUserOffer(body: Any) {
-        guard let urlString = body as? String else { return }
-        guard let url = URL(string: urlString) else { return }
-        if url.host() == "welcome.\(ApiEnvironment.current.host)" {
-            Task {
-                @InjectService var accountManager: AccountManagerable
-                guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
-                    return
-                }
-
-                upgradeViewEndpoint = UpgradeEndpointItem(token: token, url: url)
-            }
-        } else {
+    private func upgradeUserOffer(url: URL) {
+        guard url.host() == UpgradeAccountView.welcomeRoute.host() else {
             UIApplication.shared.open(url)
+            return
+        }
+
+        Task {
+            @InjectService var accountManager: AccountManagerable
+            guard let token = await accountManager.currentSession?.apiFetcher.currentToken else {
+                return
+            }
+
+            upgradeViewEndpoint = UpgradeEndpointItem(token: token, url: url)
         }
     }
 }
