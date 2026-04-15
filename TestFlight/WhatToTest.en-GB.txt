@@ -1,2 +1,2 @@
 What’s new:
-- We’ve added support for additional languages
+ - Various improvements and fixes
