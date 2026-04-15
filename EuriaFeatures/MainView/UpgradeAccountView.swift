@@ -30,8 +30,9 @@ struct UpgradeAccountView: UIViewRepresentable {
     let onUpgradeCompleted: (() -> Void)?
 
     static let welcomeRoute = URL(string: "https://welcome.\(ApiEnvironment.current.host)")!
+    static let kSuiteRoute = URL(string: "https://ksuite.\(ApiEnvironment.current.host)")!
+
     static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)!
-    static let kSuiteRoute = URL(string: "https://ksuite.infomaniak.com")!
 
     class Coordinator: NSObject, WKNavigationDelegate {
         let dismissAction: () -> Void
