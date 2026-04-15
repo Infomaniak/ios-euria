@@ -30,6 +30,8 @@ struct UpgradeAccountView: UIViewRepresentable {
     let onUpgradeCompleted: (() -> Void)?
 
     static let welcomeRoute = URL(string: "https://welcome.\(ApiEnvironment.current.host)")!
+    static let kSuiteRoute = URL(string: "https://ksuite.\(ApiEnvironment.current.host)")!
+
     static let managerRoute = Constants.autologinUrl(to: welcomeRoute.absoluteString)!
 
     class Coordinator: NSObject, WKNavigationDelegate {
@@ -51,7 +53,7 @@ struct UpgradeAccountView: UIViewRepresentable {
                 return
             }
 
-            if url.host == ApiEnvironment.current.euriaHost {
+            if url.host == ApiEnvironment.current.euriaHost || url.host == kSuiteRoute.host() {
                 decisionHandler(.cancel)
                 onUpgradeCompleted?()
                 dismissAction()
