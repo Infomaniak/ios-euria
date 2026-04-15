@@ -1,2 +1,2 @@
 Quoi de neuf :
- - Nous avons ajouté le support de langages additionnels
+ - Améliorations et corrections diverses
