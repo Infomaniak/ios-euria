@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCoreUI
 import InfomaniakCore
 import SwiftUI
 import UIKit
@@ -52,6 +53,7 @@ struct WebView: UIViewRepresentable {
         setupWebView(webView, coordinator: webViewCoordinator)
 
         webViewCoordinator?.webView = webView
+        loadCSS(configuration: webConfiguration)
 
         let request = URLRequest(url: url)
         webView.load(request)
@@ -95,5 +97,17 @@ struct WebView: UIViewRepresentable {
 
     private func addCustomUserAgent(_ webView: WKWebView) {
         webView.customUserAgent = UserAgentBuilder().userAgent
+    }
+
+    private func loadCSS(configuration: WKWebViewConfiguration) {
+        let fontScript = FontHelper.loadCSS()
+
+        let userScript = WKUserScript(
+            source: fontScript,
+            injectionTime: .atDocumentEnd,
+            forMainFrameOnly: true
+        )
+
+        configuration.userContentController.addUserScript(userScript)
     }
 }
