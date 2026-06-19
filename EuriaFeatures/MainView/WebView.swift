@@ -49,11 +49,11 @@ struct WebView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> WKWebView {
+        loadCSS(configuration: webConfiguration)
         let webView = EuriaWebView(frame: .zero, configuration: webConfiguration)
         setupWebView(webView, coordinator: webViewCoordinator)
 
         webViewCoordinator?.webView = webView
-        loadCSS(configuration: webConfiguration)
 
         let request = URLRequest(url: url)
         webView.load(request)
