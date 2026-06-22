@@ -30,6 +30,7 @@ import InfomaniakCreateAccount
 import InfomaniakDI
 import InfomaniakLogin
 import InfomaniakNotifications
+import QuickLook
 import SwiftUI
 import UIKit
 import WebKit
