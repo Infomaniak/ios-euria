@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCore
 import Foundation
 import WebKit
 
@@ -23,6 +24,17 @@ import WebKit
 
 extension EuriaWebViewDelegate: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
+        if let url = navigationAction.request.url,
+           url.host() == host,
+           url.path.hasSuffix("/download") {
+            do {
+                return .download
+            } catch {
+                self.error = .downloadFailed(error: error)
+            }
+            return .cancel
+        }
+
         guard !navigationAction.shouldPerformDownload else {
             return .download
         }
@@ -51,5 +63,13 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         reloadWebView()
+        enableAppFeatures(configuration: webConfiguration)
+    }
+
+    private func enableAppFeatures(configuration: WKWebViewConfiguration) {
+        let featuresTab = AppFeatures.allCases.map { "'\($0.rawValue)'" }.joined(separator: ",")
+        let scriptSource = "enableAppFeatures([\(featuresTab)]);"
+
+        webView?.evaluateJavaScript(scriptSource)
     }
 }
