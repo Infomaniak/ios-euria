@@ -24,18 +24,9 @@ import WebKit
 
 extension EuriaWebViewDelegate: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        if let url = navigationAction.request.url,
-           url.host() == host,
-           url.path.hasSuffix("/download") {
-            do {
-                return .download
-            } catch {
-                self.error = .downloadFailed(error: error)
-            }
-            return .cancel
-        }
+        let hasDownloadSuffix = navigationAction.request.url?.path.hasSuffix("/download") ?? false
 
-        guard !navigationAction.shouldPerformDownload else {
+        guard !navigationAction.shouldPerformDownload, !hasDownloadSuffix else {
             return .download
         }
 
@@ -55,6 +46,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         isLoaded = true
+        enableAppFeatures()
     }
 
     func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
@@ -63,10 +55,9 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         reloadWebView()
-        enableAppFeatures(configuration: webConfiguration)
     }
 
-    private func enableAppFeatures(configuration: WKWebViewConfiguration) {
+    private func enableAppFeatures() {
         let featuresTab = AppFeatures.allCases.map { "'\($0.rawValue)'" }.joined(separator: ",")
         let scriptSource = "enableAppFeatures([\(featuresTab)]);"
 
