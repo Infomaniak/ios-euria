@@ -24,9 +24,14 @@ import WebKit
 
 extension EuriaWebViewDelegate: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        let hasDownloadSuffix = navigationAction.request.url?.path.hasSuffix("/download") ?? false
+        if let url = navigationAction.request.url,
+           url.host() == host,
+           url.path.hasSuffix("/download") {
+            await downloadFile(from: url)
+            return .cancel
+        }
 
-        guard !navigationAction.shouldPerformDownload, !hasDownloadSuffix else {
+        guard !navigationAction.shouldPerformDownload else {
             return .download
         }
 
@@ -62,5 +67,39 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
         let scriptSource = "enableAppFeatures([\(featuresTab)]);"
 
         webView?.evaluateJavaScript(scriptSource)
+    }
+
+    private func downloadFile(from url: URL) async {
+        guard let token = currentToken else {
+            error = .downloadFailed(error: NSError(domain: "Euria", code: -1, userInfo: [
+                NSLocalizedDescriptionKey: "Missing authentication token"
+            ]))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token.accessToken)", forHTTPHeaderField: "Authorization")
+
+        do {
+            let (temporaryLocalURL, response) = try await URLSession.shared.download(for: request)
+            guard let response = response as? HTTPURLResponse, (200 ... 299).contains(response.statusCode) else {
+                error = .downloadFailed(error: NSError(domain: "Euria", code: -1, userInfo: [
+                    NSLocalizedDescriptionKey: "Server returned an error"
+                ]))
+                return
+            }
+
+            let path = response.suggestedFilename ?? url.lastPathComponent
+
+            let destinationURL = try URL.temporaryDownloadsDirectory().appending(path: path)
+            if FileManager.default.fileExists(atPath: destinationURL.path(percentEncoded: false)) {
+                try FileManager.default.removeItem(at: destinationURL)
+            }
+            try FileManager.default.moveItem(at: temporaryLocalURL, to: destinationURL)
+
+            isPresentingDocument = destinationURL
+        } catch {
+            self.error = .downloadFailed(error: error)
+        }
     }
 }
