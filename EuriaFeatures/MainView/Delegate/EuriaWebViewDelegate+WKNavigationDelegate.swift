@@ -18,15 +18,14 @@
 
 import EuriaCore
 import Foundation
+import UIKit
 import WebKit
 
 // MARK: - WKNavigationDelegate
 
 extension EuriaWebViewDelegate: WKNavigationDelegate {
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-        if let url = navigationAction.request.url,
-           url.host() == host,
-           url.path.hasSuffix("/download") {
+        if let url = navigationAction.request.url, shouldBeDownloadedLocally(url: url) {
             await downloadFile(from: url)
             return .cancel
         }
@@ -36,7 +35,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
         }
 
         guard let navigationHost = navigationAction.request.url?.host() else {
-            return .allow
+            return .cancel
         }
 
         if navigationHost == host {
@@ -101,5 +100,9 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
         } catch {
             self.error = .downloadFailed(error: error)
         }
+    }
+
+    private func shouldBeDownloadedLocally(url: URL) -> Bool {
+        return url.host() == host && url.path.hasSuffix("/download")
     }
 }
