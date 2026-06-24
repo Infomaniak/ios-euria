@@ -52,6 +52,8 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     weak var webView: WKWebView?
     var subscribers: [JSMessageTopic: any WebViewMessageSubscriber] = [:]
 
+    var currentToken: ApiToken?
+
     enum Cookie: String {
         case userToken = "USER-TOKEN"
         case userLanguage = "USER-LANGUAGE"
@@ -85,6 +87,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     init(host: String, session: any UserSessionable) {
         self.host = host
         webConfiguration = WKWebViewConfiguration()
+        currentToken = session.apiFetcher.currentToken
 
         super.init()
         setupWebViewConfiguration(token: session.apiFetcher.currentToken)
@@ -201,8 +204,10 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     func updateSessionToken(_ session: any UserSessionable) {
         if let token = session.apiFetcher.currentToken {
             addCookies(token: token)
+            currentToken = token
             reloadWebView()
         }
+        currentToken = nil
     }
 
     func reloadWebView() {

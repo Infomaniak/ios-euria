@@ -78,6 +78,7 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
             }
 
             await accountManager.removeTokenAndAccountFor(userId: userId)
+            currentToken = nil
         }
     }
 
