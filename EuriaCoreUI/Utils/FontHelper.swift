@@ -21,17 +21,8 @@ import UIKit
 public enum FontHelper {
     public static func loadCSS() -> String {
         let scaleFactor = fontScale()
-        let css = """
-        :root{
-        --app-font-scale: \(scaleFactor);
-        }
-        """
 
-        let script = """
-        var style = document.createElement('style');
-        style.textContent = `\(css)`;
-        document.head.appendChild(style);
-        """
+        let script = "document.documentElement.style.setProperty('--app-font-scale', '\(scaleFactor)');"
 
         return script
     }
