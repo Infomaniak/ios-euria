@@ -22,9 +22,7 @@ public enum FontHelper {
     public static func loadCSS() -> String {
         let scaleFactor = fontScale()
 
-        let script = "document.documentElement.style.setProperty('--app-font-scale', '\(scaleFactor)');"
-
-        return script
+        return "document.documentElement.style.setProperty('--app-font-scale', '\(scaleFactor)');"
     }
 
     private static func fontScale() -> CGFloat {

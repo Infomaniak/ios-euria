@@ -18,7 +18,7 @@
 
 import Foundation
 
-struct FileUploadSucceedJsResponse: Encodable, Sendable {
+struct FileUploadSucceedJsResponse: Encodable {
     let ref: String
     let id: String
     let name: String

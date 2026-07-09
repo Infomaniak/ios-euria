@@ -47,11 +47,9 @@ public extension InfomaniakNetworkLoginable {
                 bypassValidation: deviceCheckEnvironment == .preprod
             )
 
-        let derivatedToken = try await derivateApiToken(
+        return try await derivateApiToken(
             using: token,
             attestationToken: attestationToken
         )
-
-        return derivatedToken
     }
 }

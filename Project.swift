@@ -11,12 +11,14 @@ let preloadingView = Feature(name: "PreloadingView", additionalDependencies: [
 ])
 
 let onboardingView = Feature(name: "OnboardingView", additionalDependencies: [
+    TargetDependency.target(name: "EuriaResources"),
     TargetDependency.external(name: "InfomaniakConcurrency"),
     TargetDependency.external(name: "InfomaniakCore"),
     TargetDependency.external(name: "InfomaniakDeviceCheck"),
     TargetDependency.external(name: "InfomaniakDI"),
     TargetDependency.external(name: "InfomaniakLogin"),
     TargetDependency.external(name: "InfomaniakOnboarding"),
+    TargetDependency.external(name: "InfomaniakCreateAccount"),
     TargetDependency.external(name: "InterAppLogin"),
     TargetDependency.external(name: "Lottie")
 ])
@@ -25,15 +27,25 @@ let mainView = Feature(
     name: "MainView",
     dependencies: [onboardingView],
     additionalDependencies: [
+        TargetDependency.target(name: "EuriaCore"),
+        TargetDependency.target(name: "EuriaCoreUI"),
+        TargetDependency.target(name: "EuriaResources"),
         TargetDependency.external(name: "InfomaniakCoreUIResources"),
         TargetDependency.external(name: "InfomaniakNotifications"),
-        TargetDependency.external(name: "VersionChecker")
+        TargetDependency.external(name: "VersionChecker"),
+        TargetDependency.external(name: "InAppTwoFactorAuthentication"),
+        TargetDependency.external(name: "InfomaniakConcurrency"),
+        TargetDependency.external(name: "InfomaniakCreateAccount")
     ]
 )
 
 let rootView = Feature(
     name: "RootView",
-    dependencies: [mainView, preloadingView, onboardingView, TargetDependency.external(name: "VersionChecker")]
+    dependencies: [mainView, preloadingView, onboardingView],
+    additionalDependencies: [
+        TargetDependency.target(name: "EuriaCoreUI"),
+        TargetDependency.external(name: "VersionChecker")
+    ]
 )
 
 let mainiOSAppFeatures = [
@@ -71,6 +83,7 @@ let project = Project(
                 Constants.stripSymbolsScript
             ],
             dependencies: [
+                .target(name: "EuriaResources"),
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
                 .target(name: "EuriaWidget"),
@@ -78,6 +91,7 @@ let project = Project(
                 .external(name: "InfomaniakCoreCommonUI"),
                 .external(name: "InfomaniakDI"),
                 .external(name: "InfomaniakNotifications"),
+                .external(name: "InAppTwoFactorAuthentication"),
                 rootView.asDependency
             ],
             settings: .settings(base: Constants.baseSettings),
@@ -117,7 +131,12 @@ let project = Project(
                 sources: "EuriaCoreUI/**",
                 dependencies: [
                     .target(name: "EuriaCore"),
-                    .external(name: "InfomaniakCoreUIResources")
+                    .target(name: "EuriaResources"),
+                    .external(name: "DesignSystem"),
+                    .external(name: "InfomaniakCore"),
+                    .external(name: "InfomaniakCoreSwiftUI"),
+                    .external(name: "InfomaniakDI"),
+                    .external(name: "InfomaniakLogin")
                 ],
                 settings: .settings(base: Constants.baseSettings)),
         .target(name: "EuriaResources",
@@ -148,6 +167,7 @@ let project = Project(
             dependencies: [
                 .target(name: "EuriaCore"),
                 .target(name: "EuriaCoreUI"),
+                .target(name: "EuriaResources"),
                 .external(name: "DesignSystem"),
                 .external(name: "InfomaniakCoreSwiftUI")
             ],

@@ -22,12 +22,11 @@ import InfomaniakCoreCommonUI
 import InfomaniakDI
 
 public struct NavigationDestination: Identifiable, Equatable {
-    public var id: String { return string }
-    public let string: String
-
-    init(string: String) {
-        self.string = string
+    public var id: String {
+        return string
     }
+
+    public let string: String
 }
 
 public struct UniversalLinkHandler: Sendable {

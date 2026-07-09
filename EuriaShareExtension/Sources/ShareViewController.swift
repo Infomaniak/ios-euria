@@ -37,8 +37,7 @@ extension NSItemProvider: @unchecked @retroactive Sendable {
 
         case .isText:
             let getText = try ItemProviderTextRepresentation(from: self)
-            let resultURL = try await getText.result.get()
-            return resultURL
+            return try await getText.result.get()
 
         case .isImageData, .isCompressedData, .isMiscellaneous:
             let getFile = try ItemProviderFileRepresentation(from: self)
@@ -127,8 +126,7 @@ final class ShareViewController: UIViewController {
 
         let possibleURLs: [URL?] = await itemProviders.asyncMap { itemProvider in
             do {
-                let url = try await itemProvider.importItem()
-                return url
+                return try await itemProvider.importItem()
             } catch {
                 return nil
             }
