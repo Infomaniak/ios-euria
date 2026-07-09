@@ -1,7 +1,7 @@
 [tools]
-tuist = { version = '4.104.6', os = ["macos"] }
-periphery = { version = '3.2.0', os = ["macos"] }
-swiftformat = { version = '0.58.6', os = ["macos", "linux"] }
+tuist = { version = '4.200.4', os = ["macos"] }
+periphery = { version = '3.7.4', os = ["macos"] }
+swiftformat = { version = '0.60.1', os = ["macos", "linux"] }
 swiftlint = { version = '0.62.2', os = ["macos", "linux"] }
 sentry-cli = { version = "latest", os = ["macos"] }
 pipx = { version = "1.8.0", os = ["macos", "linux"] }
