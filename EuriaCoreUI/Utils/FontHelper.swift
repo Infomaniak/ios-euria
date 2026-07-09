@@ -37,10 +37,12 @@ public enum FontHelper {
     }
 
     private static func fontScale() -> CGFloat {
-        let standardSize: CGFloat = 16.0
-        let fontMetrics = UIFontMetrics(forTextStyle: .body)
-        let scaledSize = fontMetrics.scaledValue(for: standardSize)
-        let scaleFactor = scaledSize / standardSize
-        return scaleFactor
+        let standardSize: CGFloat = UIFont.preferredFont(
+            forTextStyle: .body,
+            compatibleWith: UITraitCollection(preferredContentSizeCategory: .medium)
+        ).pointSize
+        let scaledSize = UIFont.preferredFont(forTextStyle: .body).pointSize
+
+        return scaledSize / standardSize
     }
 }
