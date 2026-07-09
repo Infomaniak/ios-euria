@@ -206,8 +206,9 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
             addCookies(token: token)
             currentToken = token
             reloadWebView()
+        } else {
+            currentToken = nil
         }
-        currentToken = nil
     }
 
     func reloadWebView() {

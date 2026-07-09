@@ -92,7 +92,9 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 
             let destinationURL = try URL.temporaryDownloadsDirectory().appending(path: path)
             if FileManager.default.fileExists(atPath: destinationURL.path(percentEncoded: false)) {
-                try FileManager.default.removeItem(at: destinationURL)
+                try FileManager.default.removeItem(at: temporaryLocalURL)
+                isPresentingDocument = destinationURL
+                return
             }
             try FileManager.default.moveItem(at: temporaryLocalURL, to: destinationURL)
 
