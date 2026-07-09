@@ -18,7 +18,7 @@
 
 import Foundation
 
-struct FileUploadErrorJsResponse: Encodable, Sendable {
+struct FileUploadErrorJsResponse: Encodable {
     let ref: String
     let error: String
 }

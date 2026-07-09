@@ -69,7 +69,8 @@ public struct FileUploadDone: JSFunction {
                 id: remoteId,
                 name: name,
                 mimeType: mimeType
-            )),
+            )
+        ),
             let jsonString = String(data: jsonData, encoding: .utf8) else {
             declaration = "fileUploadDone({})"
             return

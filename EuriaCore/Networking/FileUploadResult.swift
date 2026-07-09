@@ -18,7 +18,7 @@
 
 import Foundation
 
-struct FileUploadResult: Decodable, Sendable {
+struct FileUploadResult: Decodable {
     let id: String
     let name: String
     let mimeType: String

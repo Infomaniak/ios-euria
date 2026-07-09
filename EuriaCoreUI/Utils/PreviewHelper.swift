@@ -42,7 +42,6 @@ public enum PreviewHelper {
         )
         let apiFetcher = ApiFetcher(token: apiToken, delegate: PreviewHelperRefreshTokenDelegate())
 
-        let session = UserSession(userId: 42, apiFetcher: apiFetcher)
-        return session
+        return UserSession(userId: 42, apiFetcher: apiFetcher)
     }()
 }
