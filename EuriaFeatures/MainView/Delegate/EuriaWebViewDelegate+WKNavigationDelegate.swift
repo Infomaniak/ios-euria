@@ -70,9 +70,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 
     private func downloadFile(from url: URL) async {
         guard let token = currentToken else {
-            error = .downloadFailed(error: NSError(domain: "Euria", code: -1, userInfo: [
-                NSLocalizedDescriptionKey: "Missing authentication token"
-            ]))
+            error = .downloadFailed(error: nil)
             return
         }
 
@@ -82,9 +80,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
         do {
             let (temporaryLocalURL, response) = try await URLSession.shared.download(for: request)
             guard let response = response as? HTTPURLResponse, (200 ... 299).contains(response.statusCode) else {
-                error = .downloadFailed(error: NSError(domain: "Euria", code: -1, userInfo: [
-                    NSLocalizedDescriptionKey: "Server returned an error"
-                ]))
+                error = .downloadFailed(error: nil)
                 return
             }
 

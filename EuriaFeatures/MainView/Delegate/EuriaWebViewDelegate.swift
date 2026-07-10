@@ -20,6 +20,7 @@ import EuriaCore
 import EuriaCoreUI
 import EuriaOnboardingView
 import InfomaniakCore
+import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakLogin
 import OSLog
@@ -61,14 +62,18 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
 
     enum ErrorDomain: LocalizedError, Equatable {
         case urlGenerationFailed(error: Error)
-        case downloadFailed(error: Error)
+        case downloadFailed(error: Error?)
 
         var errorDescription: String? {
             switch self {
             case .urlGenerationFailed(let error):
                 return error.localizedDescription
             case .downloadFailed(let error):
-                return error.localizedDescription
+                if let error {
+                    return error.localizedDescription
+                } else {
+                    return InfomaniakCoreUIResources.CoreUILocalizable.anErrorHasOccurred
+                }
             }
         }
 
