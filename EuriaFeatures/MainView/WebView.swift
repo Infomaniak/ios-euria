@@ -16,6 +16,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import EuriaCore
 import EuriaCoreUI
 import InfomaniakCore
 import SwiftUI
@@ -54,7 +55,6 @@ struct WebView: UIViewRepresentable {
         setupWebView(webView, coordinator: webViewCoordinator)
 
         webViewCoordinator?.webView = webView
-
         let request = URLRequest(url: url)
         webView.load(request)
 

@@ -20,6 +20,7 @@ import EuriaCore
 import EuriaCoreUI
 import EuriaOnboardingView
 import InfomaniakCore
+import InfomaniakCoreUIResources
 import InfomaniakDI
 import InfomaniakLogin
 import OSLog
@@ -52,6 +53,8 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     weak var webView: WKWebView?
     var subscribers: [JSMessageTopic: any WebViewMessageSubscriber] = [:]
 
+    var currentToken: ApiToken?
+
     enum Cookie: String {
         case userToken = "USER-TOKEN"
         case userLanguage = "USER-LANGUAGE"
@@ -59,14 +62,18 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
 
     enum ErrorDomain: LocalizedError, Equatable {
         case urlGenerationFailed(error: Error)
-        case downloadFailed(error: Error)
+        case downloadFailed(error: Error?)
 
         var errorDescription: String? {
             switch self {
             case .urlGenerationFailed(let error):
                 return error.localizedDescription
             case .downloadFailed(let error):
-                return error.localizedDescription
+                if let error {
+                    return error.localizedDescription
+                } else {
+                    return InfomaniakCoreUIResources.CoreUILocalizable.anErrorHasOccurred
+                }
             }
         }
 
@@ -85,6 +92,7 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     init(host: String, session: any UserSessionable) {
         self.host = host
         webConfiguration = WKWebViewConfiguration()
+        currentToken = session.apiFetcher.currentToken
 
         super.init()
         setupWebViewConfiguration(token: session.apiFetcher.currentToken)
@@ -201,7 +209,10 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
     func updateSessionToken(_ session: any UserSessionable) {
         if let token = session.apiFetcher.currentToken {
             addCookies(token: token)
+            currentToken = token
             reloadWebView()
+        } else {
+            currentToken = nil
         }
     }
 
