@@ -122,6 +122,18 @@ let project = Project(
                     .external(name: "Sentry-Dynamic")
                 ],
                 settings: .settings(base: Constants.baseSettings)),
+        .target(name: "EuriaTests",
+                destinations: Constants.destinations,
+                product: .unitTests,
+                bundleId: "\(Constants.baseIdentifier).tests",
+                deploymentTargets: Constants.deploymentTarget,
+                infoPlist: .default,
+                sources: "EuriaTests/**",
+                dependencies: [
+                    .target(name: "EuriaCore"),
+                    .external(name: "InfomaniakCore")
+                ],
+                settings: .settings(base: Constants.baseSettings)),
         .target(name: "EuriaCoreUI",
                 destinations: Constants.destinations,
                 product: Constants.productTypeBasedOnEnv,

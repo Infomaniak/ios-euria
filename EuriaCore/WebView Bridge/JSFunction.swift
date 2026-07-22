@@ -29,7 +29,7 @@ public struct GoToDestination: JSFunction {
     public let declaration: String
 
     public init(destination: String) {
-        declaration = "goTo(\"\(destination)\")"
+        declaration = "goTo(\"\(destination.escapedForJavaScriptString())\")"
     }
 }
 

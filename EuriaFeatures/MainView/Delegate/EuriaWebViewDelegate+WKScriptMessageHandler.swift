@@ -53,7 +53,12 @@ extension EuriaWebViewDelegate: WKScriptMessageHandler, WebViewMessageSubscriber
         case .openReview:
             isShowingReviewAlert = true
         case .upgradeWithLink:
-            guard let path = body as? String, let url = URL(string: path) else { return }
+            guard let path = body as? String, let url = URL(string: path), url.isAllowedUpgradeURL else {
+                SentrySDK.capture(message: "Blocked an upgrade URL with an untrusted origin") { scope in
+                    scope.setLevel(.warning)
+                }
+                return
+            }
             upgradeUserOffer(url: url)
         default:
             break
