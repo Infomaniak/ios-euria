@@ -1,4 +1,2 @@
 Quoi de neuf :
-- Téléchargez les fichiers PDF générés par Euria
-- Accessibilité améliorée
 - Améliorations et corrections diverses
