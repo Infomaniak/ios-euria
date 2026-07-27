@@ -21,6 +21,7 @@ import DesignSystem
 import EuriaCore
 import EuriaCoreUI
 import EuriaResources
+import InfomaniakCore
 import InfomaniakCoreUIResources
 import InfomaniakCreateAccount
 import InfomaniakDI
@@ -48,6 +49,15 @@ struct OnboardingBottomButtonsView: View {
         return selection == slideCount - 1
     }
 
+    private var shouldUseWithAccounts: Bool {
+        #if DEBUG
+        if ApiEnvironment.current == .prod {
+            return false
+        }
+        #endif
+        return true
+    }
+
     var body: some View {
         VStack(spacing: IKPadding.mini) {
             if !isPresentingInterAppLogin {
@@ -57,7 +67,8 @@ struct OnboardingBottomButtonsView: View {
                 ContinueWithAccountView(
                     isLoading: loginHandler.isLoading,
                     excludingUserIds: excludedUserIds,
-                    allowsMultipleSelection: false
+                    allowsMultipleSelection: false,
+                    shouldUseWithAccounts: shouldUseWithAccounts
                 ) {
                     loginPressed()
                 } onLoginWithAccountsPressed: { accounts in
