@@ -35,6 +35,16 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
 
+    func application(
+        _ application: UIApplication,
+        configurationForConnecting connectingSceneSession: UISceneSession,
+        options: UIScene.ConnectionOptions
+    ) -> UISceneConfiguration {
+        let config = UISceneConfiguration(name: nil, sessionRole: connectingSceneSession.role)
+        config.delegateClass = SceneDelegate.self
+        return config
+    }
+
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Task {
             for account in await accountManager.accounts {
@@ -56,5 +66,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
                      supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         @InjectService var orientationManager: OrientationManageable
         return orientationManager.orientationLock
+    }
+}
+
+final class SceneDelegate: NSObject, UIWindowSceneDelegate {
+    @available(iOS 26.0, *)
+    func preferredWindowingControlStyle(for windowScene: UIWindowScene) -> UIWindowScene.WindowingControlStyle {
+        return .minimal
     }
 }
