@@ -1,2 +1,2 @@
 What's New:
-- Various improvements and bug fixes
+- Various improvements and bug fixes.
