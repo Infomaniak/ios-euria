@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="25073"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="124" width="440" height="668"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splashscreen-euria" translatesAutoresizingMaskIntoConstraints="NO" id="Ucg-dU-BSJ" userLabel="splashscreen-swisstransfer">
-                                        <rect key="frame" x="120" y="234" width="200" height="200"/>
+                                        <rect key="frame" x="120" y="226" width="200" height="200"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="chP-kl-Bs2"/>
                                             <constraint firstAttribute="width" secondItem="Ucg-dU-BSJ" secondAttribute="height" multiplier="1:1" id="dRk-wI-D0e"/>
@@ -32,7 +32,6 @@
                                 </subviews>
                                 <viewLayoutGuide key="safeArea" id="yfw-te-FVu"/>
                                 <constraints>
-                                    <constraint firstItem="Ucg-dU-BSJ" firstAttribute="centerY" secondItem="yfw-te-FVu" secondAttribute="centerY" id="LuA-R8-wQ9"/>
                                     <constraint firstItem="Ucg-dU-BSJ" firstAttribute="centerX" secondItem="yfw-te-FVu" secondAttribute="centerX" id="Up8-Jw-Vcb"/>
                                     <constraint firstItem="yfw-te-FVu" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Ucg-dU-BSJ" secondAttribute="bottom" constant="16" id="gBp-EI-Sy8"/>
                                 </constraints>
@@ -49,6 +48,7 @@
                         <constraints>
                             <constraint firstItem="AnS-21-ChX" firstAttribute="trailing" secondItem="tDd-7D-iHq" secondAttribute="trailing" id="2h2-bj-Qiu"/>
                             <constraint firstItem="Owd-z3-cKR" firstAttribute="centerX" secondItem="tDd-7D-iHq" secondAttribute="centerX" id="EXR-NL-ATa"/>
+                            <constraint firstItem="Ucg-dU-BSJ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-28" id="LuA-R8-wQ9"/>
                             <constraint firstItem="AnS-21-ChX" firstAttribute="top" secondItem="tDd-7D-iHq" secondAttribute="top" id="Pc2-K5-Y3z"/>
                             <constraint firstAttribute="trailing" secondItem="2qQ-y8-J85" secondAttribute="trailing" id="Pii-jG-8zh"/>
                             <constraint firstItem="tDd-7D-iHq" firstAttribute="leading" secondItem="AnS-21-ChX" secondAttribute="leading" id="VD3-cJ-jSm"/>
