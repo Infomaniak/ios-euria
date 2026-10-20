@@ -12,6 +12,8 @@ jobs:
   build:
     name: Build and Test project
     runs-on: [ self-hosted, iOS ]
+    env:
+        DEVELOPER_DIR: /Applications/Xcode-Latest.app/Contents/Developer
 
     steps:
       - uses: jdx/mise-action@6d1e696aa24c1aa1bcc1adea0212707c71ab78a8
