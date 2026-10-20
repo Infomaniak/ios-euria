@@ -48,7 +48,7 @@ public struct SplashScreenView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: 200)
-                    .alignmentGuide(.splashScreenIconAlignment) { d in d[VerticalAlignment.center] }
+                    .alignmentGuide(.splashScreenIconAlignment) { d in d[VerticalAlignment.center] - 20 }
 
                 ProgressView()
                     .progressViewStyle(.circular)
@@ -58,5 +58,6 @@ public struct SplashScreenView: View {
             infomaniakLogoImage
                 .padding(.bottom, value: .medium)
         }
+        .ignoresSafeArea()
     }
 }
