@@ -11,3 +11,5 @@ concurrency:
 jobs:
   periphery:
     uses: infomaniak/.github/.github/workflows/periphery.yml@v2
+    with:
+      developer_dir: /Applications/Xcode-Latest.app/Contents/Developer
