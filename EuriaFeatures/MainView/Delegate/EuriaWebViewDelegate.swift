@@ -87,6 +87,20 @@ final class EuriaWebViewDelegate: NSObject, WebViewCoordinator, WebViewBridge, O
                 return false
             }
         }
+
+        static func isIgnorable(_ error: Error) -> Bool {
+            if error is CancellationError {
+                return true
+            }
+
+            let nsError = error as NSError
+            guard nsError.domain == NSURLErrorDomain else {
+                return false
+            }
+
+            let ignoredCodes: [URLError.Code] = [.cancelled, .networkConnectionLost, .notConnectedToInternet]
+            return ignoredCodes.contains(URLError.Code(rawValue: nsError.code))
+        }
     }
 
     init(host: String, session: any UserSessionable) {
