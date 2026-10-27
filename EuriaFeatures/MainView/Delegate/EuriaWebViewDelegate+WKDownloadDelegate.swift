@@ -50,9 +50,10 @@ extension EuriaWebViewDelegate: WKDownloadDelegate {
     }
 
     func download(_ download: WKDownload, didFailWithError error: any Error, resumeData: Data?) {
-        self.error = .downloadFailed(error: error)
         Logger.general.error("Error while downloading a file: \(error)")
-
         downloads[download] = nil
+
+        guard !ErrorDomain.isIgnorable(error) else { return }
+        self.error = .downloadFailed(error: error)
     }
 }

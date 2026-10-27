@@ -96,6 +96,7 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
 
             isPresentingDocument = destinationURL
         } catch {
+            guard !ErrorDomain.isIgnorable(error) else { return }
             self.error = .downloadFailed(error: error)
         }
     }
