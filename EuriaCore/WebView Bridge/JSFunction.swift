@@ -20,77 +20,82 @@ import Foundation
 
 public protocol JSFunction<Result> {
     associatedtype Result
-    var declaration: String { get }
+    var functionBody: String { get }
+    var arguments: [String: Any] { get }
+}
+
+public extension JSFunction {
+    var arguments: [String: Any] {
+        [:]
+    }
+}
+
+extension JSFunction {
+    static func javaScriptArgument(from value: some Encodable) -> Any? {
+        guard let data = try? JSONEncoder().encode(value) else { return nil }
+        return try? JSONSerialization.jsonObject(with: data, options: [.fragmentsAllowed])
+    }
 }
 
 public struct GoToDestination: JSFunction {
     public typealias Result = Void
 
-    public let declaration: String
+    public let functionBody = "goTo(destination);"
+    public let arguments: [String: Any]
 
     public init(destination: String) {
-        declaration = "goTo(\"\(destination.escapedForJavaScriptString())\")"
+        arguments = ["destination": destination]
     }
 }
 
 public struct PrepareFilesForUpload: JSFunction {
     public typealias Result = [String]
 
-    public let declaration: String
+    public let functionBody = "return prepareFilesForUpload(files);"
+    public let arguments: [String: Any]
 
     init(files: [ImportedFile]) {
-        let jsonEncoder = JSONEncoder()
-        guard let jsonData = try? jsonEncoder.encode(files),
-              let jsonString = String(data: jsonData, encoding: .utf8) else {
-            declaration = "prepareFilesForUpload([])"
-            return
-        }
-
-        declaration = "prepareFilesForUpload(\(jsonString))"
+        arguments = ["files": Self.javaScriptArgument(from: files) ?? [Any]()]
     }
 }
 
 public struct GetCurrentOrganizationId: JSFunction {
     public typealias Result = Int
 
-    public let declaration = "getCurrentOrganizationId()"
+    public let functionBody = "return getCurrentOrganizationId();"
 }
 
 public struct FileUploadDone: JSFunction {
     public typealias Result = Void
 
-    public let declaration: String
+    public let functionBody = "fileUploadDone(response);"
+    public let arguments: [String: Any]
 
     public init(ref: String, remoteId: String, name: String, mimeType: String) {
-        let jsonEncoder = JSONEncoder()
-        guard let jsonData = try? jsonEncoder.encode(
-            FileUploadSucceedJsResponse(
-                ref: ref,
-                id: remoteId,
-                name: name,
-                mimeType: mimeType
-            )
-        ),
-            let jsonString = String(data: jsonData, encoding: .utf8) else {
-            declaration = "fileUploadDone({})"
-            return
-        }
-        declaration = "fileUploadDone(\(jsonString))"
+        let response = FileUploadSucceedJsResponse(ref: ref, id: remoteId, name: name, mimeType: mimeType)
+        arguments = ["response": Self.javaScriptArgument(from: response) ?? [String: Any]()]
     }
 }
 
 public struct FileUploadError: JSFunction {
     public typealias Result = Void
 
-    public let declaration: String
+    public let functionBody = "fileUploadError(response);"
+    public let arguments: [String: Any]
 
     public init(ref: String, error: String) {
-        let jsonEncoder = JSONEncoder()
-        guard let jsonData = try? jsonEncoder.encode(FileUploadErrorJsResponse(ref: ref, error: error)),
-              let jsonString = String(data: jsonData, encoding: .utf8) else {
-            declaration = "fileUploadError({})"
-            return
-        }
-        declaration = "fileUploadError(\(jsonString))"
+        let response = FileUploadErrorJsResponse(ref: ref, error: error)
+        arguments = ["response": Self.javaScriptArgument(from: response) ?? [String: Any]()]
+    }
+}
+
+public struct EnableAppFeatures: JSFunction {
+    public typealias Result = Void
+
+    public let functionBody = "enableAppFeatures(features);"
+    public let arguments: [String: Any]
+
+    public init(features: [AppFeatures] = AppFeatures.allCases) {
+        arguments = ["features": features.map(\.rawValue)]
     }
 }
