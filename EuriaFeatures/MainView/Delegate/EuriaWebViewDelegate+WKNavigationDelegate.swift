@@ -62,10 +62,9 @@ extension EuriaWebViewDelegate: WKNavigationDelegate {
     }
 
     private func enableAppFeatures() {
-        let featuresTab = AppFeatures.allCases.map { "'\($0.rawValue)'" }.joined(separator: ",")
-        let scriptSource = "enableAppFeatures([\(featuresTab)]);"
-
-        webView?.evaluateJavaScript(scriptSource)
+        Task {
+            await callFunction(EnableAppFeatures())
+        }
     }
 
     private func downloadFile(from url: URL) async {
