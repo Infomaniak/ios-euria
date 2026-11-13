@@ -103,20 +103,27 @@ public actor AccountManager: AccountManagerable, ObservableObject {
     }
 
     public func createAccount(token: ApiToken) async throws -> (any UserSessionable) {
-        let temporaryApiFetcher = ApiFetcher(token: token, delegate: refreshTokenDelegate)
-        let user = try await userProfileStore.updateUserProfile(with: temporaryApiFetcher)
+        do {
+            let temporaryApiFetcher = ApiFetcher(token: token, delegate: refreshTokenDelegate)
+            let user = try await userProfileStore.updateUserProfile(with: temporaryApiFetcher)
 
-        let deviceId = try await deviceManager.getOrCreateCurrentDevice().uid
-        tokenStore.addToken(newToken: token, associatedDeviceId: deviceId)
+            let deviceId = try await deviceManager.getOrCreateCurrentDevice().uid
+            tokenStore.addToken(newToken: token, associatedDeviceId: deviceId)
 
-        guard let session = getUserSession(for: user.id) as? UserSession else {
-            throw ErrorDomain.noUserSession
+            guard let session = getUserSession(for: user.id) as? UserSession else {
+                throw ErrorDomain.noUserSession
+            }
+
+            attachDeviceToApiToken(token, apiFetcher: session.apiFetcher)
+            await notificationService.updateTopicsIfNeeded([Topic.twoFAPushChallenge], userApiFetcher: session.apiFetcher)
+
+            return session
+        } catch {
+            removeTokenAndAccountFor(userId: token.userId)
+            revokeApiToken(token)
+
+            throw error
         }
-
-        attachDeviceToApiToken(token, apiFetcher: session.apiFetcher)
-        await notificationService.updateTopicsIfNeeded([Topic.twoFAPushChallenge], userApiFetcher: session.apiFetcher)
-
-        return session
     }
 
     public func createGuestAccount() -> (any UserSessionable) {
@@ -139,7 +146,11 @@ public actor AccountManager: AccountManagerable, ObservableObject {
 
         guard let removedToken else { return }
 
-        networkLoginService.deleteApiToken(token: removedToken) { result in
+        revokeApiToken(removedToken)
+    }
+
+    private func revokeApiToken(_ token: ApiToken) {
+        networkLoginService.deleteApiToken(token: token) { result in
             guard case .failure(let error) = result else { return }
             Logger.general.error("Failed to delete api token: \(error.localizedDescription)")
         }
