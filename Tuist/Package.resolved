@@ -1,5 +1,5 @@
 {
-  "originHash" : "b717d4e0f0163e8133e56aac72b628ec05f94ec1ffabc31ca15b519fce02597d",
+  "originHash" : "39317ce6f263e207d81a5499134bbe9d6e695ae330eefccdf5ad0cf4f60b5f1a",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core",
       "state" : {
-        "revision" : "7a8ab413d5ac54531d9cae327e49bd1c28b26adc",
-        "version" : "19.1.5"
+        "revision" : "a2ccfeadb409fb6664213dc534f27ea5857ede72",
+        "version" : "21.0.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core-ui",
       "state" : {
-        "revision" : "fa789107d7685c5555518c6b73d496043d085eec",
-        "version" : "26.3.0"
+        "revision" : "66fa8f505bd911eef59a1c8454248a9f59c4a9af",
+        "version" : "29.0.0"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-core-uikit",
       "state" : {
-        "revision" : "10d7a7a4bcdef924d250a2d93e69d0bd233be9e8",
-        "version" : "2.0.1"
+        "revision" : "4ddd3be2c68e5732b2143fb2de9e3f758f7f590c",
+        "version" : "5.0.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-create-account",
       "state" : {
-        "revision" : "e675d43e7b2b2996ab8971368d2ef979b11d85da",
-        "version" : "25.0.0"
+        "revision" : "6b436b4f434dfc4d6e65837dbceb1dd6f95a9384",
+        "version" : "28.0.0"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-features",
       "state" : {
-        "revision" : "7f852f0076d08cfcf9186060463f59f4aabb575c",
-        "version" : "10.2.0"
+        "revision" : "e0123223363794ae1c91f08cb3c73cb4bbf76bf7",
+        "version" : "13.0.0"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-notifications",
       "state" : {
-        "revision" : "54eb1428395f01c2745b64a728a9083a1c8c6e12",
-        "version" : "16.0.0"
+        "revision" : "39510ab224a8683384a49c148b2b8bf93be05394",
+        "version" : "18.0.0"
       }
     },
     {
@@ -114,8 +114,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Infomaniak/ios-version-checker",
       "state" : {
-        "revision" : "d4d0aac42a3c00b58c80c29f4d244578330935bc",
-        "version" : "18.0.0"
+        "revision" : "d5d223a46d240e0d8ce8839ac767a21006efba7b",
+        "version" : "21.0.0"
       }
     },
     {
@@ -186,8 +186,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "4bb2282661ee6ca2212aa01d19a1214394cd3c45",
-        "version" : "9.30.2"
+        "revision" : "485e0622e00d60d71eb6b519822188e2eb7c29e3",
+        "version" : "9.35.0"
       }
     },
     {
